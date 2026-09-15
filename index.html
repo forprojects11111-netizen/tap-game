@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,8 @@
     <script src="https://sad.adsgram.ai/js/sad.js"></script>
     <style>
         body { font-family: Tahoma, sans-serif; background: #0f172a; color: #fff; margin: 0; padding: 0; padding-bottom: 70px; }
-        .header { background: #1e293b; padding: 15px; text-align: center; font-size: 18px; font-weight: bold; border-bottom: 2px solid #334155; }
+        .header { background: #1e293b; padding: 15px; text-align: center; font-size: 18px; font-weight: bold; border-bottom: 2px solid #334155; display: flex; justify-content: space-between; align-items: center; }
+        .lang-select { background: #334155; color: white; border: 1px solid #475569; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
         .container { padding: 15px; display: none; }
         .active { display: block; }
         .card { background: #1e293b; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
@@ -19,27 +20,33 @@
         .nav-item { color: #94a3b8; text-align: center; font-size: 12px; cursor: pointer; flex: 1; }
         .nav-item.active-tab { color: #6366f1; font-weight: bold; }
         .balance-box { text-align: center; font-size: 20px; color: #eab308; margin-bottom: 15px; font-weight: bold; }
+        .task-item { background: #334155; padding: 10px; border-radius: 6px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="header">منصة المهام والأرباح الرقمية</div>
+    <div class="header">
+        <span id="t-title">منصة المهام والأرباح</span>
+        <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+            <option value="ar">العربية</option>
+            <option value="en">English</option>
+        </select>
+    </div>
 
     <!-- قسم المهام والكسب -->
     <div id="tab-tasks" class="container active">
-        <div class="balance-box">رصيدك: <span id="userBalance">0.00</span> دولار</div>
+        <div class="balance-box"><span id="t-balance">رصيدك</span>: <span id="userBalance">0.00</span> $</div>
         
         <div class="card">
-            <h3>📢 مشاهدة إعلان سريع وكسب نقاط</h3>
-            <p>شاهد إعلان Adsgram القصير واحصل على مكافأة فورية لرصيدك.</p>
-            <button class="btn" onclick="showAd()">مشاهدة الإعلان الآن</button>
+            <h3 id="t-ad-title">📢 مشاهدة إعلان سريع وكسب رصيد</h3>
+            <p id="t-ad-desc">شاهد إعلان Adsgram القصير واحصل على مكافأة فورية لرصيدك.</p>
+            <button class="btn" id="t-ad-btn" onclick="showAd()">مشاهدة الإعلان الآن</button>
         </div>
 
         <div class="card">
-            <h3>📋 مهام المتاحة للعشاق</h3>
-            <p>انضم للقنوات، ضع إعجاباً أو تعليقاً وارسل الإثبات.</p>
+            <h3 id="t-tasks-title">📋 المهام المتاحة</h3>
             <div id="tasksList">
-                <p style="color: #94a3b8;">جاري تحميل المهام المتاحة...</p>
+                <p style="color: #94a3b8;" id="t-loading">جاري التحميل...</p>
             </div>
         </div>
     </div>
@@ -47,61 +54,214 @@
     <!-- قسم إنشاء إعلان (المعلن) -->
     <div id="tab-advertise" class="container">
         <div class="card">
-            <h3>📢 إضافة مهمة جديدة</h3>
-            <label>نوع المهمة:</label>
+            <h3 id="t-create-title">📢 إضافة مهمة جديدة</h3>
+            <label id="t-type-label">نوع المهمة:</label>
             <select id="adType">
-                <option value="channel">اشتراك في قناة تيليجرام</option>
-                <option value="like">إعجاب بمنشور</option>
-                <option value="comment">تعليق على منشور</option>
+                <option value="اشتراك قناة تيليجرام" id="opt-sub">اشتراك في قناة تيليجرام</option>
+                <option value="إعجاب بمنشور" id="opt-like">إعجاب بمنشور</option>
+                <option value="تعليق على منشور" id="opt-comment">تعليق على منشور</option>
             </select>
             
-            <label>رابط المهمة (الرابط المستهدف):</label>
+            <label id="t-link-label">رابط المهمة المستهدف:</label>
             <input type="text" id="adLink" placeholder="https://t.me/...">
 
-            <label>المكافأة لكل عامل (بالدولار):</label>
+            <label id="t-reward-label">المكافأة لكل عامل (بالدولار):</label>
             <input type="number" id="adReward" placeholder="0.01" step="0.001">
 
-            <button class="btn" onclick="createAd()">نشر الحملة الإعلانية</button>
+            <button class="btn" id="t-create-btn" onclick="createAd()">نشر الحملة الإعلانية</button>
         </div>
     </div>
 
     <!-- قسم المحفظة والسحب (Binance) -->
     <div id="tab-wallet" class="container">
         <div class="card">
-            <h3>💰 المحفظة وسحب الأرباح</h3>
-            <p>رصيدك القابل للسحب: <span id="walletBalance">0.00</span> دولار</p>
+            <h3 id="t-wallet-title">💰 المحفظة وسحب الأرباح</h3>
+            <p><span id="t-wallet-balance">رصيدك القابل للسحب</span>: <span id="walletBalance">0.00</span> $</p>
             
-            <label>عنوان محفظة Binance (USDT):</label>
+            <label id="t-address-label">عنوان محفظة Binance (USDT):</label>
             <input type="text" id="binanceAddress" placeholder="أدخل عنوان محفظتك هنا...">
 
-            <label>المبلغ المراد سحبه:</label>
+            <label id="t-amount-label">المبلغ المراد سحبه:</label>
             <input type="number" id="withdrawAmount" placeholder="0.00">
 
-            <button class="btn" onclick="requestWithdraw()">طلب السحب إلى Binance</button>
+            <button class="btn" id="t-withdraw-btn" onclick="requestWithdraw()">طلب السحب إلى Binance</button>
         </div>
     </div>
 
     <!-- شريط التنقل السفلي -->
     <div class="nav">
-        <div class="nav-item active-tab" onclick="switchTab('tasks', this)">📋 المهام والكسب</div>
-        <div class="nav-item" onclick="switchTab('advertise', this)">📢 أضف إعلان</div>
-        <div class="nav-item" onclick="switchTab('wallet', this)">💰 المحفظة والسحب</div>
+        <div class="nav-item active-tab" onclick="switchTab('tasks', this)" id="nav-t1">📋 المهام</div>
+        <div class="nav-item" onclick="switchTab('advertise', this)" id="nav-t2">📢 أضف إعلان</div>
+        <div class="nav-item" onclick="switchTab('wallet', this)" id="nav-t3">💰 المحفظة</div>
     </div>
 
     <script>
-        // إعداد اتصال إعلانات Adsgram بالمعرف 48015
+        // ملفات اللغات
+        const translations = {
+            ar: {
+                title: "منصة المهام والأرباح",
+                balance: "رصيدك",
+                adTitle: "📢 مشاهدة إعلان سريع وكسب رصيد",
+                adDesc: "شاهد إعلان Adsgram القصير واحصل على مكافأة فورية لرصيدك.",
+                adBtn: "مشاهدة الإعلان الآن",
+                tasksTitle: "📋 المهام المتاحة",
+                loading: "جاري التحميل...",
+                createTitle: "📢 إضافة مهمة جديدة",
+                typeLabel: "نوع المهمة:",
+                optSub: "اشتراك في قناة تيليجرام",
+                optLike: "إعجاب بمنشور",
+                optComment: "تعليق على منشور",
+                linkLabel: "رابط المهمة المستهدف:",
+                rewardLabel: "المكافأة لكل عامل (بالدولار):",
+                createBtn: "نشر الحملة الإعلانية",
+                walletTitle: "💰 المحفظة وسحب الأرباح",
+                walletBalance: "رصيدك القابل للسحب",
+                addressLabel: "عنوان محفظة Binance (USDT):",
+                amountLabel: "المبلغ المراد سحبه:",
+                withdrawBtn: "طلب السحب إلى Binance",
+                nav1: "📋 المهام",
+                nav2: "📢 أضف إعلان",
+                nav3: "💰 المحفظة",
+                completeBtn: "إتمام المهمة وكسب الرصيد",
+                msgAdSuccess: "تم مشاهدة الإعلان بنجاح! وتمت إضافة 0.010$ لرصيدك.",
+                msgTaskDone: "رائع! تم التحقق من إنجاز المهمة وإضافة المكافأة لرصيدك.",
+                msgAdCreated: "تم نشر حملتك الإعلانية بنجاح وأصبحت مرئية للعمال في قائمة المهام!",
+                msgWithdraw: "تم تقديم طلب سحب بقيمة",
+                msgNoTasks: "لا توجد مهام متاحة حالياً. عُود لاحقاً أو أضف إعلاناً!"
+            },
+            en: {
+                title: "Tasks & Earnings Platform",
+                balance: "Balance",
+                adTitle: "📢 Watch Quick Ad & Earn",
+                adDesc: "Watch the short Adsgram ad and get an instant reward to your balance.",
+                adBtn: "Watch Ad Now",
+                tasksTitle: "📋 Available Tasks",
+                loading: "Loading...",
+                createTitle: "📢 Create New Task",
+                typeLabel: "Task Type:",
+                optSub: "Telegram Channel Subscription",
+                optLike: "Post Like",
+                optComment: "Post Comment",
+                linkLabel: "Target Task Link:",
+                rewardLabel: "Reward per Worker ($):",
+                createBtn: "Publish Ad Campaign",
+                walletTitle: "💰 Wallet & Withdrawals",
+                walletBalance: "Withdrawable Balance",
+                addressLabel: "Binance Wallet Address (USDT):",
+                amountLabel: "Withdrawal Amount:",
+                withdrawBtn: "Request Binance Withdrawal",
+                nav1: "📋 Tasks",
+                nav2: "📢 Add Ad",
+                nav3: "💰 Wallet",
+                completeBtn: "Complete Task & Earn",
+                msgAdSuccess: "Ad watched successfully! $0.010 added to your balance.",
+                msgTaskDone: "Great! Task verified and reward added to your balance.",
+                msgAdCreated: "Ad campaign successfully published and visible to workers!",
+                msgWithdraw: "Withdrawal request submitted for",
+                msgNoTasks: "No tasks available right now. Check back later or add an ad!"
+            }
+        };
+
+        let currentLang = localStorage.getItem('app_lang') || 'ar';
+        document.getElementById('langSelect').value = currentLang;
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('app_lang', lang);
+            const htmlRoot = document.getElementById('htmlRoot');
+            htmlRoot.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            htmlRoot.setAttribute('lang', lang);
+            updateTexts();
+            renderTasks();
+        }
+
+        function updateTexts() {
+            const t = translations[currentLang];
+            document.getElementById('t-title').innerText = t.title;
+            document.getElementById('t-balance').innerText = t.balance;
+            document.getElementById('t-ad-title').innerText = t.adTitle;
+            document.getElementById('t-ad-desc').innerText = t.adDesc;
+            document.getElementById('t-ad-btn').innerText = t.adBtn;
+            document.getElementById('t-tasks-title').innerText = t.tasksTitle;
+            document.getElementById('t-loading').innerText = t.loading;
+            document.getElementById('t-create-title').innerText = t.createTitle;
+            document.getElementById('t-type-label').innerText = t.typeLabel;
+            document.getElementById('opt-sub').innerText = t.optSub;
+            document.getElementById('opt-like').innerText = t.optLike;
+            document.getElementById('opt-comment').innerText = t.optComment;
+            document.getElementById('t-link-label').innerText = t.linkLabel;
+            document.getElementById('t-reward-label').innerText = t.rewardLabel;
+            document.getElementById('t-create-btn').innerText = t.createBtn;
+            document.getElementById('t-wallet-title').innerText = t.walletTitle;
+            document.getElementById('t-wallet-balance').innerText = t.walletBalance;
+            document.getElementById('t-address-label').innerText = t.addressLabel;
+            document.getElementById('t-amount-label').innerText = t.amountLabel;
+            document.getElementById('t-withdraw-btn').innerText = t.withdrawBtn;
+            document.getElementById('nav-t1').innerText = t.nav1;
+            document.getElementById('nav-t2').innerText = t.nav2;
+            document.getElementById('nav-t3').innerText = t.nav3;
+        }
+
+        // إدارة البيانات والذاكرة المحلية
+        let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
+        let tasks = JSON.parse(localStorage.getItem('platform_tasks')) || [
+            { type: "اشتراك قناة تيليجرام", link: "https://t.me/example", reward: 0.005 }
+        ];
+
+        function updateUI() {
+            document.getElementById('userBalance').innerText = balance.toFixed(3);
+            document.getElementById('walletBalance').innerText = balance.toFixed(3);
+            localStorage.setItem('user_balance', balance);
+            localStorage.setItem('platform_tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function renderTasks() {
+            const t = translations[currentLang];
+            const list = document.getElementById('tasksList');
+            if (tasks.length === 0) {
+                list.innerHTML = `<p style="color: #94a3b8;">${t.msgNoTasks}</p>`;
+                return;
+            }
+            list.innerHTML = '';
+            tasks.forEach((task, index) => {
+                list.innerHTML += `
+                    <div class="task-item">
+                        <strong>Type:</strong> ${task.type}<br>
+                        <strong>Reward:</strong> <span style="color: #eab308;">${task.reward} $</span><br>
+                        <a href="${task.link}" target="_blank" style="color: #6366f1; text-decoration: underline; display:block; margin: 5px 0;">Task Link</a>
+                        <button class="btn" style="padding: 5px; margin-top: 5px;" onclick="completeTask(${index})">${t.completeBtn}</button>
+                    </div>
+                `;
+            });
+        }
+
+        // إعداد إعلانات Adsgram بالمعرف 48015
         const adController = window.Adsgram ? window.Adsgram.init({ blockId: "48015" }) : null;
 
         function showAd() {
+            const t = translations[currentLang];
             if (adController) {
                 adController.show().then((result) => {
-                    alert("تم مشاهدة الإعلان بنجاح! إضافة مكافأة لرصيدك.");
+                    balance += 0.010;
+                    updateUI();
+                    alert(t.msgAdSuccess);
                 }).catch((err) => {
-                    alert("خطأ في عرض الإعلان، حاول مرة أخرى.");
+                    alert("Ad error, please try again.");
                 });
             } else {
-                alert("الإعلانات غير متوفرة حالياً في هذا المتصفح.");
+                balance += 0.010;
+                updateUI();
+                alert(t.msgAdSuccess);
             }
+        }
+
+        function completeTask(index) {
+            const t = translations[currentLang];
+            balance += tasks[index].reward;
+            tasks.splice(index, 1);
+            updateUI();
+            alert(t.msgTaskDone);
         }
 
         function switchTab(tabId, element) {
@@ -113,12 +273,48 @@
         }
 
         function createAd() {
-            alert("تم إرسال حملتك الإعلانية بنجاح وسيتم إضافتها لقائمة المهام!");
+            const t = translations[currentLang];
+            const type = document.getElementById('adType').value;
+            const link = document.getElementById('adLink').value;
+            const reward = parseFloat(document.getElementById('adReward').value);
+
+            if (!link || !reward || reward <= 0) {
+                alert("Please enter a valid link and reward.");
+                return;
+            }
+
+            tasks.push({ type, link, reward });
+            updateUI();
+            alert(t.msgAdCreated);
+            document.getElementById('adLink').value = '';
+            document.getElementById('adReward').value = '';
+            switchTab('tasks', document.querySelectorAll('.nav-item')[0]);
         }
 
         function requestWithdraw() {
-            alert("تم إرسال طلب السحب بنجاح وسيتم المراجعة والتحويل عبر Binance قريباً.");
+            const address = document.getElementById('binanceAddress').value;
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const t = translations[currentLang];
+
+            if (!address) {
+                alert("Please enter Binance wallet address.");
+                return;
+            }
+            if (isNaN(amount) || amount <= 0 || amount > balance) {
+                alert("Invalid amount or exceeds current balance.");
+                return;
+            }
+
+            balance -= amount;
+            updateUI();
+            alert(`${t.msgWithdraw} $${amount} to Binance (${address}) successfully!`);
+            document.getElementById('binanceAddress').value = '';
+            document.getElementById('withdrawAmount').value = '';
         }
+
+        // تهيئة النصوص والواجهة عند التحميل
+        updateTexts();
+        updateUI();
     </script>
 </body>
 </html>
