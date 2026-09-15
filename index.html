@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">منصة المهام والأرباح - SudanTapGame</title>
+    <title id="page-title">منصة المهام والأرباح - v2.5</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -115,7 +115,7 @@
 <body>
 
     <div class="header">
-        <h2 id="main-heading">Tasks & Earnings Platform</h2>
+        <h2 id="main-heading">منصة المهام والأرباح</h2>
         <select class="lang-select" id="langSwitcher" onchange="changeLanguage()">
             <option value="ar">العربية</option>
             <option value="en">English</option>
@@ -133,11 +133,6 @@
                     <p>المكافأة: $0.050</p>
                     <button class="btn btn-success" onclick="completeTask(0.05)">إنجاز المهمة</button>
                 </div>
-                <div class="card" style="background: var(--bg-color);">
-                    <h4>مشاهدة إعلان ترويجي</h4>
-                    <p>المكافأة: $0.010</p>
-                    <button class="btn btn-success" onclick="completeTask(0.01)">مشاهدة الإعلان (Demo)</button>
-                </div>
             </div>
         </div>
     </div>
@@ -145,25 +140,27 @@
     <!-- قسم المحفظة والسحب -->
     <div id="tab-wallet" class="container">
         <div class="card">
-            <h3 id="w-title">المحفظة والأرباح</h3>
-            <p id="w-balance-label">رصيدك الحالي: <span id="userBalance" style="color: var(--success-color); font-weight: bold;">$0.00</span></p>
+            <h3 id="w-title">المحفظة وسحب الأرباح</h3>
+            <p id="w-balance-label">رصيدكم الحالي: <span id="userBalance" style="color: var(--success-color); font-weight: bold;">$0.00</span></p>
             
             <div class="notice" id="w-notice">
                 ملاحظة: يتم معالجة طلبات السحب وتحويل الأرباح خلال 24 ساعة كحد أقصى.
             </div>
 
-            <h4 id="w-withdraw-title">طلب سحب الأرباح</h4>
             <label id="w-select-method">اختر طريقة السحب:</label>
             <select id="withdrawMethod">
-                <option value="bank">تحويل بنكي محلي / تطبيقك (بنكك)</option>
+                <option value="bank">تطبيق بنكك (البنك السوداني)</option>
                 <option value="fawry">بنك فوري (Fawry)</option>
                 <option value="mycash">محفظة ماي كاشي (MyCash)</option>
                 <option value="ton">محفظة تون تيليجرام (Telegram TON)</option>
                 <option value="binance">منصة بايننس (Binance USDT)</option>
             </select>
 
-            <label id="w-account-info">معلومات الحساب أو المحفظة:</label>
-            <input type="text" id="accountDetails" placeholder="أدخل رقم الحساب أو العنوان هنا...">
+            <label id="w-account-info">رقم الحساب أو عنوان المحفظة:</label>
+            <input type="text" id="accountDetails" placeholder="أدخل بيانات الحساب هنا...">
+
+            <label id="w-amount-label">المبلغ المراد سحبه ($):</label>
+            <input type="number" id="withdrawAmountInput" placeholder="0.00">
 
             <button class="btn" onclick="requestWithdrawal()" id="w-btn">تأكيد طلب السحب</button>
         </div>
@@ -173,12 +170,11 @@
     <div id="tab-add" class="container">
         <div class="card">
             <h3 id="ad-title">إضافة إعلان وشحن الرصيد</h3>
-            <p id="ad-desc">للبدء في الإعلان، قم بشحن حسابك أولاً لتظهر إعلاناتك لجميع المستخدمين.</p>
+            <p id="ad-desc">اشحن رصيدك أولاً لتظهر إعلاناتك لجميع المستخدمين.</p>
             
-            <h4 id="ad-recharge-title">طرق شحن الرصيد (للمعلنين):</h4>
-            <label id="ad-select-pay">اختر وسيلة الدفع للشحن:</label>
+            <label id="ad-select-pay">اختر وسيلة الدفع لشحن الرصيد:</label>
             <select id="depositMethod">
-                <option value="bank">تحويل بنكي محلي / تطبيقك (بنكك)</option>
+                <option value="bank">تطبيق بنكك (البنك السوداني)</option>
                 <option value="fawry">بنك فوري (Fawry)</option>
                 <option value="mycash">محفظة ماي كاشي (MyCash)</option>
                 <option value="ton">محفظة تون تيليجرام (Telegram TON)</option>
@@ -193,11 +189,11 @@
             <hr style="border-color: var(--border-color); margin: 20px 0;">
 
             <h4 id="ad-create-title">إنشاء إعلان جديد</h4>
-            <label id="ad-title-label">عنوان المهمة أو الإعلان:</label>
-            <input type="text" id="adTitleInput" placeholder="مثال: انضم لقناتي على تيليجرام">
+            <label id="ad-title-label">عنوان المهمة:</label>
+            <input type="text" id="adTitleInput" placeholder="مثال: انضم لقناتي">
             
             <label id="ad-reward-label">مكافأة العامل الواحد ($):</label>
-            <input type="number" id="adRewardInput" placeholder="مثال: 0.01">
+            <input type="number" id="adRewardInput" placeholder="0.01">
 
             <button class="btn" onclick="createAd()" id="ad-create-btn">نشر الإعلان</button>
         </div>
@@ -256,8 +252,7 @@
         }
 
         function requestWithdrawal() {
-            let amountStr = prompt("أدخل المبلغ المراد سحبه (رصيدك الحالي: $" + currentBalance.toFixed(2) + "):");
-            let amount = parseFloat(amountStr);
+            let amount = parseFloat(document.getElementById('withdrawAmountInput').value);
             let method = document.getElementById('withdrawMethod').value;
             let details = document.getElementById('accountDetails').value;
 
@@ -309,25 +304,23 @@
 
         const translations = {
             ar: {
-                "page-title": "منصة المهام والأرباح - SudanTapGame",
                 "main-heading": "منصة المهام والأرباح",
                 "t-available-tasks": "المهام المتاحة",
                 "t-tasks-desc": "أجز المهام واربح الأرباح فوراً.",
-                "w-title": "المحفظة والأرباح",
+                "w-title": "المحفظة وسحب الأرباح",
                 "w-balance-label": "رصيدك الحالي: ",
                 "w-notice": "ملاحظة: يتم معالجة طلبات السحب وتحويل الأرباح خلال 24 ساعة كحد أقصى.",
-                "w-withdraw-title": "طلب سحب الأرباح",
                 "w-select-method": "اختر طريقة السحب:",
-                "w-account-info": "معلومات الحساب أو المحفظة:",
+                "w-account-info": "رقم الحساب أو عنوان المحفظة:",
+                "w-amount-label": "المبلغ المراد سحبه ($):",
                 "w-btn": "تأكيد طلب السحب",
                 "ad-title": "إضافة إعلان وشحن الرصيد",
-                "ad-desc": "للبدء في الإعلان، قم بشحن حسابك أولاً لتظهر إعلاناتك لجميع المستخدمين.",
-                "ad-recharge-title": "طرق شحن الرصيد (للمعلنين):",
-                "ad-select-pay": "اختر وسيلة الدفع للشحن:",
+                "ad-desc": "اشحن رصيدك أولاً لتظهر إعلاناتك لجميع المستخدمين.",
+                "ad-select-pay": "اختر وسيلة الدفع لشحن الرصيد:",
                 "ad-amount-label": "المبلغ المراد شحنه ($):",
                 "ad-btn": "شحن الرصيد الآن",
                 "ad-create-title": "إنشاء إعلان جديد",
-                "ad-title-label": "عنوان المهمة أو الإعلان:",
+                "ad-title-label": "عنوان المهمة:",
                 "ad-reward-label": "مكافأة العامل الواحد ($):",
                 "ad-create-btn": "نشر الإعلان",
                 "h-title": "سجل العمليات",
@@ -337,28 +330,26 @@
                 "nav-history": "السجل"
             },
             en: {
-                "page-title": "Tasks & Earnings Platform",
                 "main-heading": "Tasks & Earnings Platform",
                 "t-available-tasks": "Available Tasks",
                 "t-tasks-desc": "Complete tasks and earn instantly.",
-                "w-title": "Wallet & Earnings",
+                "w-title": "Wallet & Withdrawals",
                 "w-balance-label": "Current Balance: ",
                 "w-notice": "Note: Withdrawal requests are processed and funds are delivered within a maximum of 24 hours.",
-                "w-withdraw-title": "Request Withdrawal",
                 "w-select-method": "Select Withdrawal Method:",
                 "w-account-info": "Account or Wallet Details:",
+                "w-amount-label": "Withdrawal Amount ($):",
                 "w-btn": "Confirm Withdrawal",
                 "ad-title": "Add Ad & Recharge",
-                "ad-desc": "To start advertising, recharge your balance first so your ads appear to all users.",
-                "ad-recharge-title": "Recharge Methods (for Advertisers):",
-                "ad-select-pay": "Select Payment Method:",
+                "ad-desc": "Recharge your balance to display your ads.",
+                "ad-select-pay": "Select Deposit Method:",
                 "ad-amount-label": "Amount to Recharge ($):",
                 "ad-btn": "Recharge Now",
                 "ad-create-title": "Create New Ad",
-                "ad-title-label": "Task or Ad Title:",
+                "ad-title-label": "Task Title:",
                 "ad-reward-label": "Reward per Worker ($):",
                 "ad-create-btn": "Publish Ad",
-                "h-title": "Activity & Operation Logs",
+                "h-title": "Activity Logs",
                 "nav-tasks": "Tasks",
                 "nav-wallet": "Wallet",
                 "nav-add": "Add Ad",
