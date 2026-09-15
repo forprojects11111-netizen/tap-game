@@ -17,15 +17,15 @@
         .btn:active { background: #4f46e5; }
         input, select { width: 100%; padding: 10px; margin-top: 8px; margin-bottom: 15px; background: #334155; border: 1px solid #475569; color: white; border-radius: 5px; box-sizing: border-box; }
         .nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #334155; z-index: 1000; }
-        .nav-item { color: #94a3b8; text-align: center; font-size: 10px; cursor: pointer; flex: 1; }
+        .nav-item { color: #94a3b8; text-align: center; font-size: 11px; cursor: pointer; flex: 1; }
         .nav-item.active-tab { color: #6366f1; font-weight: bold; }
         .balance-box { text-align: center; font-size: 20px; color: #eab308; margin-bottom: 15px; font-weight: bold; }
         .task-item, .log-item { background: #334155; padding: 12px; border-radius: 6px; margin-bottom: 10px; font-size: 14px; }
         .log-item { border-right: 4px solid #6366f1; }
         [dir="ltr"] .log-item { border-right: none; border-left: 4px solid #6366f1; }
-        /* تنسيق لعبة النقرات */
+        /* تنسيق لعبة النقرات (تسلية فقط بدون زيادة في رصيد الدولارات) */
         .clicker-box { text-align: center; }
-        .clicker-circle { width: 150px; height: 150px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); user-select: none; transition: transform 0.1s; color: white; }
+        .clicker-circle { width: 150px; height: 150px; background: linear-gradient(135deg, #eab308, #f97316); border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(234, 179, 8, 0.4); user-select: none; transition: transform 0.1s; color: white; }
         .clicker-circle:active { transform: scale(0.92); }
     </style>
 </head>
@@ -57,13 +57,13 @@
         </div>
     </div>
 
-    <!-- قسم لعبة النقرات (Clicker Game) -->
+    <!-- قسم لعبة النقرات (تسلية ونقاط فقط بدون تأثير على الرصيد المالي) -->
     <div id="tab-clicker" class="container">
         <div class="card clicker-box">
-            <h3 id="lbl-clicker-title">لعبة التعدين بالنقرات</h3>
-            <p id="lbl-clicker-desc">اضغط على الدائرة بسرعة واجمع الأرباح المجانية فوراً!</p>
-            <div class="clicker-circle" onclick="tapCoin()" id="lbl-tap-btn">انقر هنا</div>
-            <p style="font-size: 14px; color: #94a3b8; margin-top: 15px;"><span id="lbl-taps-count">عدد النقرات</span>: <span id="tapCount">0</span></p>
+            <h3 id="lbl-clicker-title">لعبة النقرات والنشاط</h3>
+            <p id="lbl-clicker-desc">اضغط على الدائرة لزيادة نقاط نشاطك الشخصية (للتسلية فقط ولا تضاف للأموال):</p>
+            <div class="clicker-circle" onclick="tapGame()" id="lbl-tap-btn">اضغط هنا</div>
+            <p style="font-size: 16px; color: #eab308; margin-top: 15px; font-weight: bold;"><span id="lbl-taps-count">نقاط النقرات</span>: <span id="tapCount">0</span></p>
         </div>
     </div>
 
@@ -140,10 +140,10 @@
                 btnAd: "مشاهدة الإعلان الآن",
                 tasksTitle: "المهام المتاحة",
                 loading: "جاري التحميل...",
-                clickerTitle: "لعبة التعدين بالنقرات",
-                clickerDesc: "اضغط على الدائرة بسرعة واجمع الأرباح المجانية فوراً!",
-                tapBtnText: "انقر هنا",
-                tapsCount: "عدد النقرات",
+                clickerTitle: "لعبة النقرات والنشاط",
+                clickerDesc: "اضغط على الدائرة لزيادة نقاط نشاطك الشخصية (للتسلية فقط ولا تضاف للأموال):",
+                tapBtnText: "اضغط هنا",
+                tapsCount: "نقاط النقرات",
                 createTitle: "إضافة مهمة جديدة",
                 typeLabel: "نوع المهمة:",
                 optTg: "تيليجرام (اشتراك / متابعة)",
@@ -187,10 +187,10 @@
                 btnAd: "Watch Ad Now",
                 tasksTitle: "Available Tasks",
                 loading: "Loading...",
-                clickerTitle: "Clicker Mining Game",
-                clickerDesc: "Tap the circle quickly and collect free earnings instantly!",
+                clickerTitle: "Clicker & Activity Game",
+                clickerDesc: "Tap the circle to increase your personal activity points (for fun only, does not add to balance):",
                 tapBtnText: "Tap Here",
-                tapsCount: "Total Taps",
+                tapsCount: "Click Points",
                 createTitle: "Create New Task",
                 typeLabel: "Task Type:",
                 optTg: "Telegram (Subscribe / Join)",
@@ -228,7 +228,6 @@
         };
 
         let currentLang = localStorage.getItem('app_lang') || 'ar';
-        document.getElementById('langSelect').value = currentLang;
 
         function changeLanguage(lang) {
             currentLang = lang;
@@ -277,6 +276,7 @@
             document.getElementById('btn-withdraw').innerText = t.btnWithdraw;
             document.getElementById('lbl-history-title').innerText = t.historyTitle;
             document.getElementById('lbl-no-history').innerText = t.noHistory;
+            
             document.getElementById('nav-t1').innerText = t.nav1;
             document.getElementById('nav-t2').innerText = t.nav2;
             document.getElementById('nav-t3').innerText = t.nav3;
@@ -310,10 +310,11 @@
             if (historyLogs.length > 25) historyLogs.pop();
         }
 
-        function tapCoin() {
+        // دالة لعبة النقرات (تزيد نقاط التسلية فقط ولا تلمس رصيد الدولارات أبداً)
+        function tapGame() {
             tapCount++;
-            balance += 0.001; 
-            updateUI();
+            document.getElementById('tapCount').innerText = tapCount;
+            localStorage.setItem('user_taps', tapCount);
         }
 
         function renderHistory() {
@@ -380,10 +381,8 @@
             const reward = tasks[index].reward;
             const type = tasks[index].type;
             
-            // فتح الرابط أولاً ليقوم المستخدم بتنفيذ المهمة فعلياً
             window.open(tasks[index].link, '_blank');
 
-            // محاكاة التحقق من إنجاز المهمة بدلاً من الإضافة الوهمية المباشرة
             setTimeout(() => {
                 balance += reward;
                 addLog(currentLang === 'ar' ? `إنجاز مهمة (${type}) وكسب +${reward}$` : `Completed task (${type}) and earned +$${reward}`);
@@ -437,15 +436,15 @@
             balance -= amount;
             addLog(currentLang === 'ar' ? `طلب سحب بقيمة ${amount}$ إلى Binance (${address})` : `Withdrawal request of $${amount} to Binance (${address})`);
             updateUI();
-            alert(currentLang === 'ar' ? `تم إرسال طلب السحب بقيمة $${amount} بنجاح!` : `Withdrawal request of $${amount} to Binance submitted successfully!`);
+            alert(currentLang === 'ar' ? `تم إرسال طلب السحب بقيمة $${amount} بنجاح!` : `Withdrawal request of $${amount} to Binance successfully submitted!`);
             document.getElementById('binanceAddress').value = '';
             document.getElementById('withdrawAmount').value = '';
         }
 
-        const initialLang = localStorage.getItem('app_lang') || 'ar';
-        document.getElementById('htmlRoot').setAttribute('dir', initialLang === 'ar' ? 'rtl' : 'ltr');
-        document.getElementById('htmlRoot').setAttribute('lang', initialLang);
-        document.getElementById('langSelect').value = initialLang;
+        // تهيئة التطبيق
+        document.getElementById('htmlRoot').setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+        document.getElementById('htmlRoot').setAttribute('lang', currentLang);
+        document.getElementById('langSelect').value = currentLang;
         updateTexts();
         updateUI();
     </script>
