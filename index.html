@@ -7,6 +7,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.js"></script>
     <style>
+        /* [1] التنسيق العام والستايل (CSS): مكان تخصيص الألوان، الخلفيات، والشاشات */
         body { font-family: Tahoma, sans-serif; background: #0f172a; color: #fff; margin: 0; padding: 0; padding-bottom: 70px; }
         .header { background: #1e293b; padding: 15px; text-align: center; font-size: 18px; font-weight: bold; border-bottom: 2px solid #334155; display: flex; justify-content: space-between; align-items: center; }
         .lang-select { background: #334155; color: white; border: 1px solid #475569; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 14px; }
@@ -35,14 +36,14 @@
 <body>
 
     <div class="header">
-        <span id="header-title">منصة المهام والأرباح</span>
+        <span id="header-title">منصة تبادل المهام والأرباح</span>
         <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
             <option value="ar">العربية</option>
             <option value="en">English</option>
         </select>
     </div>
 
-    <!-- قسم المهام والكسب -->
+    <!-- [2] قسم المهام والكسب: مكان عرض الرصيد، زر الإعلانات، وقائمة المهام المتاحة -->
     <div id="tab-tasks" class="container active">
         <div class="balance-box"><span id="lbl-balance">رصيدك</span>: <span id="userBalance">0.00</span> $</div>
         
@@ -54,14 +55,14 @@
         </div>
 
         <div class="card">
-            <h3 id="lbl-tasks-title" style="text-align: center;">المهام المتاحة (تتضاعف أرباحها حسب مستواك)</h3>
+            <h3 id="lbl-tasks-title" style="text-align: center;">المهام المتاحة</h3>
             <div id="tasksList">
                 <p style="color: #94a3b8; text-align: center;" id="lbl-loading">جاري التحميل...</p>
             </div>
         </div>
     </div>
 
-    <!-- قسم النقرات ورفع المستوى -->
+    <!-- [3] قسم النقرات ورفع المستوى: مكان زيادة نقاط التفاعل ورفع مستوى الحساب -->
     <div id="tab-clicker" class="container">
         <div class="card clicker-box">
             <h3 id="lbl-clicker-title">مركز زيادة التفاعل والمستوى</h3>
@@ -72,7 +73,7 @@
         </div>
     </div>
 
-    <!-- قسم الإحالة والترويج (Referral) -->
+    <!-- [4] قسم الإحالة والترويج: مكان رابط دعوة الأصدقاء وحساب الأرباح التابعة -->
     <div id="tab-referral" class="container">
         <div class="card" style="text-align: center;">
             <h3 id="lbl-ref-title">برنامج الإحالة والأصدقاء</h3>
@@ -89,7 +90,7 @@
         </div>
     </div>
 
-    <!-- قسم إنشاء إعلان -->
+    <!-- [5] قسم إنشاء إعلان: مكان إضافة المستخدمين لمهام جديدة (تليجرام، يوتيوب، إلخ) -->
     <div id="tab-advertise" class="container">
         <div class="card">
             <h3 id="lbl-create-title" style="text-align: center;">إضافة مهمة جديدة</h3>
@@ -106,27 +107,28 @@
                 <option value="LinkedIn" id="opt-li">لينكد إن</option>
             </select>
 
-            <label id="lbl-action-label">اختر نوع المهمة (الإجراء):</label>
+            <label id="lbl-action-label">اختر نوع الإجراء المطلوب:</label>
             <select id="adAction">
-                <option value="اشتراك / انضمام" id="act-sub">اشتراك / انضمام</option>
-                <option value="متابعة حساب" id="act-follow">متابعة حساب</option>
-                <option value="إعجاب / لايك" id="act-like">إعجاب / لايك</option>
+                <option value="اشتراك" id="act-sub">اشتراك</option>
+                <option value="متابعة" id="act-follow">متابعة</option>
+                <option value="إعجاب (لايك)" id="act-like">إعجاب (لايك)</option>
                 <option value="مشاهدة فيديو" id="act-watch">مشاهدة فيديو</option>
-                <option value="إعادة نشر / ريتويت" id="act-repost">إعادة نشر / ريتويت</option>
                 <option value="تعليق" id="act-comment">تعليق</option>
+                <option value="انضمام لمجموعة/قناة" id="act-join">انضمام لمجموعة/قناة</option>
+                <option value="إعادة نشر (ريتويت)" id="act-repost">إعادة نشر (ريتويت)</option>
             </select>
             
             <label id="lbl-link-label">رابط المهمة المستهدف:</label>
             <input type="text" id="adLink" placeholder="https://...">
 
-            <label id="lbl-reward-label">المكافأة الأساسية للعامل (بالدولار):</label>
+            <label id="lbl-reward-label">سعر / مكافأة المهمة لكل عامل (بالدولار):</label>
             <input type="number" id="adReward" placeholder="0.005" step="0.001">
 
             <button class="btn" id="btn-create" onclick="createAd()">نشر الحملة الإعلانية</button>
         </div>
     </div>
 
-    <!-- قسم المحفظة وسحب الأرباح -->
+    <!-- [6] قسم المحفظة وسحب الأرباح: مكان إدخال عنوان Binance وطلب سحب الرصيد -->
     <div id="tab-wallet" class="container">
         <div class="card">
             <h3 id="lbl-wallet-title" style="text-align: center;">المحفظة وسحب الأرباح</h3>
@@ -142,7 +144,7 @@
         </div>
     </div>
 
-    <!-- قسم السجل والعمليات -->
+    <!-- [7] قسم السجل والعمليات: مكان عرض تاريخ العمليات والسحب والإنجازات السابقة -->
     <div id="tab-history" class="container">
         <div class="card">
             <h3 id="lbl-history-title" style="text-align: center;">سجل الأنشطة والعمليات</h3>
@@ -152,7 +154,7 @@
         </div>
     </div>
 
-    <!-- شريط التنقل السفلي -->
+    <!-- [8] شريط التنقل السفلي: أزرار التنقل بين الأقسام المختلفة -->
     <div class="nav">
         <div class="nav-item active-tab" onclick="switchTab('tasks', this)" id="nav-t1">المهام</div>
         <div class="nav-item" onclick="switchTab('clicker', this)" id="nav-t2">المستوى</div>
@@ -163,6 +165,7 @@
     </div>
 
     <script>
+        /* [9] البرمجة والمنطق (JavaScript): معالجة اللغات، الأرصدة، الإعلانات، وحفظ البيانات محلياً */
         const translations = {
             ar: {
                 pageTitle: "منصة تبادل المهام والأرباح",
@@ -171,7 +174,7 @@
                 adTitle: "مشاهدة إعلان سريع وكسب رصيد",
                 adDesc: "شاهد إعلان Adsgram القصير واحصل على مكافأة فورية لرصيدك.",
                 btnAd: "مشاهدة الإعلان الآن",
-                tasksTitle: "المهام المتاحة (تتضاعف أرباحها حسب مستواك)",
+                tasksTitle: "المهام المتاحة",
                 loading: "جاري التحميل...",
                 clickerTitle: "مركز زيادة التفاعل والمستوى",
                 clickerDesc: "اضغط لزيادة نقاط نشاطك ورفع مستواك للحصول على مهام ذات أجر أعلى:",
@@ -183,7 +186,7 @@
                 btnCopyRef: "نسخ رابط الإحالة",
                 createTitle: "إضافة مهمة جديدة",
                 platformLabel: "اختر منصة التواصل الاجتماعي:",
-                actionLabel: "اختر نوع المهمة (الإجراء):",
+                actionLabel: "اختر نوع الإجراء المطلوب:",
                 optTg: "تيليجرام",
                 optYt: "يوتيوب",
                 optTt: "تيك توك",
@@ -192,14 +195,15 @@
                 optX: "تويتر / X",
                 optWa: "واتساب",
                 optLi: "لينكد إن",
-                actSub: "اشتراك / انضمام",
-                actFollow: "متابعة حساب",
-                actLike: "إعجاب / لايك",
+                actSub: "اشتراك",
+                actFollow: "متابعة",
+                actLike: "إعجاب (لايك)",
                 actWatch: "مشاهدة فيديو",
-                actRepost: "إعادة نشر / ريتويت",
                 actComment: "تعليق",
+                actJoin: "انضمام لمجموعة/قناة",
+                actRepost: "إعادة نشر (ريتويت)",
                 linkLabel: "رابط المهمة المستهدف:",
-                rewardLabel: "المكافأة الأساسية للعامل (بالدولار):",
+                rewardLabel: "سعر / مكافأة المهمة لكل عامل (بالدولار):",
                 btnCreate: "نشر الحملة الإعلانية",
                 walletTitle: "المحفظة وسحب الأرباح",
                 walletBalance: "رصيدك القابل للسحب",
@@ -232,7 +236,7 @@
                 adTitle: "Watch Quick Ad & Earn",
                 adDesc: "Watch the short Adsgram ad and get an instant reward to your balance.",
                 btnAd: "Watch Ad Now",
-                tasksTitle: "Available Tasks (Multiplied by your level)",
+                tasksTitle: "Available Tasks",
                 loading: "Loading...",
                 clickerTitle: "Activity & Level Center",
                 clickerDesc: "Tap to increase your activity points and level up for higher-paying tasks:",
@@ -244,7 +248,7 @@
                 btnCopyRef: "Copy Referral Link",
                 createTitle: "Create New Task",
                 platformLabel: "Select Social Media Platform:",
-                actionLabel: "Select Task Action:",
+                actionLabel: "Select Action Type:",
                 optTg: "Telegram",
                 optYt: "YouTube",
                 optTt: "TikTok",
@@ -253,14 +257,15 @@
                 optX: "Twitter / X",
                 optWa: "WhatsApp",
                 optLi: "LinkedIn",
-                actSub: "Subscribe / Join",
-                actFollow: "Follow Account",
+                actSub: "Subscribe",
+                actFollow: "Follow",
                 actLike: "Like",
                 actWatch: "Watch Video",
-                actRepost: "Repost / Retweet",
                 actComment: "Comment",
+                actJoin: "Join Group/Channel",
+                actRepost: "Repost (Retweet)",
                 linkLabel: "Target Task Link:",
-                rewardLabel: "Base Reward per Worker ($):",
+                rewardLabel: "Task Price per Worker ($):",
                 btnCreate: "Publish Ad Campaign",
                 walletTitle: "Wallet & Withdrawals",
                 walletBalance: "Withdrawable Balance",
@@ -337,8 +342,9 @@
             document.getElementById('act-follow').innerText = t.actFollow;
             document.getElementById('act-like').innerText = t.actLike;
             document.getElementById('act-watch').innerText = t.actWatch;
-            document.getElementById('act-repost').innerText = t.actRepost;
             document.getElementById('act-comment').innerText = t.actComment;
+            document.getElementById('act-join').innerText = t.actJoin;
+            document.getElementById('act-repost').innerText = t.actRepost;
 
             document.getElementById('lbl-link-label').innerText = t.linkLabel;
             document.getElementById('lbl-reward-label').innerText = t.rewardLabel;
@@ -365,7 +371,7 @@
         let refEarned = parseFloat(localStorage.getItem('user_ref_earned')) || 0.00;
         
         let tasks = JSON.parse(localStorage.getItem('platform_tasks')) || [
-            { platform: "Telegram", action: "اشتراك / انضمام", link: "https://t.me/example", reward: 0.005 },
+            { platform: "Telegram", action: "اشتراك", link: "https://t.me/example", reward: 0.005 },
             { platform: "YouTube", action: "مشاهدة فيديو", link: "https://youtube.com/@example", reward: 0.008 }
         ];
         let historyLogs = JSON.parse(localStorage.getItem('platform_history')) || [];
