@@ -13,20 +13,18 @@
         .container { padding: 15px; display: none; }
         .active { display: block; }
         .card { background: #1e293b; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); text-align: center; }
-        .btn { background: #6366f1; color: white; border: none; padding: 10px 15px; border-radius: 5px; width: 100%; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        .btn { background: #6366f1; color: white; border: none; padding: 10px 15px; border-radius: 5px; width: 100%; font-size: 16px; cursor: pointer; margin-top: 10px; font-weight: bold; }
         .btn:active { background: #4f46e5; }
-        input, select { width: 100%; padding: 10px; margin-top: 8px; margin-bottom: 15px; background: #334155; border: 1px solid #475569; color: white; border-radius: 5px; box-sizing: border-box; text-align: right; }
-        [dir="ltr"] input, [dir="ltr"] select { text-align: left; }
+        input, select { width: 100%; padding: 10px; margin-top: 8px; margin-bottom: 15px; background: #334155; border: 1px solid #475569; color: white; border-radius: 5px; box-sizing: border-box; }
         .nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #334155; z-index: 1000; }
         .nav-item { color: #94a3b8; text-align: center; font-size: 10px; cursor: pointer; flex: 1; }
         .nav-item.active-tab { color: #6366f1; font-weight: bold; }
         .balance-box { text-align: center; font-size: 20px; color: #eab308; margin-bottom: 15px; font-weight: bold; }
-        .task-item, .log-item { background: #334155; padding: 10px; border-radius: 6px; margin-bottom: 10px; font-size: 14px; text-align: right; }
-        [dir="ltr"] .task-item, [dir="ltr"] .log-item { text-align: left; }
+        .task-item, .log-item { background: #334155; padding: 12px; border-radius: 6px; margin-bottom: 10px; font-size: 14px; }
         .log-item { border-right: 4px solid #6366f1; }
         [dir="ltr"] .log-item { border-right: none; border-left: 4px solid #6366f1; }
-        /* تصميم لعبة النقرات */
-        .clicker-circle { width: 150px; height: 150px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); user-select: none; transition: transform 0.1s; }
+        /* تنسيق لعبة النقرات */
+        .clicker-circle { width: 150px; height: 150px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); user-select: none; transition: transform 0.1s; color: white; }
         .clicker-circle:active { transform: scale(0.92); }
     </style>
 </head>
@@ -45,15 +43,15 @@
         <div class="balance-box"><span id="lbl-balance">رصيدك</span>: <span id="userBalance">0.00</span> $</div>
         
         <div class="card">
-            <h3 id="lbl-ad-title">📢 مشاهدة إعلان سريع وكسب رصيد</h3>
+            <h3 id="lbl-ad-title">مشاهدة إعلان سريع وكسب رصيد</h3>
             <p id="lbl-ad-desc">شاهد إعلان Adsgram القصير واحصل على مكافأة فورية لرصيدك.</p>
             <button class="btn" id="btn-ad" onclick="showAd()">مشاهدة الإعلان الآن</button>
         </div>
 
-        <div class="card" style="text-align: right;">
-            <h3 id="lbl-tasks-title" style="text-align: center;">📋 المهام المتاحة</h3>
-            <div id="tasksList">
-                <p style="color: #94a3b8; text-align: center;" id="lbl-loading">جاري التحميل...</p>
+        <div class="card" style="text-align: inherit;">
+            <h3 id="lbl-tasks-title">المهام المتاحة</h3>
+            <div id="tasksList" style="text-align: inherit;">
+                <p style="color: #94a3b8;" id="lbl-loading">جاري التحميل...</p>
             </div>
         </div>
     </div>
@@ -61,19 +59,19 @@
     <!-- قسم لعبة النقرات (Clicker Game) -->
     <div id="tab-clicker" class="container">
         <div class="card">
-            <h3 id="lbl-clicker-title">⚡ لعبة التعدين بالنقرات</h3>
+            <h3 id="lbl-clicker-title">لعبة التعدين بالنقرات</h3>
             <p id="lbl-clicker-desc">اضغط على الدائرة بسرعة واجمع الأرباح المجانية فوراً!</p>
-            <div class="clicker-circle" onclick="tapCoin()">🪙 انقر هنا</div>
+            <div class="clicker-circle" onclick="tapCoin()" id="lbl-tap-btn">انقر هنا</div>
             <p style="font-size: 14px; color: #94a3b8;"><span id="lbl-taps-count">عدد النقرات</span>: <span id="tapCount">0</span></p>
         </div>
     </div>
 
     <!-- قسم إنشاء إعلان (المعلن) -->
     <div id="tab-advertise" class="container">
-        <div class="card" style="text-align: right;">
-            <h3 id="lbl-create-title" style="text-align: center;">📢 إضافة مهمة جديدة</h3>
+        <div class="card" style="text-align: inherit;">
+            <h3 id="lbl-create-title">إضافة مهمة جديدة</h3>
             
-            <label id="lbl-type-label">نوع المهمة المنصة:</label>
+            <label id="lbl-type-label" style="display:block; text-align:inherit;">نوع المهمة:</label>
             <select id="adType">
                 <option value="تيليجرام - اشتراك في قناة" id="opt-tg">تيليجرام (اشتراك / متابعة)</option>
                 <option value="يوتيوب - مشاهدة واشتراك" id="opt-yt">يوتيوب (مشاهدة واشتراك)</option>
@@ -83,10 +81,10 @@
                 <option value="تويتر / X - إعادة نشر ومتابعة" id="opt-x">تويتر / X (متابعة وإعادة نشر)</option>
             </select>
             
-            <label id="lbl-link-label">رابط المهمة المستهدف:</label>
+            <label id="lbl-link-label" style="display:block; text-align:inherit;">رابط المهمة المستهدف:</label>
             <input type="text" id="adLink" placeholder="https://...">
 
-            <label id="lbl-reward-label">المكافأة لكل عامل (بالدولار):</label>
+            <label id="lbl-reward-label" style="display:block; text-align:inherit;">المكافأة لكل عامل (بالدولار):</label>
             <input type="number" id="adReward" placeholder="0.005" step="0.001">
 
             <button class="btn" id="btn-create" onclick="createAd()">نشر الحملة الإعلانية</button>
@@ -95,14 +93,14 @@
 
     <!-- قسم المحفظة والسحب (Binance) -->
     <div id="tab-wallet" class="container">
-        <div class="card" style="text-align: right;">
-            <h3 id="lbl-wallet-title" style="text-align: center;">💰 المحفظة وسحب الأرباح</h3>
+        <div class="card" style="text-align: inherit;">
+            <h3 id="lbl-wallet-title">المحفظة وسحب الأرباح</h3>
             <p><span id="lbl-wallet-balance">رصيدك القابل للسحب</span>: <span id="walletBalance">0.00</span> $</p>
             
-            <label id="lbl-address-label">عنوان محفظة Binance (USDT):</label>
-            <input type="text" id="binanceAddress" placeholder="UQ... / T... / Email">
+            <label id="lbl-address-label" style="display:block; text-align:inherit;">عنوان محفظة Binance (USDT):</label>
+            <input type="text" id="binanceAddress" placeholder="أدخل عنوان محفظتك هنا...">
 
-            <label id="lbl-amount-label">المبلغ المراد سحبه:</label>
+            <label id="lbl-amount-label" style="display:block; text-align:inherit;">المبلغ المراد سحبه:</label>
             <input type="number" id="withdrawAmount" placeholder="0.00">
 
             <button class="btn" id="btn-withdraw" onclick="requestWithdraw()">طلب السحب إلى Binance</button>
@@ -111,21 +109,21 @@
 
     <!-- قسم السجل والعمليات -->
     <div id="tab-history" class="container">
-        <div class="card" style="text-align: right;">
-            <h3 id="lbl-history-title" style="text-align: center;">📜 سجل الأنشطة والعمليات</h3>
-            <div id="historyList">
-                <p style="color: #94a3b8; text-align: center;" id="lbl-no-history">لا توجد عمليات سابقة حتى الآن.</p>
+        <div class="card" style="text-align: inherit;">
+            <h3 id="lbl-history-title">سجل الأنشطة والعمليات</h3>
+            <div id="historyList" style="text-align: inherit;">
+                <p style="color: #94a3b8;" id="lbl-no-history">لا توجد عمليات سابقة حتى الآن.</p>
             </div>
         </div>
     </div>
 
     <!-- شريط التنقل السفلي -->
     <div class="nav">
-        <div class="nav-item active-tab" onclick="switchTab('tasks', this)" id="nav-t1">📋 المهام</div>
-        <div class="nav-item" onclick="switchTab('clicker', this)" id="nav-t2">⚡ النقرات</div>
-        <div class="nav-item" onclick="switchTab('advertise', this)" id="nav-t3">📢 أضف إعلان</div>
-        <div class="nav-item" onclick="switchTab('wallet', this)" id="nav-t4">💰 المحفظة</div>
-        <div class="nav-item" onclick="switchTab('history', this)" id="nav-t5">📜 السجل</div>
+        <div class="nav-item active-tab" onclick="switchTab('tasks', this)" id="nav-t1">المهام</div>
+        <div class="nav-item" onclick="switchTab('clicker', this)" id="nav-t2">النقرات</div>
+        <div class="nav-item" onclick="switchTab('advertise', this)" id="nav-t3">أضف إعلان</div>
+        <div class="nav-item" onclick="switchTab('wallet', this)" id="nav-t4">المحفظة</div>
+        <div class="nav-item" onclick="switchTab('history', this)" id="nav-t5">السجل</div>
     </div>
 
     <script>
@@ -134,16 +132,17 @@
                 pageTitle: "منصة تبادل المهام والأرباح",
                 headerTitle: "منصة المهام والأرباح",
                 balance: "رصيدك",
-                adTitle: "📢 مشاهدة إعلان سريع وكسب رصيد",
+                adTitle: "مشاهدة إعلان سريع وكسب رصيد",
                 adDesc: "شاهد إعلان Adsgram القصير واحصل على مكافأة فورية لرصيدك.",
                 btnAd: "مشاهدة الإعلان الآن",
-                tasksTitle: "📋 المهام المتاحة",
+                tasksTitle: "المهام المتاحة",
                 loading: "جاري التحميل...",
-                clickerTitle: "⚡ لعبة التعدين بالنقرات",
+                clickerTitle: "لعبة التعدين بالنقرات",
                 clickerDesc: "اضغط على الدائرة بسرعة واجمع الأرباح المجانية فوراً!",
+                tapBtnText: "انقر هنا",
                 tapsCount: "عدد النقرات",
-                createTitle: "📢 إضافة مهمة جديدة",
-                typeLabel: "نوع المهمة المنصة:",
+                createTitle: "إضافة مهمة جديدة",
+                typeLabel: "نوع المهمة:",
                 optTg: "تيليجرام (اشتراك / متابعة)",
                 optYt: "يوتيوب (مشاهدة واشتراك)",
                 optTt: "تيك توك (متابعة وإعجاب)",
@@ -153,40 +152,42 @@
                 linkLabel: "رابط المهمة المستهدف:",
                 rewardLabel: "المكافأة لكل عامل (بالدولار):",
                 btnCreate: "نشر الحملة الإعلانية",
-                walletTitle: "💰 المحفظة وسحب الأرباح",
+                walletTitle: "المحفظة وسحب الأرباح",
                 walletBalance: "رصيدك القابل للسحب",
                 addressLabel: "عنوان محفظة Binance (USDT):",
                 amountLabel: "المبلغ المراد سحبه:",
                 btnWithdraw: "طلب السحب إلى Binance",
-                historyTitle: "📜 سجل الأنشطة والعمليات",
+                historyTitle: "سجل الأنشطة والعمليات",
                 noHistory: "لا توجد عمليات سابقة حتى الآن.",
-                nav1: "📋 المهام",
-                nav2: "⚡ النقرات",
-                nav3: "📢 أضف إعلان",
-                nav4: "💰 المحفظة",
-                nav5: "📜 السجل",
+                nav1: "المهام",
+                nav2: "النقرات",
+                nav3: "أضف إعلان",
+                nav4: "المحفظة",
+                nav5: "السجل",
                 completeBtn: "إتمام المهمة وكسب الرصيد",
                 msgAdSuccess: "تم مشاهدة الإعلان بنجاح! وتمت إضافة 0.010$ لرصيدك.",
                 msgTaskDone: "رائع! تم التحقق من إنجاز المهمة وإضافة المكافأة لرصيدك.",
                 msgAdCreated: "تم نشر حملتك الإعلانية بنجاح وأصبحت مرئية للعمال!",
                 msgNoTasks: "لا توجد مهام متاحة حالياً. عُود لاحقاً أو أضف إعلاناً!",
                 linkText: "رابط المهمة",
-                clickRewardMsg: "مبروك! ربحت +0.001$ من النقرات."
+                typeLabelText: "النوع:",
+                rewardLabelText: "المكافأة:"
             },
             en: {
                 pageTitle: "Tasks & Earnings Platform",
                 headerTitle: "Tasks & Earnings Platform",
                 balance: "Balance",
-                adTitle: "📢 Watch Quick Ad & Earn",
+                adTitle: "Watch Quick Ad & Earn",
                 adDesc: "Watch the short Adsgram ad and get an instant reward to your balance.",
                 btnAd: "Watch Ad Now",
-                tasksTitle: "📋 Available Tasks",
+                tasksTitle: "Available Tasks",
                 loading: "Loading...",
-                clickerTitle: "⚡ Clicker Mining Game",
+                clickerTitle: "Clicker Mining Game",
                 clickerDesc: "Tap the circle quickly and collect free earnings instantly!",
+                tapBtnText: "Tap Here",
                 tapsCount: "Total Taps",
-                createTitle: "📢 Create New Task",
-                typeLabel: "Platform Task Type:",
+                createTitle: "Create New Task",
+                typeLabel: "Task Type:",
                 optTg: "Telegram (Subscribe / Join)",
                 optYt: "YouTube (Watch & Subscribe)",
                 optTt: "TikTok (Follow & Like)",
@@ -196,25 +197,26 @@
                 linkLabel: "Target Task Link:",
                 rewardLabel: "Reward per Worker ($):",
                 btnCreate: "Publish Ad Campaign",
-                walletTitle: "💰 Wallet & Withdrawals",
+                walletTitle: "Wallet & Withdrawals",
                 walletBalance: "Withdrawable Balance",
                 addressLabel: "Binance Wallet Address (USDT):",
                 amountLabel: "Withdrawal Amount:",
                 btnWithdraw: "Request Binance Withdrawal",
-                historyTitle: "📜 Activity & Operation Logs",
+                historyTitle: "Activity & Operation Logs",
                 noHistory: "No previous operations yet.",
-                nav1: "📋 Tasks",
-                nav2: "⚡ Clicker",
-                nav3: "📢 Add Ad",
-                nav4: "💰 Wallet",
-                nav5: "📜 History",
+                nav1: "Tasks",
+                nav2: "Clicker",
+                nav3: "Add Ad",
+                nav4: "Wallet",
+                nav5: "History",
                 completeBtn: "Complete Task & Earn",
                 msgAdSuccess: "Ad watched successfully! $0.010 added to your balance.",
                 msgTaskDone: "Great! Task verified and reward added to your balance.",
                 msgAdCreated: "Ad campaign successfully published and visible to workers!",
                 msgNoTasks: "No tasks available right now. Check back later or add an ad!",
                 linkText: "Task Link",
-                clickRewardMsg: "Congrats! You earned +$0.001 from taps."
+                typeLabelText: "Type:",
+                rewardLabelText: "Reward:"
             }
         };
 
@@ -244,6 +246,7 @@
             document.getElementById('lbl-loading').innerText = t.loading;
             document.getElementById('lbl-clicker-title').innerText = t.clickerTitle;
             document.getElementById('lbl-clicker-desc').innerText = t.clickerDesc;
+            document.getElementById('lbl-tap-btn').innerText = t.tapBtnText;
             document.getElementById('lbl-taps-count').innerText = t.tapsCount;
             document.getElementById('lbl-create-title').innerText = t.createTitle;
             document.getElementById('lbl-type-label').innerText = t.typeLabel;
@@ -298,7 +301,7 @@
 
         function tapCoin() {
             tapCount++;
-            balance += 0.001; // مكافأة كل نقرة
+            balance += 0.001; 
             updateUI();
         }
 
@@ -306,7 +309,7 @@
             const t = translations[currentLang];
             const list = document.getElementById('historyList');
             if (historyLogs.length === 0) {
-                list.innerHTML = `<p style="color: #94a3b8; text-align: center;" id="lbl-no-history">${t.noHistory}</p>`;
+                list.innerHTML = `<p style="color: #94a3b8;" id="lbl-no-history">${t.noHistory}</p>`;
                 return;
             }
             list.innerHTML = '';
@@ -324,17 +327,17 @@
             const t = translations[currentLang];
             const list = document.getElementById('tasksList');
             if (tasks.length === 0) {
-                list.innerHTML = `<p style="color: #94a3b8; text-align: center;">${t.msgNoTasks}</p>`;
+                list.innerHTML = `<p style="color: #94a3b8;">${t.msgNoTasks}</p>`;
                 return;
             }
             list.innerHTML = '';
             tasks.forEach((task, index) => {
                 list.innerHTML += `
                     <div class="task-item">
-                        <strong>Type:</strong> ${task.type}<br>
-                        <strong>Reward:</strong> <span style="color: #eab308;">${task.reward} $</span><br>
+                        <strong>${t.typeLabelText}</strong> ${task.type}<br>
+                        <strong>${t.rewardLabelText}</strong> <span style="color: #eab308;">${task.reward} $</span><br>
                         <a href="${task.link}" target="_blank" style="color: #6366f1; text-decoration: underline; display:block; margin: 5px 0;">${t.linkText}</a>
-                        <button class="btn" style="padding: 5px; margin-top: 5px;" onclick="completeTask(${index})">${t.completeBtn}</button>
+                        <button class="btn" style="padding: 6px; margin-top: 5px; font-size: 14px;" onclick="completeTask(${index})">${t.completeBtn}</button>
                     </div>
                 `;
             });
@@ -374,8 +377,10 @@
 
         function switchTab(tabId, element) {
             document.querySelectorAll('.container').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-tab'));
+            document.querySelectorAll('.nav-item').forEach, (el => el.classList.remove('active-tab'));
             
+            // Fix selector logic safely
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-tab'));
             document.getElementById('tab-' + tabId).classList.add('active');
             element.classList.add('active-tab');
         }
@@ -387,7 +392,7 @@
             const reward = parseFloat(document.getElementById('adReward').value);
 
             if (!link || !reward || reward <= 0) {
-                alert("Please enter a valid link and reward.");
+                alert(currentLang === 'ar' ? "الرجاء إدخال رابط صحيح ومكافأة مقبولة." : "Please enter a valid link and reward.");
                 return;
             }
 
@@ -405,22 +410,26 @@
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
 
             if (!address) {
-                alert("Please enter Binance wallet address.");
+                alert(currentLang === 'ar' ? "الرجاء إدخال عنوان محفظة باينانس." : "Please enter Binance wallet address.");
                 return;
             }
             if (isNaN(amount) || amount <= 0 || amount > balance) {
-                alert("Invalid amount or exceeds current balance.");
+                alert(currentLang === 'ar' ? "المبلغ غير صحيح أو يتجاوز رصيدك الحالي." : "Invalid amount or exceeds current balance.");
                 return;
             }
 
             balance -= amount;
             addLog(currentLang === 'ar' ? `طلب سحب بقيمة ${amount}$ إلى Binance (${address})` : `Withdrawal request of $${amount} to Binance (${address})`);
             updateUI();
-            alert(`Withdrawal request of $${amount} to Binance (${address}) submitted successfully!`);
+            alert(currentLang === 'ar' ? `تم إرسال طلب السحب بقيمة $${amount} بنجاح!` : `Withdrawal request of $${amount} to Binance submitted successfully!`);
             document.getElementById('binanceAddress').value = '';
             document.getElementById('withdrawAmount').value = '';
         }
 
+        // تطبيق اتجاه الصفحة واللغة الصحيحة عند البدء
+        const initialLang = localStorage.getItem('app_lang') || 'ar';
+        document.getElementById('htmlRoot').setAttribute('dir', initialLang === 'ar' ? 'rtl' : 'ltr');
+        document.getElementById('htmlRoot').setAttribute('lang', initialLang);
         updateTexts();
         updateUI();
     </script>
