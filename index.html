@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة النقاط السريعة</title>
+    <!-- مكتبة تليجرام الرسمية -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121d25;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            user-select: none;
+        }
+        .score-box {
+            background-color: #1e2c3a;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 24px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .tap-btn {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: none;
+            background: radial-gradient(circle, #00a8ff 0%, #006699 100%);
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(0, 168, 255, 0.4);
+            cursor: pointer;
+        }
+        .tap-btn:active {
+            transform: scale(0.93);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="score-box">
+        النقاط: <span id="score">0</span>
+    </div>
+
+    <button class="tap-btn" id="tapBtn">اضغط هنا!</button>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        let score = 0;
+        const scoreDisplay = document.getElementById('score');
+x        const tapButton = document.getElementById('tapBtn');
+
+        tapButton.addEventListener('click', () => {
+            score++;
+            scoreDisplay.innerText = score;
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
+        });
+    </script>
+</body>
+</html>
