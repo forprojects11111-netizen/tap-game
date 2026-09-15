@@ -12,7 +12,7 @@
         .lang-select { background: #334155; color: white; border: 1px solid #475569; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 14px; }
         .container { padding: 15px; display: none; }
         .active { display: block; }
-        .card { background: #1e293b; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); text-align: center; }
+        .card { background: #1e293b; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); text-align: inherit; }
         .btn { background: #6366f1; color: white; border: none; padding: 10px 15px; border-radius: 5px; width: 100%; font-size: 16px; cursor: pointer; margin-top: 10px; font-weight: bold; }
         .btn:active { background: #4f46e5; }
         input, select { width: 100%; padding: 10px; margin-top: 8px; margin-bottom: 15px; background: #334155; border: 1px solid #475569; color: white; border-radius: 5px; box-sizing: border-box; }
@@ -24,7 +24,8 @@
         .log-item { border-right: 4px solid #6366f1; }
         [dir="ltr"] .log-item { border-right: none; border-left: 4px solid #6366f1; }
         /* تنسيق لعبة النقرات */
-        .clicker-circle { width: 150px; height: 150px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); user-select: none; transition: transform 0.1s; color: white; }
+        .clicker-box { text-align: center; }
+        .clicker-circle { width: 150px; height: 150px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); user-select: none; transition: transform 0.1s; color: white; }
         .clicker-circle:active { transform: scale(0.92); }
     </style>
 </head>
@@ -42,49 +43,51 @@
     <div id="tab-tasks" class="container active">
         <div class="balance-box"><span id="lbl-balance">رصيدك</span>: <span id="userBalance">0.00</span> $</div>
         
-        <div class="card">
+        <div class="card" style="text-align: center;">
             <h3 id="lbl-ad-title">مشاهدة إعلان سريع وكسب رصيد</h3>
             <p id="lbl-ad-desc">شاهد إعلان Adsgram القصير واحصل على مكافأة فورية لرصيدك.</p>
             <button class="btn" id="btn-ad" onclick="showAd()">مشاهدة الإعلان الآن</button>
         </div>
 
-        <div class="card" style="text-align: inherit;">
-            <h3 id="lbl-tasks-title">المهام المتاحة</h3>
-            <div id="tasksList" style="text-align: inherit;">
-                <p style="color: #94a3b8;" id="lbl-loading">جاري التحميل...</p>
+        <div class="card">
+            <h3 id="lbl-tasks-title" style="text-align: center;">المهام المتاحة</h3>
+            <div id="tasksList">
+                <p style="color: #94a3b8; text-align: center;" id="lbl-loading">جاري التحميل...</p>
             </div>
         </div>
     </div>
 
     <!-- قسم لعبة النقرات (Clicker Game) -->
     <div id="tab-clicker" class="container">
-        <div class="card">
+        <div class="card clicker-box">
             <h3 id="lbl-clicker-title">لعبة التعدين بالنقرات</h3>
             <p id="lbl-clicker-desc">اضغط على الدائرة بسرعة واجمع الأرباح المجانية فوراً!</p>
             <div class="clicker-circle" onclick="tapCoin()" id="lbl-tap-btn">انقر هنا</div>
-            <p style="font-size: 14px; color: #94a3b8;"><span id="lbl-taps-count">عدد النقرات</span>: <span id="tapCount">0</span></p>
+            <p style="font-size: 14px; color: #94a3b8; margin-top: 15px;"><span id="lbl-taps-count">عدد النقرات</span>: <span id="tapCount">0</span></p>
         </div>
     </div>
 
     <!-- قسم إنشاء إعلان (المعلن) -->
     <div id="tab-advertise" class="container">
-        <div class="card" style="text-align: inherit;">
-            <h3 id="lbl-create-title">إضافة مهمة جديدة</h3>
+        <div class="card">
+            <h3 id="lbl-create-title" style="text-align: center;">إضافة مهمة جديدة</h3>
             
-            <label id="lbl-type-label" style="display:block; text-align:inherit;">نوع المهمة:</label>
+            <label id="lbl-type-label">نوع المهمة:</label>
             <select id="adType">
-                <option value="تيليجرام - اشتراك في قناة" id="opt-tg">تيليجرام (اشتراك / متابعة)</option>
-                <option value="يوتيوب - مشاهدة واشتراك" id="opt-yt">يوتيوب (مشاهدة واشتراك)</option>
-                <option value="تيك توك - متابعة وإعجاب" id="opt-tt">تيك توك (متابعة وإعجاب)</option>
-                <option value="إنستغرام - متابعة حساب" id="opt-ig">إنستغرام (متابعة حساب)</option>
-                <option value="فيسبوك - إعجاب بالصفحة" id="opt-fb">فيسبوك (إعجاب / متابعة)</option>
-                <option value="تويتر / X - إعادة نشر ومتابعة" id="opt-x">تويتر / X (متابعة وإعادة نشر)</option>
+                <option value="Telegram" id="opt-tg">تيليجرام (اشتراك / متابعة)</option>
+                <option value="YouTube" id="opt-yt">يوتيوب (مشاهدة واشتراك)</option>
+                <option value="TikTok" id="opt-tt">تيك توك (متابعة وإعجاب)</option>
+                <option value="Instagram" id="opt-ig">إنستغرام (متابعة حساب)</option>
+                <option value="Facebook" id="opt-fb">فيسبوك (إعجاب / متابعة)</option>
+                <option value="Twitter / X" id="opt-x">تويتر / X (متابعة وإعادة نشر)</option>
+                <option value="WhatsApp" id="opt-wa">واتساب (انضمام لمجموعة / قناة)</option>
+                <option value="LinkedIn" id="opt-li">لينكد إن (متابعة الشركة)</option>
             </select>
             
-            <label id="lbl-link-label" style="display:block; text-align:inherit;">رابط المهمة المستهدف:</label>
+            <label id="lbl-link-label">رابط المهمة المستهدف:</label>
             <input type="text" id="adLink" placeholder="https://...">
 
-            <label id="lbl-reward-label" style="display:block; text-align:inherit;">المكافأة لكل عامل (بالدولار):</label>
+            <label id="lbl-reward-label">المكافأة لكل عامل (بالدولار):</label>
             <input type="number" id="adReward" placeholder="0.005" step="0.001">
 
             <button class="btn" id="btn-create" onclick="createAd()">نشر الحملة الإعلانية</button>
@@ -93,14 +96,14 @@
 
     <!-- قسم المحفظة والسحب (Binance) -->
     <div id="tab-wallet" class="container">
-        <div class="card" style="text-align: inherit;">
-            <h3 id="lbl-wallet-title">المحفظة وسحب الأرباح</h3>
+        <div class="card">
+            <h3 id="lbl-wallet-title" style="text-align: center;">المحفظة وسحب الأرباح</h3>
             <p><span id="lbl-wallet-balance">رصيدك القابل للسحب</span>: <span id="walletBalance">0.00</span> $</p>
             
-            <label id="lbl-address-label" style="display:block; text-align:inherit;">عنوان محفظة Binance (USDT):</label>
+            <label id="lbl-address-label">عنوان محفظة Binance (USDT):</label>
             <input type="text" id="binanceAddress" placeholder="أدخل عنوان محفظتك هنا...">
 
-            <label id="lbl-amount-label" style="display:block; text-align:inherit;">المبلغ المراد سحبه:</label>
+            <label id="lbl-amount-label">المبلغ المراد سحبه:</label>
             <input type="number" id="withdrawAmount" placeholder="0.00">
 
             <button class="btn" id="btn-withdraw" onclick="requestWithdraw()">طلب السحب إلى Binance</button>
@@ -109,10 +112,10 @@
 
     <!-- قسم السجل والعمليات -->
     <div id="tab-history" class="container">
-        <div class="card" style="text-align: inherit;">
-            <h3 id="lbl-history-title">سجل الأنشطة والعمليات</h3>
-            <div id="historyList" style="text-align: inherit;">
-                <p style="color: #94a3b8;" id="lbl-no-history">لا توجد عمليات سابقة حتى الآن.</p>
+        <div class="card">
+            <h3 id="lbl-history-title" style="text-align: center;">سجل الأنشطة والعمليات</h3>
+            <div id="historyList">
+                <p style="color: #94a3b8; text-align: center;" id="lbl-no-history">لا توجد عمليات سابقة حتى الآن.</p>
             </div>
         </div>
     </div>
@@ -149,6 +152,8 @@
                 optIg: "إنستغرام (متابعة حساب)",
                 optFb: "فيسبوك (إعجاب / متابعة)",
                 optX: "تويتر / X (متابعة وإعادة نشر)",
+                optWa: "واتساب (انضمام لمجموعة / قناة)",
+                optLi: "لينكد إن (متابعة الشركة)",
                 linkLabel: "رابط المهمة المستهدف:",
                 rewardLabel: "المكافأة لكل عامل (بالدولار):",
                 btnCreate: "نشر الحملة الإعلانية",
@@ -194,6 +199,8 @@
                 optIg: "Instagram (Follow Account)",
                 optFb: "Facebook (Page Like / Follow)",
                 optX: "Twitter / X (Repost & Follow)",
+                optWa: "WhatsApp (Join Group / Channel)",
+                optLi: "LinkedIn (Follow Company)",
                 linkLabel: "Target Task Link:",
                 rewardLabel: "Reward per Worker ($):",
                 btnCreate: "Publish Ad Campaign",
@@ -250,12 +257,16 @@
             document.getElementById('lbl-taps-count').innerText = t.tapsCount;
             document.getElementById('lbl-create-title').innerText = t.createTitle;
             document.getElementById('lbl-type-label').innerText = t.typeLabel;
+            
             document.getElementById('opt-tg').innerText = t.optTg;
             document.getElementById('opt-yt').innerText = t.optYt;
             document.getElementById('opt-tt').innerText = t.optTt;
             document.getElementById('opt-ig').innerText = t.optIg;
             document.getElementById('opt-fb').innerText = t.optFb;
             document.getElementById('opt-x').innerText = t.optX;
+            document.getElementById('opt-wa').innerText = t.optWa;
+            document.getElementById('opt-li').innerText = t.optLi;
+
             document.getElementById('lbl-link-label').innerText = t.linkLabel;
             document.getElementById('lbl-reward-label').innerText = t.rewardLabel;
             document.getElementById('btn-create').innerText = t.btnCreate;
@@ -276,8 +287,8 @@
         let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
         let tapCount = parseInt(localStorage.getItem('user_taps')) || 0;
         let tasks = JSON.parse(localStorage.getItem('platform_tasks')) || [
-            { type: "تيليجرام - اشتراك في قناة", link: "https://t.me/example", reward: 0.005 },
-            { type: "يوتيوب - مشاهدة واشتراك", link: "https://youtube.com/@example", reward: 0.008 }
+            { type: "Telegram", link: "https://t.me/example", reward: 0.005 },
+            { type: "YouTube", link: "https://youtube.com/@example", reward: 0.008 }
         ];
         let historyLogs = JSON.parse(localStorage.getItem('platform_history')) || [];
 
@@ -309,7 +320,7 @@
             const t = translations[currentLang];
             const list = document.getElementById('historyList');
             if (historyLogs.length === 0) {
-                list.innerHTML = `<p style="color: #94a3b8;" id="lbl-no-history">${t.noHistory}</p>`;
+                list.innerHTML = `<p style="color: #94a3b8; text-align: center;" id="lbl-no-history">${t.noHistory}</p>`;
                 return;
             }
             list.innerHTML = '';
@@ -327,7 +338,7 @@
             const t = translations[currentLang];
             const list = document.getElementById('tasksList');
             if (tasks.length === 0) {
-                list.innerHTML = `<p style="color: #94a3b8;">${t.msgNoTasks}</p>`;
+                list.innerHTML = `<p style="color: #94a3b8; text-align: center;">${t.msgNoTasks}</p>`;
                 return;
             }
             list.innerHTML = '';
@@ -354,7 +365,7 @@
                     updateUI();
                     alert(t.msgAdSuccess);
                 }).catch((err) => {
-                    alert("Ad error, please try again.");
+                    alert(currentLang === 'ar' ? "تم إغلاق الإعلان أو حدث خطأ." : "Ad closed or error occurred.");
                 });
             } else {
                 balance += 0.010;
@@ -368,19 +379,24 @@
             const t = translations[currentLang];
             const reward = tasks[index].reward;
             const type = tasks[index].type;
-            balance += reward;
-            addLog(currentLang === 'ar' ? `إنجاز مهمة (${type}) وكسب +${reward}$` : `Completed task (${type}) and earned +$${reward}`);
-            tasks.splice(index, 1);
-            updateUI();
-            alert(t.msgTaskDone);
+            
+            // فتح الرابط أولاً ليقوم المستخدم بتنفيذ المهمة فعلياً
+            window.open(tasks[index].link, '_blank');
+
+            // محاكاة التحقق من إنجاز المهمة بدلاً من الإضافة الوهمية المباشرة
+            setTimeout(() => {
+                balance += reward;
+                addLog(currentLang === 'ar' ? `إنجاز مهمة (${type}) وكسب +${reward}$` : `Completed task (${type}) and earned +$${reward}`);
+                tasks.splice(index, 1);
+                updateUI();
+                alert(t.msgTaskDone);
+            }, 1500);
         }
 
         function switchTab(tabId, element) {
             document.querySelectorAll('.container').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach, (el => el.classList.remove('active-tab'));
-            
-            // Fix selector logic safely
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-tab'));
+            
             document.getElementById('tab-' + tabId).classList.add('active');
             element.classList.add('active-tab');
         }
@@ -426,10 +442,10 @@
             document.getElementById('withdrawAmount').value = '';
         }
 
-        // تطبيق اتجاه الصفحة واللغة الصحيحة عند البدء
         const initialLang = localStorage.getItem('app_lang') || 'ar';
         document.getElementById('htmlRoot').setAttribute('dir', initialLang === 'ar' ? 'rtl' : 'ltr');
         document.getElementById('htmlRoot').setAttribute('lang', initialLang);
+        document.getElementById('langSelect').value = initialLang;
         updateTexts();
         updateUI();
     </script>
