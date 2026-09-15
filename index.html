@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة تبادل المهام والأرباح</title>
+    <title id="page-title">منصة تبادل المهام والأرباح</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.js"></script>
     <style>
@@ -12,23 +12,28 @@
         .lang-select { background: #334155; color: white; border: 1px solid #475569; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 14px; }
         .container { padding: 15px; display: none; }
         .active { display: block; }
-        .card { background: #1e293b; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .card { background: #1e293b; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); text-align: center; }
         .btn { background: #6366f1; color: white; border: none; padding: 10px 15px; border-radius: 5px; width: 100%; font-size: 16px; cursor: pointer; margin-top: 10px; }
         .btn:active { background: #4f46e5; }
-        input, select { width: 100%; padding: 10px; margin-top: 8px; margin-bottom: 15px; background: #334155; border: 1px solid #475569; color: white; border-radius: 5px; box-sizing: border-box; }
+        input, select { width: 100%; padding: 10px; margin-top: 8px; margin-bottom: 15px; background: #334155; border: 1px solid #475569; color: white; border-radius: 5px; box-sizing: border-box; text-align: right; }
+        [dir="ltr"] input, [dir="ltr"] select { text-align: left; }
         .nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #334155; z-index: 1000; }
-        .nav-item { color: #94a3b8; text-align: center; font-size: 11px; cursor: pointer; flex: 1; }
+        .nav-item { color: #94a3b8; text-align: center; font-size: 10px; cursor: pointer; flex: 1; }
         .nav-item.active-tab { color: #6366f1; font-weight: bold; }
         .balance-box { text-align: center; font-size: 20px; color: #eab308; margin-bottom: 15px; font-weight: bold; }
-        .task-item, .log-item { background: #334155; padding: 10px; border-radius: 6px; margin-bottom: 10px; font-size: 14px; }
+        .task-item, .log-item { background: #334155; padding: 10px; border-radius: 6px; margin-bottom: 10px; font-size: 14px; text-align: right; }
+        [dir="ltr"] .task-item, [dir="ltr"] .log-item { text-align: left; }
         .log-item { border-right: 4px solid #6366f1; }
         [dir="ltr"] .log-item { border-right: none; border-left: 4px solid #6366f1; }
+        /* تصميم لعبة النقرات */
+        .clicker-circle { width: 150px; height: 150px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); user-select: none; transition: transform 0.1s; }
+        .clicker-circle:active { transform: scale(0.92); }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <span id="t-title">منصة المهام والأرباح</span>
+        <span id="header-title">منصة المهام والأرباح</span>
         <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
             <option value="ar">العربية</option>
             <option value="en">English</option>
@@ -37,65 +42,79 @@
 
     <!-- قسم المهام والكسب -->
     <div id="tab-tasks" class="container active">
-        <div class="balance-box"><span id="t-balance">رصيدك</span>: <span id="userBalance">0.00</span> $</div>
+        <div class="balance-box"><span id="lbl-balance">رصيدك</span>: <span id="userBalance">0.00</span> $</div>
         
         <div class="card">
-            <h3 id="t-ad-title">📢 مشاهدة إعلان سريع وكسب رصيد</h3>
-            <p id="t-ad-desc">شاهد إعلان Adsgram القصير واحصل على مكافأة فورية لرصيدك.</p>
-            <button class="btn" id="t-ad-btn" onclick="showAd()">مشاهدة الإعلان الآن</button>
+            <h3 id="lbl-ad-title">📢 مشاهدة إعلان سريع وكسب رصيد</h3>
+            <p id="lbl-ad-desc">شاهد إعلان Adsgram القصير واحصل على مكافأة فورية لرصيدك.</p>
+            <button class="btn" id="btn-ad" onclick="showAd()">مشاهدة الإعلان الآن</button>
         </div>
 
-        <div class="card">
-            <h3 id="t-tasks-title">📋 المهام المتاحة</h3>
+        <div class="card" style="text-align: right;">
+            <h3 id="lbl-tasks-title" style="text-align: center;">📋 المهام المتاحة</h3>
             <div id="tasksList">
-                <p style="color: #94a3b8;" id="t-loading">جاري التحميل...</p>
+                <p style="color: #94a3b8; text-align: center;" id="lbl-loading">جاري التحميل...</p>
             </div>
+        </div>
+    </div>
+
+    <!-- قسم لعبة النقرات (Clicker Game) -->
+    <div id="tab-clicker" class="container">
+        <div class="card">
+            <h3 id="lbl-clicker-title">⚡ لعبة التعدين بالنقرات</h3>
+            <p id="lbl-clicker-desc">اضغط على الدائرة بسرعة واجمع الأرباح المجانية فوراً!</p>
+            <div class="clicker-circle" onclick="tapCoin()">🪙 انقر هنا</div>
+            <p style="font-size: 14px; color: #94a3b8;"><span id="lbl-taps-count">عدد النقرات</span>: <span id="tapCount">0</span></p>
         </div>
     </div>
 
     <!-- قسم إنشاء إعلان (المعلن) -->
     <div id="tab-advertise" class="container">
-        <div class="card">
-            <h3 id="t-create-title">📢 إضافة مهمة جديدة</h3>
-            <label id="t-type-label">نوع المهمة:</label>
+        <div class="card" style="text-align: right;">
+            <h3 id="lbl-create-title" style="text-align: center;">📢 إضافة مهمة جديدة</h3>
+            
+            <label id="lbl-type-label">نوع المهمة المنصة:</label>
             <select id="adType">
-                <option value="اشتراك في قناة تيليجرام" id="opt-sub">اشتراك في قناة تيليجرام</option>
-                <option value="إعجاب بمنشور" id="opt-like">إعجاب بمنشور</option>
-                <option value="تعليق على منشور" id="opt-comment">تعليق على منشور</option>
+                <option value="تيليجرام - اشتراك في قناة" id="opt-tg">تيليجرام (اشتراك / متابعة)</option>
+                <option value="يوتيوب - مشاهدة واشتراك" id="opt-yt">يوتيوب (مشاهدة واشتراك)</option>
+                <option value="تيك توك - متابعة وإعجاب" id="opt-tt">تيك توك (متابعة وإعجاب)</option>
+                <option value="إنستغرام - متابعة حساب" id="opt-ig">إنستغرام (متابعة حساب)</option>
+                <option value="فيسبوك - إعجاب بالصفحة" id="opt-fb">فيسبوك (إعجاب / متابعة)</option>
+                <option value="تويتر / X - إعادة نشر ومتابعة" id="opt-x">تويتر / X (متابعة وإعادة نشر)</option>
             </select>
             
-            <label id="t-link-label">رابط المهمة المستهدف:</label>
-            <input type="text" id="adLink" placeholder="https://t.me/...">
+            <label id="lbl-link-label">رابط المهمة المستهدف:</label>
+            <input type="text" id="adLink" placeholder="https://...">
 
-            <label id="t-reward-label">المكافأة لكل عامل (بالدولار):</label>
-            <input type="number" id="adReward" placeholder="0.01" step="0.001">
+            <label id="lbl-reward-label">المكافأة لكل عامل (بالدولار):</label>
+            <input type="number" id="adReward" placeholder="0.005" step="0.001">
 
-            <button class="btn" id="t-create-btn" onclick="createAd()">نشر الحملة الإعلانية</button>
+            <button class="btn" id="btn-create" onclick="createAd()">نشر الحملة الإعلانية</button>
         </div>
     </div>
 
     <!-- قسم المحفظة والسحب (Binance) -->
     <div id="tab-wallet" class="container">
-        <div class="card">
-            <h3 id="t-wallet-title">💰 المحفظة وسحب الأرباح</h3>
-            <p><span id="t-wallet-balance">رصيدك القابل للسحب</span>: <span id="walletBalance">0.00</span> $</p>
+        <div class="card" style="text-align: right;">
+            <h3 id="lbl-wallet-title" style="text-align: center;">💰 المحفظة وسحب الأرباح</h3>
+            <p><span id="lbl-wallet-balance">رصيدك القابل للسحب</span>: <span id="walletBalance">0.00</span> $</p>
             
-            <label id="t-address-label">عنوان محفظة Binance (USDT):</label>
-            <input type="text" id="binanceAddress" placeholder="أدخل عنوان محفظتك هنا...">
+            <label id="lbl-address-label">عنوان محفظة Binance (USDT):</label>
+            <input type="text" id="binanceAddress" placeholder="UQ... / T... / Email">
 
-            <label id="t-amount-label">المبلغ المراد سحبه:</label>
+            <label id="lbl-amount-label">المبلغ المراد سحبه:</label>
             <input type="number" id="withdrawAmount" placeholder="0.00">
 
-            <button class="btn" id="t-withdraw-btn" onclick="requestWithdraw()">طلب السحب إلى Binance</button>
+            <button class="btn" id="btn-withdraw" onclick="requestWithdraw()">طلب السحب إلى Binance</button>
         </div>
     </div>
 
-    <!-- قسم السجل والعمليات (History & Logs) -->
+    <!-- قسم السجل والعمليات -->
     <div id="tab-history" class="container">
-        <div class="card">
-            <h3 id="t-history-title">📜 سجل الأنشطة والعمليات</h3>
+        <div class="card" style="text-align: right;">
+            <h3 id="lbl-history-title" style="text-align: center;">📜 سجل الأنشطة والعمليات</h3>
             <div id="historyList">
-                <p style="color: #94a3b8;" id="t-no-history">لا توجد عمليات سابقة حتى الآن.</p>
+                <p style="color: #94a3b8; text-align: center;" id="lbl-no-history">لا توجد عمليات سابقة حتى الآن.</p>
             </div>
         </div>
     </div>
@@ -103,80 +122,99 @@
     <!-- شريط التنقل السفلي -->
     <div class="nav">
         <div class="nav-item active-tab" onclick="switchTab('tasks', this)" id="nav-t1">📋 المهام</div>
-        <div class="nav-item" onclick="switchTab('advertise', this)" id="nav-t2">📢 أضف إعلان</div>
-        <div class="nav-item" onclick="switchTab('wallet', this)" id="nav-t3">💰 المحفظة</div>
-        <div class="nav-item" onclick="switchTab('history', this)" id="nav-t4">📜 السجل</div>
+        <div class="nav-item" onclick="switchTab('clicker', this)" id="nav-t2">⚡ النقرات</div>
+        <div class="nav-item" onclick="switchTab('advertise', this)" id="nav-t3">📢 أضف إعلان</div>
+        <div class="nav-item" onclick="switchTab('wallet', this)" id="nav-t4">💰 المحفظة</div>
+        <div class="nav-item" onclick="switchTab('history', this)" id="nav-t5">📜 السجل</div>
     </div>
 
     <script>
         const translations = {
             ar: {
-                title: "منصة المهام والأرباح",
+                pageTitle: "منصة تبادل المهام والأرباح",
+                headerTitle: "منصة المهام والأرباح",
                 balance: "رصيدك",
                 adTitle: "📢 مشاهدة إعلان سريع وكسب رصيد",
                 adDesc: "شاهد إعلان Adsgram القصير واحصل على مكافأة فورية لرصيدك.",
-                adBtn: "مشاهدة الإعلان الآن",
+                btnAd: "مشاهدة الإعلان الآن",
                 tasksTitle: "📋 المهام المتاحة",
                 loading: "جاري التحميل...",
+                clickerTitle: "⚡ لعبة التعدين بالنقرات",
+                clickerDesc: "اضغط على الدائرة بسرعة واجمع الأرباح المجانية فوراً!",
+                tapsCount: "عدد النقرات",
                 createTitle: "📢 إضافة مهمة جديدة",
-                typeLabel: "نوع المهمة:",
-                optSub: "اشتراك في قناة تيليجرام",
-                optLike: "إعجاب بمنشور",
-                optComment: "تعليق على منشور",
+                typeLabel: "نوع المهمة المنصة:",
+                optTg: "تيليجرام (اشتراك / متابعة)",
+                optYt: "يوتيوب (مشاهدة واشتراك)",
+                optTt: "تيك توك (متابعة وإعجاب)",
+                optIg: "إنستغرام (متابعة حساب)",
+                optFb: "فيسبوك (إعجاب / متابعة)",
+                optX: "تويتر / X (متابعة وإعادة نشر)",
                 linkLabel: "رابط المهمة المستهدف:",
                 rewardLabel: "المكافأة لكل عامل (بالدولار):",
-                createBtn: "نشر الحملة الإعلانية",
+                btnCreate: "نشر الحملة الإعلانية",
                 walletTitle: "💰 المحفظة وسحب الأرباح",
                 walletBalance: "رصيدك القابل للسحب",
                 addressLabel: "عنوان محفظة Binance (USDT):",
                 amountLabel: "المبلغ المراد سحبه:",
-                withdrawBtn: "طلب السحب إلى Binance",
+                btnWithdraw: "طلب السحب إلى Binance",
                 historyTitle: "📜 سجل الأنشطة والعمليات",
                 noHistory: "لا توجد عمليات سابقة حتى الآن.",
                 nav1: "📋 المهام",
-                nav2: "📢 أضف إعلان",
-                nav3: "💰 المحفظة",
-                nav4: "📜 السجل",
+                nav2: "⚡ النقرات",
+                nav3: "📢 أضف إعلان",
+                nav4: "💰 المحفظة",
+                nav5: "📜 السجل",
                 completeBtn: "إتمام المهمة وكسب الرصيد",
                 msgAdSuccess: "تم مشاهدة الإعلان بنجاح! وتمت إضافة 0.010$ لرصيدك.",
                 msgTaskDone: "رائع! تم التحقق من إنجاز المهمة وإضافة المكافأة لرصيدك.",
                 msgAdCreated: "تم نشر حملتك الإعلانية بنجاح وأصبحت مرئية للعمال!",
                 msgNoTasks: "لا توجد مهام متاحة حالياً. عُود لاحقاً أو أضف إعلاناً!",
-                linkText: "رابط المهمة"
+                linkText: "رابط المهمة",
+                clickRewardMsg: "مبروك! ربحت +0.001$ من النقرات."
             },
             en: {
-                title: "Tasks & Earnings Platform",
+                pageTitle: "Tasks & Earnings Platform",
+                headerTitle: "Tasks & Earnings Platform",
                 balance: "Balance",
                 adTitle: "📢 Watch Quick Ad & Earn",
                 adDesc: "Watch the short Adsgram ad and get an instant reward to your balance.",
-                adBtn: "Watch Ad Now",
+                btnAd: "Watch Ad Now",
                 tasksTitle: "📋 Available Tasks",
                 loading: "Loading...",
+                clickerTitle: "⚡ Clicker Mining Game",
+                clickerDesc: "Tap the circle quickly and collect free earnings instantly!",
+                tapsCount: "Total Taps",
                 createTitle: "📢 Create New Task",
-                typeLabel: "Task Type:",
-                optSub: "Telegram Channel Subscription",
-                optLike: "Post Like",
-                optComment: "Post Comment",
+                typeLabel: "Platform Task Type:",
+                optTg: "Telegram (Subscribe / Join)",
+                optYt: "YouTube (Watch & Subscribe)",
+                optTt: "TikTok (Follow & Like)",
+                optIg: "Instagram (Follow Account)",
+                optFb: "Facebook (Page Like / Follow)",
+                optX: "Twitter / X (Repost & Follow)",
                 linkLabel: "Target Task Link:",
                 rewardLabel: "Reward per Worker ($):",
-                createBtn: "Publish Ad Campaign",
+                btnCreate: "Publish Ad Campaign",
                 walletTitle: "💰 Wallet & Withdrawals",
                 walletBalance: "Withdrawable Balance",
                 addressLabel: "Binance Wallet Address (USDT):",
                 amountLabel: "Withdrawal Amount:",
-                withdrawBtn: "Request Binance Withdrawal",
+                btnWithdraw: "Request Binance Withdrawal",
                 historyTitle: "📜 Activity & Operation Logs",
                 noHistory: "No previous operations yet.",
                 nav1: "📋 Tasks",
-                nav2: "📢 Add Ad",
-                nav3: "💰 Wallet",
-                nav4: "📜 History",
+                nav2: "⚡ Clicker",
+                nav3: "📢 Add Ad",
+                nav4: "💰 Wallet",
+                nav5: "📜 History",
                 completeBtn: "Complete Task & Earn",
                 msgAdSuccess: "Ad watched successfully! $0.010 added to your balance.",
                 msgTaskDone: "Great! Task verified and reward added to your balance.",
                 msgAdCreated: "Ad campaign successfully published and visible to workers!",
                 msgNoTasks: "No tasks available right now. Check back later or add an ad!",
-                linkText: "Task Link"
+                linkText: "Task Link",
+                clickRewardMsg: "Congrats! You earned +$0.001 from taps."
             }
         };
 
@@ -196,44 +234,56 @@
 
         function updateTexts() {
             const t = translations[currentLang];
-            document.getElementById('t-title').innerText = t.title;
-            document.getElementById('t-balance').innerText = t.balance;
-            document.getElementById('t-ad-title').innerText = t.adTitle;
-            document.getElementById('t-ad-desc').innerText = t.adDesc;
-            document.getElementById('t-ad-btn').innerText = t.adBtn;
-            document.getElementById('t-tasks-title').innerText = t.tasksTitle;
-            document.getElementById('t-loading').innerText = t.loading;
-            document.getElementById('t-create-title').innerText = t.createTitle;
-            document.getElementById('t-type-label').innerText = t.typeLabel;
-            document.getElementById('opt-sub').innerText = t.optSub;
-            document.getElementById('opt-like').innerText = t.optLike;
-            document.getElementById('opt-comment').innerText = t.optComment;
-            document.getElementById('t-link-label').innerText = t.linkLabel;
-            document.getElementById('t-reward-label').innerText = t.rewardLabel;
-            document.getElementById('t-create-btn').innerText = t.createBtn;
-            document.getElementById('t-wallet-title').innerText = t.walletTitle;
-            document.getElementById('t-wallet-balance').innerText = t.walletBalance;
-            document.getElementById('t-address-label').innerText = t.addressLabel;
-            document.getElementById('t-amount-label').innerText = t.amountLabel;
-            document.getElementById('t-withdraw-btn').innerText = t.withdrawBtn;
-            document.getElementById('t-history-title').innerText = t.historyTitle;
-            document.getElementById('t-no-history').innerText = t.noHistory;
+            document.getElementById('page-title').innerText = t.pageTitle;
+            document.getElementById('header-title').innerText = t.headerTitle;
+            document.getElementById('lbl-balance').innerText = t.balance;
+            document.getElementById('lbl-ad-title').innerText = t.adTitle;
+            document.getElementById('lbl-ad-desc').innerText = t.adDesc;
+            document.getElementById('btn-ad').innerText = t.btnAd;
+            document.getElementById('lbl-tasks-title').innerText = t.tasksTitle;
+            document.getElementById('lbl-loading').innerText = t.loading;
+            document.getElementById('lbl-clicker-title').innerText = t.clickerTitle;
+            document.getElementById('lbl-clicker-desc').innerText = t.clickerDesc;
+            document.getElementById('lbl-taps-count').innerText = t.tapsCount;
+            document.getElementById('lbl-create-title').innerText = t.createTitle;
+            document.getElementById('lbl-type-label').innerText = t.typeLabel;
+            document.getElementById('opt-tg').innerText = t.optTg;
+            document.getElementById('opt-yt').innerText = t.optYt;
+            document.getElementById('opt-tt').innerText = t.optTt;
+            document.getElementById('opt-ig').innerText = t.optIg;
+            document.getElementById('opt-fb').innerText = t.optFb;
+            document.getElementById('opt-x').innerText = t.optX;
+            document.getElementById('lbl-link-label').innerText = t.linkLabel;
+            document.getElementById('lbl-reward-label').innerText = t.rewardLabel;
+            document.getElementById('btn-create').innerText = t.btnCreate;
+            document.getElementById('lbl-wallet-title').innerText = t.walletTitle;
+            document.getElementById('lbl-wallet-balance').innerText = t.walletBalance;
+            document.getElementById('lbl-address-label').innerText = t.addressLabel;
+            document.getElementById('lbl-amount-label').innerText = t.amountLabel;
+            document.getElementById('btn-withdraw').innerText = t.btnWithdraw;
+            document.getElementById('lbl-history-title').innerText = t.historyTitle;
+            document.getElementById('lbl-no-history').innerText = t.noHistory;
             document.getElementById('nav-t1').innerText = t.nav1;
             document.getElementById('nav-t2').innerText = t.nav2;
             document.getElementById('nav-t3').innerText = t.nav3;
             document.getElementById('nav-t4').innerText = t.nav4;
+            document.getElementById('nav-t5').innerText = t.nav5;
         }
 
         let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
+        let tapCount = parseInt(localStorage.getItem('user_taps')) || 0;
         let tasks = JSON.parse(localStorage.getItem('platform_tasks')) || [
-            { type: "اشتراك في قناة تيليجرام", link: "https://t.me/example", reward: 0.005 }
+            { type: "تيليجرام - اشتراك في قناة", link: "https://t.me/example", reward: 0.005 },
+            { type: "يوتيوب - مشاهدة واشتراك", link: "https://youtube.com/@example", reward: 0.008 }
         ];
         let historyLogs = JSON.parse(localStorage.getItem('platform_history')) || [];
 
         function updateUI() {
             document.getElementById('userBalance').innerText = balance.toFixed(3);
             document.getElementById('walletBalance').innerText = balance.toFixed(3);
+            document.getElementById('tapCount').innerText = tapCount;
             localStorage.setItem('user_balance', balance);
+            localStorage.setItem('user_taps', tapCount);
             localStorage.setItem('platform_tasks', JSON.stringify(tasks));
             localStorage.setItem('platform_history', JSON.stringify(historyLogs));
             renderTasks();
@@ -243,14 +293,20 @@
         function addLog(text) {
             const time = new Date().toLocaleString();
             historyLogs.unshift({ text, time });
-            if (historyLogs.length > 20) historyLogs.pop(); // الاحتفاظ بآخر 20 سجل
+            if (historyLogs.length > 25) historyLogs.pop();
+        }
+
+        function tapCoin() {
+            tapCount++;
+            balance += 0.001; // مكافأة كل نقرة
+            updateUI();
         }
 
         function renderHistory() {
             const t = translations[currentLang];
             const list = document.getElementById('historyList');
             if (historyLogs.length === 0) {
-                list.innerHTML = `<p style="color: #94a3b8;" id="t-no-history">${t.noHistory}</p>`;
+                list.innerHTML = `<p style="color: #94a3b8; text-align: center;" id="lbl-no-history">${t.noHistory}</p>`;
                 return;
             }
             list.innerHTML = '';
@@ -268,7 +324,7 @@
             const t = translations[currentLang];
             const list = document.getElementById('tasksList');
             if (tasks.length === 0) {
-                list.innerHTML = `<p style="color: #94a3b8;">${t.msgNoTasks}</p>`;
+                list.innerHTML = `<p style="color: #94a3b8; text-align: center;">${t.msgNoTasks}</p>`;
                 return;
             }
             list.innerHTML = '';
