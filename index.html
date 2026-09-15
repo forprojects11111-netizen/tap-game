@@ -1,376 +1,51 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="htmlRoot">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">منصة المهام والأرباح - v2.5</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>Tasks Platform</title>
     <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #f8fafc;
-            --accent-color: #6366f1;
-            --accent-hover: #4f46e5;
-            --success-color: #10b981;
-            --border-color: #334155;
-        }
-        body {
-            font-family: Tahoma, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            padding-bottom: 70px;
-        }
-        .header {
-            background: var(--card-bg);
-            padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .lang-select {
-            background: var(--border-color);
-            color: var(--text-color);
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 5px;
-        }
-        .container {
-            padding: 15px;
-            display: none;
-        }
-        .active {
-            display: block;
-        }
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        .btn {
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            width: 100%;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        .btn:active { background: var(--accent-hover); }
-        .btn-success { background: var(--success-color); }
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        .nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: var(--card-bg);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            border-top: 1px solid var(--border-color);
-        }
-        .nav-item {
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 12px;
-            text-align: center;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-        .nav-item.active-nav {
-            color: var(--accent-color);
-            font-weight: bold;
-        }
-        .notice {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--success-color);
-            color: #34d399;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 13px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
+        body { font-family: Tahoma, sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
+        .card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 20px; margin-bottom: 15px; }
+        select, input { width: 100%; padding: 10px; margin-top: 8px; margin-bottom: 15px; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 5px; box-sizing: border-box; }
+        .btn { background: #6366f1; color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .notice { background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; color: #34d399; padding: 10px; border-radius: 5px; font-size: 13px; margin-bottom: 15px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2 id="main-heading">منصة المهام والأرباح</h2>
-        <select class="lang-select" id="langSwitcher" onchange="changeLanguage()">
-            <option value="ar">العربية</option>
-            <option value="en">English</option>
+    <div class="card">
+        <h3>Wallet & Withdrawals</h3>
+        <p>Current Balance: <span style="color: #10b981; font-weight: bold;">$0.174</span></p>
+        
+        <div class="notice">
+            Note: Withdrawals are processed within 24 hours max.
+        </div>
+
+        <label>Select Withdrawal Method:</label>
+        <select id="method">
+            <option value="bank">Bankak (Sudan Bank)</option>
+            <option value="fawry">Fawry Bank</option>
+            <option value="mycash">MyCash Wallet</option>
+            <option value="ton">Telegram TON Wallet</option>
+            <option value="binance">Binance USDT</option>
         </select>
-    </div>
 
-    <!-- قسم المهام -->
-    <div id="tab-tasks" class="container active">
-        <div class="card">
-            <h3 id="t-available-tasks">المهام المتاحة</h3>
-            <p id="t-tasks-desc">أجز المهام واربح الأرباح فوراً.</p>
-            <div id="taskList">
-                <div class="card" style="background: var(--bg-color);">
-                    <h4>اشتراك في قناة التليجرام</h4>
-                    <p>المكافأة: $0.050</p>
-                    <button class="btn btn-success" onclick="completeTask(0.05)">إنجاز المهمة</button>
-                </div>
-            </div>
-        </div>
-    </div>
+        <label>Account / Wallet Details:</label>
+        <input type="text" id="details" placeholder="Enter account number or address...">
 
-    <!-- قسم المحفظة والسحب -->
-    <div id="tab-wallet" class="container">
-        <div class="card">
-            <h3 id="w-title">المحفظة وسحب الأرباح</h3>
-            <p id="w-balance-label">رصيدكم الحالي: <span id="userBalance" style="color: var(--success-color); font-weight: bold;">$0.00</span></p>
-            
-            <div class="notice" id="w-notice">
-                ملاحظة: يتم معالجة طلبات السحب وتحويل الأرباح خلال 24 ساعة كحد أقصى.
-            </div>
+        <label>Withdraw Amount ($):</label>
+        <input type="number" id="amount" placeholder="0.00">
 
-            <label id="w-select-method">اختر طريقة السحب:</label>
-            <select id="withdrawMethod">
-                <option value="bank">تطبيق بنكك (البنك السوداني)</option>
-                <option value="fawry">بنك فوري (Fawry)</option>
-                <option value="mycash">محفظة ماي كاشي (MyCash)</option>
-                <option value="ton">محفظة تون تيليجرام (Telegram TON)</option>
-                <option value="binance">منصة بايننس (Binance USDT)</option>
-            </select>
-
-            <label id="w-account-info">رقم الحساب أو عنوان المحفظة:</label>
-            <input type="text" id="accountDetails" placeholder="أدخل بيانات الحساب هنا...">
-
-            <label id="w-amount-label">المبلغ المراد سحبه ($):</label>
-            <input type="number" id="withdrawAmountInput" placeholder="0.00">
-
-            <button class="btn" onclick="requestWithdrawal()" id="w-btn">تأكيد طلب السحب</button>
-        </div>
-    </div>
-
-    <!-- قسم الإعلانات وشحن الرصيد للمعلنين -->
-    <div id="tab-add" class="container">
-        <div class="card">
-            <h3 id="ad-title">إضافة إعلان وشحن الرصيد</h3>
-            <p id="ad-desc">اشحن رصيدك أولاً لتظهر إعلاناتك لجميع المستخدمين.</p>
-            
-            <label id="ad-select-pay">اختر وسيلة الدفع لشحن الرصيد:</label>
-            <select id="depositMethod">
-                <option value="bank">تطبيق بنكك (البنك السوداني)</option>
-                <option value="fawry">بنك فوري (Fawry)</option>
-                <option value="mycash">محفظة ماي كاشي (MyCash)</option>
-                <option value="ton">محفظة تون تيليجرام (Telegram TON)</option>
-                <option value="binance">منصة بايننس (Binance USDT)</option>
-            </select>
-
-            <label id="ad-amount-label">المبلغ المراد شحنه ($):</label>
-            <input type="number" id="depositAmount" placeholder="مثال: 10">
-
-            <button class="btn btn-success" onclick="rechargeBalance()" id="ad-btn">شحن الرصيد الآن</button>
-
-            <hr style="border-color: var(--border-color); margin: 20px 0;">
-
-            <h4 id="ad-create-title">إنشاء إعلان جديد</h4>
-            <label id="ad-title-label">عنوان المهمة:</label>
-            <input type="text" id="adTitleInput" placeholder="مثال: انضم لقناتي">
-            
-            <label id="ad-reward-label">مكافأة العامل الواحد ($):</label>
-            <input type="number" id="adRewardInput" placeholder="0.01">
-
-            <button class="btn" onclick="createAd()" id="ad-create-btn">نشر الإعلان</button>
-        </div>
-    </div>
-
-    <!-- قسم السجل -->
-    <div id="tab-history" class="container">
-        <div class="card">
-            <h3 id="h-title">سجل العمليات</h3>
-            <div id="historyList">
-                <p id="h-empty">لا توجد عمليات سابقة حتى الآن.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- شريط التنقل السفلي -->
-    <div class="nav-bar">
-        <button class="nav-item active-nav" onclick="switchTab('tasks', this)" id="nav-tasks">المهام</button>
-        <button class="nav-item" onclick="switchTab('wallet', this)" id="nav-wallet">المحفظة</button>
-        <button class="nav-item" onclick="switchTab('add', this)" id="nav-add">إعلان</button>
-        <button class="nav-item" onclick="switchTab('history', this)" id="nav-history">السجل</button>
+        <button class="btn" onclick="submitWithdraw()">Confirm Withdrawal</button>
     </div>
 
     <script>
-        let currentBalance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
-        updateBalanceDisplay();
-
-        function switchTab(tabName, element) {
-            document.querySelectorAll('.container').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-nav'));
-            
-            document.getElementById('tab-' + tabName).classList.add('active');
-            element.classList.add('active-nav');
-        }
-
-        function completeTask(amount) {
-            currentBalance += amount;
-            localStorage.setItem('user_balance', currentBalance.toFixed(2));
-            updateBalanceDisplay();
-            addHistoryRecord("إنجاز مهمة وكسب +$" + amount.toFixed(3));
-            alert("تم إنجاز المهمة بنجاح وإضافة الأرباح لرصيدك!");
-        }
-
-        function rechargeBalance() {
-            let amount = parseFloat(document.getElementById('depositAmount').value);
-            let method = document.getElementById('depositMethod').value;
-            if(!amount || amount <= 0) {
-                alert("الرجاء إدخال مبلغ صحيح للشحن");
-                return;
-            }
-            currentBalance += amount;
-            localStorage.setItem('user_balance', currentBalance.toFixed(2));
-            updateBalanceDisplay();
-            addHistoryRecord("شحن رصيد بقيمة $" + amount + " عبر " + method);
-            alert("تم تقديم طلب الشحن بنجاح عبر " + method + "! سيتم إضافة المبلغ لرصيدك بعد تأكيد التحويل.");
-        }
-
-        function requestWithdrawal() {
-            let amount = parseFloat(document.getElementById('withdrawAmountInput').value);
-            let method = document.getElementById('withdrawMethod').value;
-            let details = document.getElementById('accountDetails').value;
-
-            if(!amount || amount <= 0 || amount > currentBalance) {
-                alert("المبلغ غير صحيح أو أكبر من رصيدك الحالي!");
-                return;
-            }
-            if(!details) {
-                alert("الرجاء إدخال معلومات الحساب أو المحفظة للسحب.");
-                return;
-            }
-
-            currentBalance -= amount;
-            localStorage.setItem('user_balance', currentBalance.toFixed(2));
-            updateBalanceDisplay();
-            addHistoryRecord("طلب سحب $" + amount + " عبر " + method);
-            alert("تم إرسال طلب السحب بنجاح! سيصلك المبلغ إلى حسابك خلال 24 ساعة كحد أقصى.");
-        }
-
-        function createAd() {
-            let title = document.getElementById('adTitleInput').value;
-            let reward = document.getElementById('adRewardInput').value;
-            if(!title || !reward) {
-                alert("الرجاء إكمال بيانات الإعلان.");
-                return;
-            }
-            addHistoryRecord("إنشاء إعلان جديد: " + title);
-            alert("تم نشر الإعلان بنجاح وسيظهر للمستخدمين الآن!");
-            document.getElementById('adTitleInput').value = '';
-            document.getElementById('adRewardInput').value = '';
-        }
-
-        function updateBalanceDisplay() {
-            document.getElementById('userBalance').innerText = "$" + currentBalance.toFixed(2);
-        }
-
-        function addHistoryRecord(text) {
-            let historyList = document.getElementById('historyList');
-            if(document.getElementById('h-empty')) {
-                historyList.innerHTML = '';
-            }
-            let timeStr = new Date().toLocaleString();
-            let item = document.createElement('div');
-            item.className = 'card';
-            item.style.background = 'var(--bg-color)';
-            item.innerHTML = `<p>${text}</p><small style="color: #94a3b8;">${timeStr}</small>`;
-            historyList.prepend(item);
-        }
-
-        const translations = {
-            ar: {
-                "main-heading": "منصة المهام والأرباح",
-                "t-available-tasks": "المهام المتاحة",
-                "t-tasks-desc": "أجز المهام واربح الأرباح فوراً.",
-                "w-title": "المحفظة وسحب الأرباح",
-                "w-balance-label": "رصيدك الحالي: ",
-                "w-notice": "ملاحظة: يتم معالجة طلبات السحب وتحويل الأرباح خلال 24 ساعة كحد أقصى.",
-                "w-select-method": "اختر طريقة السحب:",
-                "w-account-info": "رقم الحساب أو عنوان المحفظة:",
-                "w-amount-label": "المبلغ المراد سحبه ($):",
-                "w-btn": "تأكيد طلب السحب",
-                "ad-title": "إضافة إعلان وشحن الرصيد",
-                "ad-desc": "اشحن رصيدك أولاً لتظهر إعلاناتك لجميع المستخدمين.",
-                "ad-select-pay": "اختر وسيلة الدفع لشحن الرصيد:",
-                "ad-amount-label": "المبلغ المراد شحنه ($):",
-                "ad-btn": "شحن الرصيد الآن",
-                "ad-create-title": "إنشاء إعلان جديد",
-                "ad-title-label": "عنوان المهمة:",
-                "ad-reward-label": "مكافأة العامل الواحد ($):",
-                "ad-create-btn": "نشر الإعلان",
-                "h-title": "سجل العمليات",
-                "nav-tasks": "المهام",
-                "nav-wallet": "المحفظة",
-                "nav-add": "إعلان",
-                "nav-history": "السجل"
-            },
-            en: {
-                "main-heading": "Tasks & Earnings Platform",
-                "t-available-tasks": "Available Tasks",
-                "t-tasks-desc": "Complete tasks and earn instantly.",
-                "w-title": "Wallet & Withdrawals",
-                "w-balance-label": "Current Balance: ",
-                "w-notice": "Note: Withdrawal requests are processed and funds are delivered within a maximum of 24 hours.",
-                "w-select-method": "Select Withdrawal Method:",
-                "w-account-info": "Account or Wallet Details:",
-                "w-amount-label": "Withdrawal Amount ($):",
-                "w-btn": "Confirm Withdrawal",
-                "ad-title": "Add Ad & Recharge",
-                "ad-desc": "Recharge your balance to display your ads.",
-                "ad-select-pay": "Select Deposit Method:",
-                "ad-amount-label": "Amount to Recharge ($):",
-                "ad-btn": "Recharge Now",
-                "ad-create-title": "Create New Ad",
-                "ad-title-label": "Task Title:",
-                "ad-reward-label": "Reward per Worker ($):",
-                "ad-create-btn": "Publish Ad",
-                "h-title": "Activity Logs",
-                "nav-tasks": "Tasks",
-                "nav-wallet": "Wallet",
-                "nav-add": "Add Ad",
-                "nav-history": "History"
-            }
-        };
-
-        function changeLanguage() {
-            let lang = document.getElementById('langSwitcher').value;
-            let root = document.getElementById('htmlRoot');
-            root.setAttribute('lang', lang);
-            root.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
-
-            let keys = Object.keys(translations[lang]);
-            keys.forEach(key => {
-                let el = document.getElementById(key);
-                if(el) {
-                    el.innerText = translations[lang][key];
-                }
-            });
+        function submitWithdraw() {
+            let method = document.getElementById('method').value;
+            alert("Withdrawal request sent successfully via " + method + "!");
         }
     </script>
 </body>
 </html>
+
