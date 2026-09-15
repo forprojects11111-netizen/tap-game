@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" id="htmlRoot">
 <head>
@@ -69,7 +68,7 @@
             <p id="lbl-clicker-desc">اضغط لزيادة نقاط نشاطك ورفع مستواك للحصول على مهام ذات أجر أعلى:</p>
             <div class="clicker-circle" onclick="boostActivity()" id="lbl-tap-btn">انقر لزيادة النشاط</div>
             <p style="font-size: 15px; color: #eab308; margin-top: 15px; font-weight: bold;"><span id="lbl-taps-count">نقاط النشاط</span>: <span id="tapCount">0</span></p>
-            <p style="font-size: 13px; color: #94a3b8;" id="levelProgressText">اضغط أكثر لتصل للمستوى التالي وتضاعف أرباح المهام!</p>
+            <p style="font-size: 13px; color: #94a3b8;" id="levelProgressText">كلما زادت نقاطك، ارتفع مستواك وظهرت لك مهام بأجور أعلى!</p>
         </div>
     </div>
 
@@ -95,16 +94,26 @@
         <div class="card">
             <h3 id="lbl-create-title" style="text-align: center;">إضافة مهمة جديدة</h3>
             
-            <label id="lbl-type-label">نوع المهمة:</label>
-            <select id="adType">
-                <option value="Telegram" id="opt-tg">تيليجرام (اشتراك / متابعة)</option>
-                <option value="YouTube" id="opt-yt">يوتيوب (مشاهدة واشتراك)</option>
-                <option value="TikTok" id="opt-tt">تيك توك (متابعة وإعجاب)</option>
-                <option value="Instagram" id="opt-ig">إنستغرام (متابعة حساب)</option>
-                <option value="Facebook" id="opt-fb">فيسبوك (إعجاب / متابعة)</option>
-                <option value="Twitter / X" id="opt-x">تويتر / X (متابعة وإعادة نشر)</option>
-                <option value="WhatsApp" id="opt-wa">واتساب (انضمام لمجموعة / قناة)</option>
-                <option value="LinkedIn" id="opt-li">لينكد إن (متابعة الشركة)</option>
+            <label id="lbl-platform-label">اختر منصة التواصل الاجتماعي:</label>
+            <select id="adPlatform">
+                <option value="Telegram" id="opt-tg">تيليجرام</option>
+                <option value="YouTube" id="opt-yt">يوتيوب</option>
+                <option value="TikTok" id="opt-tt">تيك توك</option>
+                <option value="Instagram" id="opt-ig">إنستغرام</option>
+                <option value="Facebook" id="opt-fb">فيسبوك</option>
+                <option value="Twitter / X" id="opt-x">تويتر / X</option>
+                <option value="WhatsApp" id="opt-wa">واتساب</option>
+                <option value="LinkedIn" id="opt-li">لينكد إن</option>
+            </select>
+
+            <label id="lbl-action-label">اختر نوع المهمة (الإجراء):</label>
+            <select id="adAction">
+                <option value="اشتراك / انضمام" id="act-sub">اشتراك / انضمام</option>
+                <option value="متابعة حساب" id="act-follow">متابعة حساب</option>
+                <option value="إعجاب / لايك" id="act-like">إعجاب / لايك</option>
+                <option value="مشاهدة فيديو" id="act-watch">مشاهدة فيديو</option>
+                <option value="إعادة نشر / ريتويت" id="act-repost">إعادة نشر / ريتويت</option>
+                <option value="تعليق" id="act-comment">تعليق</option>
             </select>
             
             <label id="lbl-link-label">رابط المهمة المستهدف:</label>
@@ -172,18 +181,23 @@
                 refDesc: "ادع أصدقاءك واربح مكافأة فورية عن كل شخص ينضم عبر رابطك ويشارك في المنصة!",
                 refLinkLabel: "رابط الإحالة الخاص بك:",
                 btnCopyRef: "نسخ رابط الإحالة",
-                refCountText: "عدد الأصدقاء المدعوين",
-                refEarnedText: "أرباح الإحالات",
                 createTitle: "إضافة مهمة جديدة",
-                typeLabel: "نوع المهمة:",
-                optTg: "تيليجرام (اشتراك / متابعة)",
-                optYt: "يوتيوب (مشاهدة واشتراك)",
-                optTt: "تيك توك (متابعة وإعجاب)",
-                optIg: "إنستغرام (متابعة حساب)",
-                optFb: "فيسبوك (إعجاب / متابعة)",
-                optX: "تويتر / X (متابعة وإعادة نشر)",
-                optWa: "واتساب (انضمام لمجموعة / قناة)",
-                optLi: "لينكد إن (متابعة الشركة)",
+                platformLabel: "اختر منصة التواصل الاجتماعي:",
+                actionLabel: "اختر نوع المهمة (الإجراء):",
+                optTg: "تيليجرام",
+                optYt: "يوتيوب",
+                optTt: "تيك توك",
+                optIg: "إنستغرام",
+                optFb: "فيسبوك",
+                optX: "تويتر / X",
+                optWa: "واتساب",
+                optLi: "لينكد إن",
+                actSub: "اشتراك / انضمام",
+                actFollow: "متابعة حساب",
+                actLike: "إعجاب / لايك",
+                actWatch: "مشاهدة فيديو",
+                actRepost: "إعادة نشر / ريتويت",
+                actComment: "تعليق",
                 linkLabel: "رابط المهمة المستهدف:",
                 rewardLabel: "المكافأة الأساسية للعامل (بالدولار):",
                 btnCreate: "نشر الحملة الإعلانية",
@@ -206,7 +220,8 @@
                 msgAdCreated: "تم نشر حملتك الإعلانية بنجاح وأصبحت مرئية للعمال!",
                 msgNoTasks: "لا توجد مهام متاحة حالياً. عُود لاحقاً أو أضف إعلاناً!",
                 linkText: "رابط المهمة",
-                typeLabelText: "النوع:",
+                platformLabelText: "المنصة:",
+                actionLabelText: "الإجراء:",
                 rewardLabelText: "المكافأة الصافية:",
                 msgCopied: "تم نسخ رابط الإحالة بنجاح!"
             },
@@ -227,18 +242,23 @@
                 refDesc: "Invite your friends and earn an instant reward for everyone who joins via your link!",
                 refLinkLabel: "Your Referral Link:",
                 btnCopyRef: "Copy Referral Link",
-                refCountText: "Invited Friends",
-                refEarnedText: "Referral Earnings",
                 createTitle: "Create New Task",
-                typeLabel: "Task Type:",
-                optTg: "Telegram (Subscribe / Join)",
-                optYt: "YouTube (Watch & Subscribe)",
-                optTt: "TikTok (Follow & Like)",
-                optIg: "Instagram (Follow Account)",
-                optFb: "Facebook (Page Like / Follow)",
-                optX: "Twitter / X (Repost & Follow)",
-                optWa: "WhatsApp (Join Group / Channel)",
-                optLi: "LinkedIn (Follow Company)",
+                platformLabel: "Select Social Media Platform:",
+                actionLabel: "Select Task Action:",
+                optTg: "Telegram",
+                optYt: "YouTube",
+                optTt: "TikTok",
+                optIg: "Instagram",
+                optFb: "Facebook",
+                optX: "Twitter / X",
+                optWa: "WhatsApp",
+                optLi: "LinkedIn",
+                actSub: "Subscribe / Join",
+                actFollow: "Follow Account",
+                actLike: "Like",
+                actWatch: "Watch Video",
+                actRepost: "Repost / Retweet",
+                actComment: "Comment",
                 linkLabel: "Target Task Link:",
                 rewardLabel: "Base Reward per Worker ($):",
                 btnCreate: "Publish Ad Campaign",
@@ -261,7 +281,8 @@
                 msgAdCreated: "Ad campaign successfully published and visible to workers!",
                 msgNoTasks: "No tasks available right now. Check back later or add an ad!",
                 linkText: "Task Link",
-                typeLabelText: "Type:",
+                platformLabelText: "Platform:",
+                actionLabelText: "Action:",
                 rewardLabelText: "Net Reward:",
                 msgCopied: "Referral link copied successfully!"
             }
@@ -300,7 +321,8 @@
             document.getElementById('btn-copy-ref').innerText = t.btnCopyRef;
 
             document.getElementById('lbl-create-title').innerText = t.createTitle;
-            document.getElementById('lbl-type-label').innerText = t.typeLabel;
+            document.getElementById('lbl-platform-label').innerText = t.platformLabel;
+            document.getElementById('lbl-action-label').innerText = t.actionLabel;
             
             document.getElementById('opt-tg').innerText = t.optTg;
             document.getElementById('opt-yt').innerText = t.optYt;
@@ -310,6 +332,13 @@
             document.getElementById('opt-x').innerText = t.optX;
             document.getElementById('opt-wa').innerText = t.optWa;
             document.getElementById('opt-li').innerText = t.optLi;
+
+            document.getElementById('act-sub').innerText = t.actSub;
+            document.getElementById('act-follow').innerText = t.actFollow;
+            document.getElementById('act-like').innerText = t.actLike;
+            document.getElementById('act-watch').innerText = t.actWatch;
+            document.getElementById('act-repost').innerText = t.actRepost;
+            document.getElementById('act-comment').innerText = t.actComment;
 
             document.getElementById('lbl-link-label').innerText = t.linkLabel;
             document.getElementById('lbl-reward-label').innerText = t.rewardLabel;
@@ -336,8 +365,8 @@
         let refEarned = parseFloat(localStorage.getItem('user_ref_earned')) || 0.00;
         
         let tasks = JSON.parse(localStorage.getItem('platform_tasks')) || [
-            { type: "Telegram", link: "https://t.me/example", reward: 0.005 },
-            { type: "YouTube", link: "https://youtube.com/@example", reward: 0.008 }
+            { platform: "Telegram", action: "اشتراك / انضمام", link: "https://t.me/example", reward: 0.005 },
+            { platform: "YouTube", action: "مشاهدة فيديو", link: "https://youtube.com/@example", reward: 0.008 }
         ];
         let historyLogs = JSON.parse(localStorage.getItem('platform_history')) || [];
 
@@ -432,7 +461,7 @@
                 const boostedReward = (task.reward * level.multiplier).toFixed(3);
                 list.innerHTML += `
                     <div class="task-item">
-                        <strong>${t.typeLabelText}</strong> ${task.type}<br>
+                        <strong>${t.platformLabelText}</strong> ${task.platform} (${task.action})<br>
                         <strong>${t.rewardLabelText}</strong> <span style="color: #eab308; font-weight: bold;">${boostedReward} $</span> <span style="font-size:11px; color:#a855f7;">(مستوى ${level.name})</span><br>
                         <a href="${task.link}" target="_blank" style="color: #6366f1; text-decoration: underline; display:block; margin: 5px 0;">${t.linkText}</a>
                         <button class="btn" style="padding: 6px; margin-top: 5px; font-size: 14px;" onclick="completeTask(${index})">${t.completeBtn}</button>
@@ -466,13 +495,14 @@
             const t = translations[currentLang];
             const level = getUserLevel();
             const finalReward = parseFloat((tasks[index].reward * level.multiplier).toFixed(3));
-            const type = tasks[index].type;
+            const platform = tasks[index].platform;
+            const action = tasks[index].action;
             
             window.open(tasks[index].link, '_blank');
 
             setTimeout(() => {
                 balance += finalReward;
-                addLog(currentLang === 'ar' ? `إنجاز مهمة (${type}) بمستوى ${level.name} وكسب +${finalReward}$` : `Completed task (${type}) at level ${level.name} and earned +$${finalReward}`);
+                addLog(currentLang === 'ar' ? `إنجاز مهمة (${platform} - ${action}) بمستوى ${level.name} وكسب +${finalReward}$` : `Completed task (${platform} - ${action}) at level ${level.name} and earned +$${finalReward}`);
                 tasks.splice(index, 1);
                 updateUI();
                 alert(t.msgTaskDone);
@@ -489,7 +519,8 @@
 
         function createAd() {
             const t = translations[currentLang];
-            const type = document.getElementById('adType').value;
+            const platform = document.getElementById('adPlatform').value;
+            const action = document.getElementById('adAction').value;
             const link = document.getElementById('adLink').value;
             const reward = parseFloat(document.getElementById('adReward').value);
 
@@ -498,8 +529,8 @@
                 return;
             }
 
-            tasks.push({ type, link, reward });
-            addLog(currentLang === 'ar' ? `نشر حملة إعلانية جديدة (${type})` : `Published new ad campaign (${type})`);
+            tasks.push({ platform, action, link, reward });
+            addLog(currentLang === 'ar' ? `نشر حملة إعلانية جديدة (${platform} - ${action})` : `Published new ad campaign (${platform} - ${action})`);
             updateUI();
             alert(t.msgAdCreated);
             document.getElementById('adLink').value = '';
