@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" id="htmlRoot">
 <head>
@@ -15,18 +16,21 @@
         .card { background: #1e293b; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); text-align: inherit; }
         .btn { background: #6366f1; color: white; border: none; padding: 10px 15px; border-radius: 5px; width: 100%; font-size: 16px; cursor: pointer; margin-top: 10px; font-weight: bold; }
         .btn:active { background: #4f46e5; }
+        .btn-success { background: #10b981; }
+        .btn-success:active { background: #059669; }
         input, select { width: 100%; padding: 10px; margin-top: 8px; margin-bottom: 15px; background: #334155; border: 1px solid #475569; color: white; border-radius: 5px; box-sizing: border-box; }
         .nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #334155; z-index: 1000; }
-        .nav-item { color: #94a3b8; text-align: center; font-size: 11px; cursor: pointer; flex: 1; }
+        .nav-item { color: #94a3b8; text-align: center; font-size: 10px; cursor: pointer; flex: 1; }
         .nav-item.active-tab { color: #6366f1; font-weight: bold; }
         .balance-box { text-align: center; font-size: 20px; color: #eab308; margin-bottom: 15px; font-weight: bold; }
         .task-item, .log-item { background: #334155; padding: 12px; border-radius: 6px; margin-bottom: 10px; font-size: 14px; }
         .log-item { border-right: 4px solid #6366f1; }
         [dir="ltr"] .log-item { border-right: none; border-left: 4px solid #6366f1; }
-        /* تنسيق لعبة النقرات (تسلية فقط بدون زيادة في رصيد الدولارات) */
         .clicker-box { text-align: center; }
-        .clicker-circle { width: 150px; height: 150px; background: linear-gradient(135deg, #eab308, #f97316); border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(234, 179, 8, 0.4); user-select: none; transition: transform 0.1s; color: white; }
+        .clicker-circle { width: 140px; height: 140px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 50%; margin: 15px auto; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); user-select: none; transition: transform 0.1s; color: white; }
         .clicker-circle:active { transform: scale(0.92); }
+        .badge { background: #334155; color: #eab308; padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: bold; display: inline-block; margin-bottom: 10px; }
+        .ref-box { background: #334155; padding: 10px; border-radius: 5px; word-break: break-all; font-family: monospace; font-size: 13px; color: #38bdf8; margin-bottom: 10px; text-align: center; }
     </style>
 </head>
 <body>
@@ -44,30 +48,49 @@
         <div class="balance-box"><span id="lbl-balance">رصيدك</span>: <span id="userBalance">0.00</span> $</div>
         
         <div class="card" style="text-align: center;">
+            <div id="userLevelBadge" class="badge">المستوى: مبتدئ (1x)</div>
             <h3 id="lbl-ad-title">مشاهدة إعلان سريع وكسب رصيد</h3>
             <p id="lbl-ad-desc">شاهد إعلان Adsgram القصير واحصل على مكافأة فورية لرصيدك.</p>
             <button class="btn" id="btn-ad" onclick="showAd()">مشاهدة الإعلان الآن</button>
         </div>
 
         <div class="card">
-            <h3 id="lbl-tasks-title" style="text-align: center;">المهام المتاحة</h3>
+            <h3 id="lbl-tasks-title" style="text-align: center;">المهام المتاحة (تتضاعف أرباحها حسب مستواك)</h3>
             <div id="tasksList">
                 <p style="color: #94a3b8; text-align: center;" id="lbl-loading">جاري التحميل...</p>
             </div>
         </div>
     </div>
 
-    <!-- قسم لعبة النقرات (تسلية ونقاط فقط بدون تأثير على الرصيد المالي) -->
+    <!-- قسم النقرات ورفع المستوى -->
     <div id="tab-clicker" class="container">
         <div class="card clicker-box">
-            <h3 id="lbl-clicker-title">لعبة النقرات والنشاط</h3>
-            <p id="lbl-clicker-desc">اضغط على الدائرة لزيادة نقاط نشاطك الشخصية (للتسلية فقط ولا تضاف للأموال):</p>
-            <div class="clicker-circle" onclick="tapGame()" id="lbl-tap-btn">اضغط هنا</div>
-            <p style="font-size: 16px; color: #eab308; margin-top: 15px; font-weight: bold;"><span id="lbl-taps-count">نقاط النقرات</span>: <span id="tapCount">0</span></p>
+            <h3 id="lbl-clicker-title">مركز زيادة التفاعل والمستوى</h3>
+            <p id="lbl-clicker-desc">اضغط لزيادة نقاط نشاطك ورفع مستواك للحصول على مهام ذات أجر أعلى:</p>
+            <div class="clicker-circle" onclick="boostActivity()" id="lbl-tap-btn">انقر لزيادة النشاط</div>
+            <p style="font-size: 15px; color: #eab308; margin-top: 15px; font-weight: bold;"><span id="lbl-taps-count">نقاط النشاط</span>: <span id="tapCount">0</span></p>
+            <p style="font-size: 13px; color: #94a3b8;" id="levelProgressText">اضغط أكثر لتصل للمستوى التالي وتضاعف أرباح المهام!</p>
         </div>
     </div>
 
-    <!-- قسم إنشاء إعلان (المعلن) -->
+    <!-- قسم الإحالة والترويج (Referral) -->
+    <div id="tab-referral" class="container">
+        <div class="card" style="text-align: center;">
+            <h3 id="lbl-ref-title">برنامج الإحالة والأصدقاء</h3>
+            <p id="lbl-ref-desc">ادع أصدقاءك واربح مكافأة فورية عن كل شخص ينضم عبر رابطك ويشارك في المنصة!</p>
+            
+            <label id="lbl-ref-link-label">رابط الإحالة الخاص بك:</label>
+            <div class="ref-box" id="refLinkText">https://t.me/YourBotName?start=ref_000000</div>
+            <button class="btn btn-success" id="btn-copy-ref" onclick="copyRefLink()">نسخ رابط الإحالة</button>
+            
+            <div style="margin-top: 20px; font-size: 14px; color: #cbd5e1;">
+                <span id="lbl-ref-count">عدد الأصدقاء المدعوين</span>: <span id="refCount" style="color: #eab308; font-weight: bold;">0</span> | 
+                <span id="lbl-ref-earned">أرباح الإحالات</span>: <span id="refEarned" style="color: #10b981; font-weight: bold;">0.00 $</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- قسم إنشاء إعلان -->
     <div id="tab-advertise" class="container">
         <div class="card">
             <h3 id="lbl-create-title" style="text-align: center;">إضافة مهمة جديدة</h3>
@@ -87,14 +110,14 @@
             <label id="lbl-link-label">رابط المهمة المستهدف:</label>
             <input type="text" id="adLink" placeholder="https://...">
 
-            <label id="lbl-reward-label">المكافأة لكل عامل (بالدولار):</label>
+            <label id="lbl-reward-label">المكافأة الأساسية للعامل (بالدولار):</label>
             <input type="number" id="adReward" placeholder="0.005" step="0.001">
 
             <button class="btn" id="btn-create" onclick="createAd()">نشر الحملة الإعلانية</button>
         </div>
     </div>
 
-    <!-- قسم المحفظة والسحب (Binance) -->
+    <!-- قسم المحفظة وسحب الأرباح -->
     <div id="tab-wallet" class="container">
         <div class="card">
             <h3 id="lbl-wallet-title" style="text-align: center;">المحفظة وسحب الأرباح</h3>
@@ -123,27 +146,34 @@
     <!-- شريط التنقل السفلي -->
     <div class="nav">
         <div class="nav-item active-tab" onclick="switchTab('tasks', this)" id="nav-t1">المهام</div>
-        <div class="nav-item" onclick="switchTab('clicker', this)" id="nav-t2">النقرات</div>
-        <div class="nav-item" onclick="switchTab('advertise', this)" id="nav-t3">أضف إعلان</div>
-        <div class="nav-item" onclick="switchTab('wallet', this)" id="nav-t4">المحفظة</div>
-        <div class="nav-item" onclick="switchTab('history', this)" id="nav-t5">السجل</div>
+        <div class="nav-item" onclick="switchTab('clicker', this)" id="nav-t2">المستوى</div>
+        <div class="nav-item" onclick="switchTab('referral', this)" id="nav-t3">الإحالات</div>
+        <div class="nav-item" onclick="switchTab('advertise', this)" id="nav-t4">إعلان</div>
+        <div class="nav-item" onclick="switchTab('wallet', this)" id="nav-t5">المحفظة</div>
+        <div class="nav-item" onclick="switchTab('history', this)" id="nav-t6">السجل</div>
     </div>
 
     <script>
         const translations = {
             ar: {
                 pageTitle: "منصة تبادل المهام والأرباح",
-                headerTitle: "منصة المهام والأرباح",
+                headerTitle: "منصة تبادل المهام والأرباح",
                 balance: "رصيدك",
                 adTitle: "مشاهدة إعلان سريع وكسب رصيد",
                 adDesc: "شاهد إعلان Adsgram القصير واحصل على مكافأة فورية لرصيدك.",
                 btnAd: "مشاهدة الإعلان الآن",
-                tasksTitle: "المهام المتاحة",
+                tasksTitle: "المهام المتاحة (تتضاعف أرباحها حسب مستواك)",
                 loading: "جاري التحميل...",
-                clickerTitle: "لعبة النقرات والنشاط",
-                clickerDesc: "اضغط على الدائرة لزيادة نقاط نشاطك الشخصية (للتسلية فقط ولا تضاف للأموال):",
-                tapBtnText: "اضغط هنا",
-                tapsCount: "نقاط النقرات",
+                clickerTitle: "مركز زيادة التفاعل والمستوى",
+                clickerDesc: "اضغط لزيادة نقاط نشاطك ورفع مستواك للحصول على مهام ذات أجر أعلى:",
+                tapBtnText: "انقر لزيادة النشاط",
+                tapsCount: "نقاط النشاط",
+                refTitle: "برنامج الإحالة والأصدقاء",
+                refDesc: "ادع أصدقاءك واربح مكافأة فورية عن كل شخص ينضم عبر رابطك ويشارك في المنصة!",
+                refLinkLabel: "رابط الإحالة الخاص بك:",
+                btnCopyRef: "نسخ رابط الإحالة",
+                refCountText: "عدد الأصدقاء المدعوين",
+                refEarnedText: "أرباح الإحالات",
                 createTitle: "إضافة مهمة جديدة",
                 typeLabel: "نوع المهمة:",
                 optTg: "تيليجرام (اشتراك / متابعة)",
@@ -155,7 +185,7 @@
                 optWa: "واتساب (انضمام لمجموعة / قناة)",
                 optLi: "لينكد إن (متابعة الشركة)",
                 linkLabel: "رابط المهمة المستهدف:",
-                rewardLabel: "المكافأة لكل عامل (بالدولار):",
+                rewardLabel: "المكافأة الأساسية للعامل (بالدولار):",
                 btnCreate: "نشر الحملة الإعلانية",
                 walletTitle: "المحفظة وسحب الأرباح",
                 walletBalance: "رصيدك القابل للسحب",
@@ -165,18 +195,20 @@
                 historyTitle: "سجل الأنشطة والعمليات",
                 noHistory: "لا توجد عمليات سابقة حتى الآن.",
                 nav1: "المهام",
-                nav2: "النقرات",
-                nav3: "أضف إعلان",
-                nav4: "المحفظة",
-                nav5: "السجل",
+                nav2: "المستوى",
+                nav3: "الإحالات",
+                nav4: "إعلان",
+                nav5: "المحفظة",
+                nav6: "السجل",
                 completeBtn: "إتمام المهمة وكسب الرصيد",
                 msgAdSuccess: "تم مشاهدة الإعلان بنجاح! وتمت إضافة 0.010$ لرصيدك.",
-                msgTaskDone: "رائع! تم التحقق من إنجاز المهمة وإضافة المكافأة لرصيدك.",
+                msgTaskDone: "رائع! تم التحقق من إنجاز المهمة وإضافة المكافأة المضاعفة لرصيدك.",
                 msgAdCreated: "تم نشر حملتك الإعلانية بنجاح وأصبحت مرئية للعمال!",
                 msgNoTasks: "لا توجد مهام متاحة حالياً. عُود لاحقاً أو أضف إعلاناً!",
                 linkText: "رابط المهمة",
                 typeLabelText: "النوع:",
-                rewardLabelText: "المكافأة:"
+                rewardLabelText: "المكافأة الصافية:",
+                msgCopied: "تم نسخ رابط الإحالة بنجاح!"
             },
             en: {
                 pageTitle: "Tasks & Earnings Platform",
@@ -185,12 +217,18 @@
                 adTitle: "Watch Quick Ad & Earn",
                 adDesc: "Watch the short Adsgram ad and get an instant reward to your balance.",
                 btnAd: "Watch Ad Now",
-                tasksTitle: "Available Tasks",
+                tasksTitle: "Available Tasks (Multiplied by your level)",
                 loading: "Loading...",
-                clickerTitle: "Clicker & Activity Game",
-                clickerDesc: "Tap the circle to increase your personal activity points (for fun only, does not add to balance):",
-                tapBtnText: "Tap Here",
-                tapsCount: "Click Points",
+                clickerTitle: "Activity & Level Center",
+                clickerDesc: "Tap to increase your activity points and level up for higher-paying tasks:",
+                tapBtnText: "Tap to Boost Activity",
+                tapsCount: "Activity Points",
+                refTitle: "Referral & Friends Program",
+                refDesc: "Invite your friends and earn an instant reward for everyone who joins via your link!",
+                refLinkLabel: "Your Referral Link:",
+                btnCopyRef: "Copy Referral Link",
+                refCountText: "Invited Friends",
+                refEarnedText: "Referral Earnings",
                 createTitle: "Create New Task",
                 typeLabel: "Task Type:",
                 optTg: "Telegram (Subscribe / Join)",
@@ -202,7 +240,7 @@
                 optWa: "WhatsApp (Join Group / Channel)",
                 optLi: "LinkedIn (Follow Company)",
                 linkLabel: "Target Task Link:",
-                rewardLabel: "Reward per Worker ($):",
+                rewardLabel: "Base Reward per Worker ($):",
                 btnCreate: "Publish Ad Campaign",
                 walletTitle: "Wallet & Withdrawals",
                 walletBalance: "Withdrawable Balance",
@@ -212,18 +250,20 @@
                 historyTitle: "Activity & Operation Logs",
                 noHistory: "No previous operations yet.",
                 nav1: "Tasks",
-                nav2: "Clicker",
-                nav3: "Add Ad",
-                nav4: "Wallet",
-                nav5: "History",
+                nav2: "Level",
+                nav3: "Referral",
+                nav4: "Add Ad",
+                nav5: "Wallet",
+                nav6: "History",
                 completeBtn: "Complete Task & Earn",
                 msgAdSuccess: "Ad watched successfully! $0.010 added to your balance.",
-                msgTaskDone: "Great! Task verified and reward added to your balance.",
+                msgTaskDone: "Great! Task verified and multiplied reward added to your balance.",
                 msgAdCreated: "Ad campaign successfully published and visible to workers!",
                 msgNoTasks: "No tasks available right now. Check back later or add an ad!",
                 linkText: "Task Link",
                 typeLabelText: "Type:",
-                rewardLabelText: "Reward:"
+                rewardLabelText: "Net Reward:",
+                msgCopied: "Referral link copied successfully!"
             }
         };
 
@@ -236,8 +276,7 @@
             htmlRoot.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
             htmlRoot.setAttribute('lang', lang);
             updateTexts();
-            renderTasks();
-            renderHistory();
+            updateUI();
         }
 
         function updateTexts() {
@@ -254,6 +293,12 @@
             document.getElementById('lbl-clicker-desc').innerText = t.clickerDesc;
             document.getElementById('lbl-tap-btn').innerText = t.tapBtnText;
             document.getElementById('lbl-taps-count').innerText = t.tapsCount;
+            
+            document.getElementById('lbl-ref-title').innerText = t.refTitle;
+            document.getElementById('lbl-ref-desc').innerText = t.refDesc;
+            document.getElementById('lbl-ref-link-label').innerText = t.refLinkLabel;
+            document.getElementById('btn-copy-ref').innerText = t.btnCopyRef;
+
             document.getElementById('lbl-create-title').innerText = t.createTitle;
             document.getElementById('lbl-type-label').innerText = t.typeLabel;
             
@@ -282,26 +327,66 @@
             document.getElementById('nav-t3').innerText = t.nav3;
             document.getElementById('nav-t4').innerText = t.nav4;
             document.getElementById('nav-t5').innerText = t.nav5;
+            document.getElementById('nav-t6').innerText = t.nav6;
         }
 
         let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
         let tapCount = parseInt(localStorage.getItem('user_taps')) || 0;
+        let refCount = parseInt(localStorage.getItem('user_ref_count')) || 0;
+        let refEarned = parseFloat(localStorage.getItem('user_ref_earned')) || 0.00;
+        
         let tasks = JSON.parse(localStorage.getItem('platform_tasks')) || [
             { type: "Telegram", link: "https://t.me/example", reward: 0.005 },
             { type: "YouTube", link: "https://youtube.com/@example", reward: 0.008 }
         ];
         let historyLogs = JSON.parse(localStorage.getItem('platform_history')) || [];
 
+        let userId = "user_" + Math.floor(100000 + Math.random() * 900000);
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
+            userId = "user_" + window.Telegram.WebApp.initDataUnsafe.user.id;
+        }
+        let botUsername = "YourBotUsername"; 
+        let refLink = `https://t.me/${botUsername}?start=${userId}`;
+
+        function getUserLevel() {
+            if (tapCount >= 100) return { name: currentLang === 'ar' ? 'خبير 🥇' : 'Expert 🥇', multiplier: 2.0 };
+            if (tapCount >= 40) return { name: currentLang === 'ar' ? 'محترف 🥈' : 'Pro 🥈', multiplier: 1.5 };
+            return { name: currentLang === 'ar' ? 'مبتدئ 🥉' : 'Beginner 🥉', multiplier: 1.0 };
+        }
+
         function updateUI() {
             document.getElementById('userBalance').innerText = balance.toFixed(3);
             document.getElementById('walletBalance').innerText = balance.toFixed(3);
             document.getElementById('tapCount').innerText = tapCount;
+            document.getElementById('refCount').innerText = refCount;
+            document.getElementById('refEarned').innerText = refEarned.toFixed(3) + " $";
+            document.getElementById('refLinkText').innerText = refLink;
+            
+            const level = getUserLevel();
+            document.getElementById('userLevelBadge').innerText = (currentLang === 'ar' ? 'المستوى: ' : 'Level: ') + level.name + ' (' + level.multiplier + 'x)';
+
             localStorage.setItem('user_balance', balance);
             localStorage.setItem('user_taps', tapCount);
             localStorage.setItem('platform_tasks', JSON.stringify(tasks));
             localStorage.setItem('platform_history', JSON.stringify(historyLogs));
+            
             renderTasks();
             renderHistory();
+        }
+
+        function copyRefLink() {
+            const t = translations[currentLang];
+            navigator.clipboard.writeText(refLink).then(() => {
+                alert(t.msgCopied);
+            }).catch(err => {
+                const tempInput = document.createElement("input");
+                tempInput.value = refLink;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempInput);
+                alert(t.msgCopied);
+            });
         }
 
         function addLog(text) {
@@ -310,11 +395,9 @@
             if (historyLogs.length > 25) historyLogs.pop();
         }
 
-        // دالة لعبة النقرات (تزيد نقاط التسلية فقط ولا تلمس رصيد الدولارات أبداً)
-        function tapGame() {
+        function boostActivity() {
             tapCount++;
-            document.getElementById('tapCount').innerText = tapCount;
-            localStorage.setItem('user_taps', tapCount);
+            updateUI();
         }
 
         function renderHistory() {
@@ -338,16 +421,19 @@
         function renderTasks() {
             const t = translations[currentLang];
             const list = document.getElementById('tasksList');
+            const level = getUserLevel();
+
             if (tasks.length === 0) {
                 list.innerHTML = `<p style="color: #94a3b8; text-align: center;">${t.msgNoTasks}</p>`;
                 return;
             }
             list.innerHTML = '';
             tasks.forEach((task, index) => {
+                const boostedReward = (task.reward * level.multiplier).toFixed(3);
                 list.innerHTML += `
                     <div class="task-item">
                         <strong>${t.typeLabelText}</strong> ${task.type}<br>
-                        <strong>${t.rewardLabelText}</strong> <span style="color: #eab308;">${task.reward} $</span><br>
+                        <strong>${t.rewardLabelText}</strong> <span style="color: #eab308; font-weight: bold;">${boostedReward} $</span> <span style="font-size:11px; color:#a855f7;">(مستوى ${level.name})</span><br>
                         <a href="${task.link}" target="_blank" style="color: #6366f1; text-decoration: underline; display:block; margin: 5px 0;">${t.linkText}</a>
                         <button class="btn" style="padding: 6px; margin-top: 5px; font-size: 14px;" onclick="completeTask(${index})">${t.completeBtn}</button>
                     </div>
@@ -378,14 +464,15 @@
 
         function completeTask(index) {
             const t = translations[currentLang];
-            const reward = tasks[index].reward;
+            const level = getUserLevel();
+            const finalReward = parseFloat((tasks[index].reward * level.multiplier).toFixed(3));
             const type = tasks[index].type;
             
             window.open(tasks[index].link, '_blank');
 
             setTimeout(() => {
-                balance += reward;
-                addLog(currentLang === 'ar' ? `إنجاز مهمة (${type}) وكسب +${reward}$` : `Completed task (${type}) and earned +$${reward}`);
+                balance += finalReward;
+                addLog(currentLang === 'ar' ? `إنجاز مهمة (${type}) بمستوى ${level.name} وكسب +${finalReward}$` : `Completed task (${type}) at level ${level.name} and earned +$${finalReward}`);
                 tasks.splice(index, 1);
                 updateUI();
                 alert(t.msgTaskDone);
@@ -441,7 +528,6 @@
             document.getElementById('withdrawAmount').value = '';
         }
 
-        // تهيئة التطبيق
         document.getElementById('htmlRoot').setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
         document.getElementById('htmlRoot').setAttribute('lang', currentLang);
         document.getElementById('langSelect').value = currentLang;
@@ -450,3 +536,4 @@
     </script>
 </body>
 </html>
+
