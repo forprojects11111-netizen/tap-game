@@ -3,574 +3,383 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">منصة تبادل المهام والأرباح</title>
+    <title id="page-title">منصة المهام والأرباح - SudanTapGame</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://sad.adsgram.ai/js/sad.js"></script>
     <style>
-        /* [1] التنسيق العام والستايل (CSS): مكان تخصيص الألوان، الخلفيات، والشاشات */
-        body { font-family: Tahoma, sans-serif; background: #0f172a; color: #fff; margin: 0; padding: 0; padding-bottom: 70px; }
-        .header { background: #1e293b; padding: 15px; text-align: center; font-size: 18px; font-weight: bold; border-bottom: 2px solid #334155; display: flex; justify-content: space-between; align-items: center; }
-        .lang-select { background: #334155; color: white; border: 1px solid #475569; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 14px; }
-        .container { padding: 15px; display: none; }
-        .active { display: block; }
-        .card { background: #1e293b; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); text-align: inherit; }
-        .btn { background: #6366f1; color: white; border: none; padding: 10px 15px; border-radius: 5px; width: 100%; font-size: 16px; cursor: pointer; margin-top: 10px; font-weight: bold; }
-        .btn:active { background: #4f46e5; }
-        .btn-success { background: #10b981; }
-        .btn-success:active { background: #059669; }
-        input, select { width: 100%; padding: 10px; margin-top: 8px; margin-bottom: 15px; background: #334155; border: 1px solid #475569; color: white; border-radius: 5px; box-sizing: border-box; }
-        .nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #334155; z-index: 1000; }
-        .nav-item { color: #94a3b8; text-align: center; font-size: 10px; cursor: pointer; flex: 1; }
-        .nav-item.active-tab { color: #6366f1; font-weight: bold; }
-        .balance-box { text-align: center; font-size: 20px; color: #eab308; margin-bottom: 15px; font-weight: bold; }
-        .task-item, .log-item { background: #334155; padding: 12px; border-radius: 6px; margin-bottom: 10px; font-size: 14px; }
-        .log-item { border-right: 4px solid #6366f1; }
-        [dir="ltr"] .log-item { border-right: none; border-left: 4px solid #6366f1; }
-        .clicker-box { text-align: center; }
-        .clicker-circle { width: 140px; height: 140px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 50%; margin: 15px auto; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); user-select: none; transition: transform 0.1s; color: white; }
-        .clicker-circle:active { transform: scale(0.92); }
-        .badge { background: #334155; color: #eab308; padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: bold; display: inline-block; margin-bottom: 10px; }
-        .ref-box { background: #334155; padding: 10px; border-radius: 5px; word-break: break-all; font-family: monospace; font-size: 13px; color: #38bdf8; margin-bottom: 10px; text-align: center; }
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #6366f1;
+            --accent-hover: #4f46e5;
+            --success-color: #10b981;
+            --border-color: #334155;
+        }
+        body {
+            font-family: Tahoma, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            padding-bottom: 70px;
+        }
+        .header {
+            background: var(--card-bg);
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .lang-select {
+            background: var(--border-color);
+            color: var(--text-color);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+        .container {
+            padding: 15px;
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .btn:active { background: var(--accent-hover); }
+        .btn-success { background: var(--success-color); }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid var(--border-color);
+        }
+        .nav-item {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 12px;
+            text-align: center;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .nav-item.active-nav {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        .notice {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-color);
+            color: #34d399;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 13px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <span id="header-title">منصة تبادل المهام والأرباح</span>
-        <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+        <h2 id="main-heading">Tasks & Earnings Platform</h2>
+        <select class="lang-select" id="langSwitcher" onchange="changeLanguage()">
             <option value="ar">العربية</option>
             <option value="en">English</option>
         </select>
     </div>
 
-    <!-- [2] قسم المهام والكسب: مكان عرض الرصيد، زر الإعلانات، وقائمة المهام المتاحة -->
+    <!-- قسم المهام -->
     <div id="tab-tasks" class="container active">
-        <div class="balance-box"><span id="lbl-balance">رصيدك</span>: <span id="userBalance">0.00</span> $</div>
-        
-        <div class="card" style="text-align: center;">
-            <div id="userLevelBadge" class="badge">المستوى: مبتدئ (1x)</div>
-            <h3 id="lbl-ad-title">مشاهدة إعلان سريع وكسب رصيد</h3>
-            <p id="lbl-ad-desc">شاهد إعلان Adsgram القصير واحصل على مكافأة فورية لرصيدك.</p>
-            <button class="btn" id="btn-ad" onclick="showAd()">مشاهدة الإعلان الآن</button>
-        </div>
-
         <div class="card">
-            <h3 id="lbl-tasks-title" style="text-align: center;">المهام المتاحة</h3>
-            <div id="tasksList">
-                <p style="color: #94a3b8; text-align: center;" id="lbl-loading">جاري التحميل...</p>
+            <h3 id="t-available-tasks">المهام المتاحة</h3>
+            <p id="t-tasks-desc">أجز المهام واربح الأرباح فوراً.</p>
+            <div id="taskList">
+                <div class="card" style="background: var(--bg-color);">
+                    <h4>اشتراك في قناة التليجرام</h4>
+                    <p>المكافأة: $0.050</p>
+                    <button class="btn btn-success" onclick="completeTask(0.05)">إنجاز المهمة</button>
+                </div>
+                <div class="card" style="background: var(--bg-color);">
+                    <h4>مشاهدة إعلان ترويجي</h4>
+                    <p>المكافأة: $0.010</p>
+                    <button class="btn btn-success" onclick="completeTask(0.01)">مشاهدة الإعلان (Demo)</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- [3] قسم النقرات ورفع المستوى: مكان زيادة نقاط التفاعل ورفع مستوى الحساب -->
-    <div id="tab-clicker" class="container">
-        <div class="card clicker-box">
-            <h3 id="lbl-clicker-title">مركز زيادة التفاعل والمستوى</h3>
-            <p id="lbl-clicker-desc">اضغط لزيادة نقاط نشاطك ورفع مستواك للحصول على مهام ذات أجر أعلى:</p>
-            <div class="clicker-circle" onclick="boostActivity()" id="lbl-tap-btn">انقر لزيادة النشاط</div>
-            <p style="font-size: 15px; color: #eab308; margin-top: 15px; font-weight: bold;"><span id="lbl-taps-count">نقاط النشاط</span>: <span id="tapCount">0</span></p>
-            <p style="font-size: 13px; color: #94a3b8;" id="levelProgressText">كلما زادت نقاطك، ارتفع مستواك وظهرت لك مهام بأجور أعلى!</p>
-        </div>
-    </div>
-
-    <!-- [4] قسم الإحالة والترويج: مكان رابط دعوة الأصدقاء وحساب الأرباح التابعة -->
-    <div id="tab-referral" class="container">
-        <div class="card" style="text-align: center;">
-            <h3 id="lbl-ref-title">برنامج الإحالة والأصدقاء</h3>
-            <p id="lbl-ref-desc">ادع أصدقاءك واربح مكافأة فورية عن كل شخص ينضم عبر رابطك ويشارك في المنصة!</p>
-            
-            <label id="lbl-ref-link-label">رابط الإحالة الخاص بك:</label>
-            <div class="ref-box" id="refLinkText">https://t.me/YourBotName?start=ref_000000</div>
-            <button class="btn btn-success" id="btn-copy-ref" onclick="copyRefLink()">نسخ رابط الإحالة</button>
-            
-            <div style="margin-top: 20px; font-size: 14px; color: #cbd5e1;">
-                <span id="lbl-ref-count">عدد الأصدقاء المدعوين</span>: <span id="refCount" style="color: #eab308; font-weight: bold;">0</span> | 
-                <span id="lbl-ref-earned">أرباح الإحالات</span>: <span id="refEarned" style="color: #10b981; font-weight: bold;">0.00 $</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- [5] قسم إنشاء إعلان: مكان إضافة المستخدمين لمهام جديدة (تليجرام، يوتيوب، إلخ) -->
-    <div id="tab-advertise" class="container">
-        <div class="card">
-            <h3 id="lbl-create-title" style="text-align: center;">إضافة مهمة جديدة</h3>
-            
-            <label id="lbl-platform-label">اختر منصة التواصل الاجتماعي:</label>
-            <select id="adPlatform">
-                <option value="Telegram" id="opt-tg">تيليجرام</option>
-                <option value="YouTube" id="opt-yt">يوتيوب</option>
-                <option value="TikTok" id="opt-tt">تيك توك</option>
-                <option value="Instagram" id="opt-ig">إنستغرام</option>
-                <option value="Facebook" id="opt-fb">فيسبوك</option>
-                <option value="Twitter / X" id="opt-x">تويتر / X</option>
-                <option value="WhatsApp" id="opt-wa">واتساب</option>
-                <option value="LinkedIn" id="opt-li">لينكد إن</option>
-            </select>
-
-            <label id="lbl-action-label">اختر نوع الإجراء المطلوب:</label>
-            <select id="adAction">
-                <option value="اشتراك" id="act-sub">اشتراك</option>
-                <option value="متابعة" id="act-follow">متابعة</option>
-                <option value="إعجاب (لايك)" id="act-like">إعجاب (لايك)</option>
-                <option value="مشاهدة فيديو" id="act-watch">مشاهدة فيديو</option>
-                <option value="تعليق" id="act-comment">تعليق</option>
-                <option value="انضمام لمجموعة/قناة" id="act-join">انضمام لمجموعة/قناة</option>
-                <option value="إعادة نشر (ريتويت)" id="act-repost">إعادة نشر (ريتويت)</option>
-            </select>
-            
-            <label id="lbl-link-label">رابط المهمة المستهدف:</label>
-            <input type="text" id="adLink" placeholder="https://...">
-
-            <label id="lbl-reward-label">سعر / مكافأة المهمة لكل عامل (بالدولار):</label>
-            <input type="number" id="adReward" placeholder="0.005" step="0.001">
-
-            <button class="btn" id="btn-create" onclick="createAd()">نشر الحملة الإعلانية</button>
-        </div>
-    </div>
-
-    <!-- [6] قسم المحفظة وسحب الأرباح: مكان إدخال عنوان Binance وطلب سحب الرصيد -->
+    <!-- قسم المحفظة والسحب -->
     <div id="tab-wallet" class="container">
         <div class="card">
-            <h3 id="lbl-wallet-title" style="text-align: center;">المحفظة وسحب الأرباح</h3>
-            <p><span id="lbl-wallet-balance">رصيدك القابل للسحب</span>: <span id="walletBalance">0.00</span> $</p>
+            <h3 id="w-title">المحفظة والأرباح</h3>
+            <p id="w-balance-label">رصيدك الحالي: <span id="userBalance" style="color: var(--success-color); font-weight: bold;">$0.00</span></p>
             
-            <label id="lbl-address-label">عنوان محفظة Binance (USDT):</label>
-            <input type="text" id="binanceAddress" placeholder="أدخل عنوان محفظتك هنا...">
+            <div class="notice" id="w-notice">
+                ملاحظة: يتم معالجة طلبات السحب وتحويل الأرباح خلال 24 ساعة كحد أقصى.
+            </div>
 
-            <label id="lbl-amount-label">المبلغ المراد سحبه:</label>
-            <input type="number" id="withdrawAmount" placeholder="0.00">
+            <h4 id="w-withdraw-title">طلب سحب الأرباح</h4>
+            <label id="w-select-method">اختر طريقة السحب:</label>
+            <select id="withdrawMethod">
+                <option value="bank">تحويل بنكي محلي / تطبيقك (بنكك)</option>
+                <option value="fawry">بنك فوري (Fawry)</option>
+                <option value="mycash">محفظة ماي كاشي (MyCash)</option>
+                <option value="ton">محفظة تون تيليجرام (Telegram TON)</option>
+                <option value="binance">منصة بايننس (Binance USDT)</option>
+            </select>
 
-            <button class="btn" id="btn-withdraw" onclick="requestWithdraw()">طلب السحب إلى Binance</button>
+            <label id="w-account-info">معلومات الحساب أو المحفظة:</label>
+            <input type="text" id="accountDetails" placeholder="أدخل رقم الحساب أو العنوان هنا...">
+
+            <button class="btn" onclick="requestWithdrawal()" id="w-btn">تأكيد طلب السحب</button>
         </div>
     </div>
 
-    <!-- [7] قسم السجل والعمليات: مكان عرض تاريخ العمليات والسحب والإنجازات السابقة -->
+    <!-- قسم الإعلانات وشحن الرصيد للمعلنين -->
+    <div id="tab-add" class="container">
+        <div class="card">
+            <h3 id="ad-title">إضافة إعلان وشحن الرصيد</h3>
+            <p id="ad-desc">للبدء في الإعلان، قم بشحن حسابك أولاً لتظهر إعلاناتك لجميع المستخدمين.</p>
+            
+            <h4 id="ad-recharge-title">طرق شحن الرصيد (للمعلنين):</h4>
+            <label id="ad-select-pay">اختر وسيلة الدفع للشحن:</label>
+            <select id="depositMethod">
+                <option value="bank">تحويل بنكي محلي / تطبيقك (بنكك)</option>
+                <option value="fawry">بنك فوري (Fawry)</option>
+                <option value="mycash">محفظة ماي كاشي (MyCash)</option>
+                <option value="ton">محفظة تون تيليجرام (Telegram TON)</option>
+                <option value="binance">منصة بايننس (Binance USDT)</option>
+            </select>
+
+            <label id="ad-amount-label">المبلغ المراد شحنه ($):</label>
+            <input type="number" id="depositAmount" placeholder="مثال: 10">
+
+            <button class="btn btn-success" onclick="rechargeBalance()" id="ad-btn">شحن الرصيد الآن</button>
+
+            <hr style="border-color: var(--border-color); margin: 20px 0;">
+
+            <h4 id="ad-create-title">إنشاء إعلان جديد</h4>
+            <label id="ad-title-label">عنوان المهمة أو الإعلان:</label>
+            <input type="text" id="adTitleInput" placeholder="مثال: انضم لقناتي على تيليجرام">
+            
+            <label id="ad-reward-label">مكافأة العامل الواحد ($):</label>
+            <input type="number" id="adRewardInput" placeholder="مثال: 0.01">
+
+            <button class="btn" onclick="createAd()" id="ad-create-btn">نشر الإعلان</button>
+        </div>
+    </div>
+
+    <!-- قسم السجل -->
     <div id="tab-history" class="container">
         <div class="card">
-            <h3 id="lbl-history-title" style="text-align: center;">سجل الأنشطة والعمليات</h3>
+            <h3 id="h-title">سجل العمليات</h3>
             <div id="historyList">
-                <p style="color: #94a3b8; text-align: center;" id="lbl-no-history">لا توجد عمليات سابقة حتى الآن.</p>
+                <p id="h-empty">لا توجد عمليات سابقة حتى الآن.</p>
             </div>
         </div>
     </div>
 
-    <!-- [8] شريط التنقل السفلي: أزرار التنقل بين الأقسام المختلفة -->
-    <div class="nav">
-        <div class="nav-item active-tab" onclick="switchTab('tasks', this)" id="nav-t1">المهام</div>
-        <div class="nav-item" onclick="switchTab('clicker', this)" id="nav-t2">المستوى</div>
-        <div class="nav-item" onclick="switchTab('referral', this)" id="nav-t3">الإحالات</div>
-        <div class="nav-item" onclick="switchTab('advertise', this)" id="nav-t4">إعلان</div>
-        <div class="nav-item" onclick="switchTab('wallet', this)" id="nav-t5">المحفظة</div>
-        <div class="nav-item" onclick="switchTab('history', this)" id="nav-t6">السجل</div>
+    <!-- شريط التنقل السفلي -->
+    <div class="nav-bar">
+        <button class="nav-item active-nav" onclick="switchTab('tasks', this)" id="nav-tasks">المهام</button>
+        <button class="nav-item" onclick="switchTab('wallet', this)" id="nav-wallet">المحفظة</button>
+        <button class="nav-item" onclick="switchTab('add', this)" id="nav-add">إعلان</button>
+        <button class="nav-item" onclick="switchTab('history', this)" id="nav-history">السجل</button>
     </div>
 
     <script>
-        /* [9] البرمجة والمنطق (JavaScript): معالجة اللغات، الأرصدة، الإعلانات، وحفظ البيانات محلياً */
-        const translations = {
-            ar: {
-                pageTitle: "منصة تبادل المهام والأرباح",
-                headerTitle: "منصة تبادل المهام والأرباح",
-                balance: "رصيدك",
-                adTitle: "مشاهدة إعلان سريع وكسب رصيد",
-                adDesc: "شاهد إعلان Adsgram القصير واحصل على مكافأة فورية لرصيدك.",
-                btnAd: "مشاهدة الإعلان الآن",
-                tasksTitle: "المهام المتاحة",
-                loading: "جاري التحميل...",
-                clickerTitle: "مركز زيادة التفاعل والمستوى",
-                clickerDesc: "اضغط لزيادة نقاط نشاطك ورفع مستواك للحصول على مهام ذات أجر أعلى:",
-                tapBtnText: "انقر لزيادة النشاط",
-                tapsCount: "نقاط النشاط",
-                refTitle: "برنامج الإحالة والأصدقاء",
-                refDesc: "ادع أصدقاءك واربح مكافأة فورية عن كل شخص ينضم عبر رابطك ويشارك في المنصة!",
-                refLinkLabel: "رابط الإحالة الخاص بك:",
-                btnCopyRef: "نسخ رابط الإحالة",
-                createTitle: "إضافة مهمة جديدة",
-                platformLabel: "اختر منصة التواصل الاجتماعي:",
-                actionLabel: "اختر نوع الإجراء المطلوب:",
-                optTg: "تيليجرام",
-                optYt: "يوتيوب",
-                optTt: "تيك توك",
-                optIg: "إنستغرام",
-                optFb: "فيسبوك",
-                optX: "تويتر / X",
-                optWa: "واتساب",
-                optLi: "لينكد إن",
-                actSub: "اشتراك",
-                actFollow: "متابعة",
-                actLike: "إعجاب (لايك)",
-                actWatch: "مشاهدة فيديو",
-                actComment: "تعليق",
-                actJoin: "انضمام لمجموعة/قناة",
-                actRepost: "إعادة نشر (ريتويت)",
-                linkLabel: "رابط المهمة المستهدف:",
-                rewardLabel: "سعر / مكافأة المهمة لكل عامل (بالدولار):",
-                btnCreate: "نشر الحملة الإعلانية",
-                walletTitle: "المحفظة وسحب الأرباح",
-                walletBalance: "رصيدك القابل للسحب",
-                addressLabel: "عنوان محفظة Binance (USDT):",
-                amountLabel: "المبلغ المراد سحبه:",
-                btnWithdraw: "طلب السحب إلى Binance",
-                historyTitle: "سجل الأنشطة والعمليات",
-                noHistory: "لا توجد عمليات سابقة حتى الآن.",
-                nav1: "المهام",
-                nav2: "المستوى",
-                nav3: "الإحالات",
-                nav4: "إعلان",
-                nav5: "المحفظة",
-                nav6: "السجل",
-                completeBtn: "إتمام المهمة وكسب الرصيد",
-                msgAdSuccess: "تم مشاهدة الإعلان بنجاح! وتمت إضافة 0.010$ لرصيدك.",
-                msgTaskDone: "رائع! تم التحقق من إنجاز المهمة وإضافة المكافأة المضاعفة لرصيدك.",
-                msgAdCreated: "تم نشر حملتك الإعلانية بنجاح وأصبحت مرئية للعمال!",
-                msgNoTasks: "لا توجد مهام متاحة حالياً. عُود لاحقاً أو أضف إعلاناً!",
-                linkText: "رابط المهمة",
-                platformLabelText: "المنصة:",
-                actionLabelText: "الإجراء:",
-                rewardLabelText: "المكافأة الصافية:",
-                msgCopied: "تم نسخ رابط الإحالة بنجاح!"
-            },
-            en: {
-                pageTitle: "Tasks & Earnings Platform",
-                headerTitle: "Tasks & Earnings Platform",
-                balance: "Balance",
-                adTitle: "Watch Quick Ad & Earn",
-                adDesc: "Watch the short Adsgram ad and get an instant reward to your balance.",
-                btnAd: "Watch Ad Now",
-                tasksTitle: "Available Tasks",
-                loading: "Loading...",
-                clickerTitle: "Activity & Level Center",
-                clickerDesc: "Tap to increase your activity points and level up for higher-paying tasks:",
-                tapBtnText: "Tap to Boost Activity",
-                tapsCount: "Activity Points",
-                refTitle: "Referral & Friends Program",
-                refDesc: "Invite your friends and earn an instant reward for everyone who joins via your link!",
-                refLinkLabel: "Your Referral Link:",
-                btnCopyRef: "Copy Referral Link",
-                createTitle: "Create New Task",
-                platformLabel: "Select Social Media Platform:",
-                actionLabel: "Select Action Type:",
-                optTg: "Telegram",
-                optYt: "YouTube",
-                optTt: "TikTok",
-                optIg: "Instagram",
-                optFb: "Facebook",
-                optX: "Twitter / X",
-                optWa: "WhatsApp",
-                optLi: "LinkedIn",
-                actSub: "Subscribe",
-                actFollow: "Follow",
-                actLike: "Like",
-                actWatch: "Watch Video",
-                actComment: "Comment",
-                actJoin: "Join Group/Channel",
-                actRepost: "Repost (Retweet)",
-                linkLabel: "Target Task Link:",
-                rewardLabel: "Task Price per Worker ($):",
-                btnCreate: "Publish Ad Campaign",
-                walletTitle: "Wallet & Withdrawals",
-                walletBalance: "Withdrawable Balance",
-                addressLabel: "Binance Wallet Address (USDT):",
-                amountLabel: "Withdrawal Amount:",
-                btnWithdraw: "Request Binance Withdrawal",
-                historyTitle: "Activity & Operation Logs",
-                noHistory: "No previous operations yet.",
-                nav1: "Tasks",
-                nav2: "Level",
-                nav3: "Referral",
-                nav4: "Add Ad",
-                nav5: "Wallet",
-                nav6: "History",
-                completeBtn: "Complete Task & Earn",
-                msgAdSuccess: "Ad watched successfully! $0.010 added to your balance.",
-                msgTaskDone: "Great! Task verified and multiplied reward added to your balance.",
-                msgAdCreated: "Ad campaign successfully published and visible to workers!",
-                msgNoTasks: "No tasks available right now. Check back later or add an ad!",
-                linkText: "Task Link",
-                platformLabelText: "Platform:",
-                actionLabelText: "Action:",
-                rewardLabelText: "Net Reward:",
-                msgCopied: "Referral link copied successfully!"
-            }
-        };
+        let currentBalance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
+        updateBalanceDisplay();
 
-        let currentLang = localStorage.getItem('app_lang') || 'ar';
-
-        function changeLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('app_lang', lang);
-            const htmlRoot = document.getElementById('htmlRoot');
-            htmlRoot.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
-            htmlRoot.setAttribute('lang', lang);
-            updateTexts();
-            updateUI();
-        }
-
-        function updateTexts() {
-            const t = translations[currentLang];
-            document.getElementById('page-title').innerText = t.pageTitle;
-            document.getElementById('header-title').innerText = t.headerTitle;
-            document.getElementById('lbl-balance').innerText = t.balance;
-            document.getElementById('lbl-ad-title').innerText = t.adTitle;
-            document.getElementById('lbl-ad-desc').innerText = t.adDesc;
-            document.getElementById('btn-ad').innerText = t.btnAd;
-            document.getElementById('lbl-tasks-title').innerText = t.tasksTitle;
-            document.getElementById('lbl-loading').innerText = t.loading;
-            document.getElementById('lbl-clicker-title').innerText = t.clickerTitle;
-            document.getElementById('lbl-clicker-desc').innerText = t.clickerDesc;
-            document.getElementById('lbl-tap-btn').innerText = t.tapBtnText;
-            document.getElementById('lbl-taps-count').innerText = t.tapsCount;
-            
-            document.getElementById('lbl-ref-title').innerText = t.refTitle;
-            document.getElementById('lbl-ref-desc').innerText = t.refDesc;
-            document.getElementById('lbl-ref-link-label').innerText = t.refLinkLabel;
-            document.getElementById('btn-copy-ref').innerText = t.btnCopyRef;
-
-            document.getElementById('lbl-create-title').innerText = t.createTitle;
-            document.getElementById('lbl-platform-label').innerText = t.platformLabel;
-            document.getElementById('lbl-action-label').innerText = t.actionLabel;
-            
-            document.getElementById('opt-tg').innerText = t.optTg;
-            document.getElementById('opt-yt').innerText = t.optYt;
-            document.getElementById('opt-tt').innerText = t.optTt;
-            document.getElementById('opt-ig').innerText = t.optIg;
-            document.getElementById('opt-fb').innerText = t.optFb;
-            document.getElementById('opt-x').innerText = t.optX;
-            document.getElementById('opt-wa').innerText = t.optWa;
-            document.getElementById('opt-li').innerText = t.optLi;
-
-            document.getElementById('act-sub').innerText = t.actSub;
-            document.getElementById('act-follow').innerText = t.actFollow;
-            document.getElementById('act-like').innerText = t.actLike;
-            document.getElementById('act-watch').innerText = t.actWatch;
-            document.getElementById('act-comment').innerText = t.actComment;
-            document.getElementById('act-join').innerText = t.actJoin;
-            document.getElementById('act-repost').innerText = t.actRepost;
-
-            document.getElementById('lbl-link-label').innerText = t.linkLabel;
-            document.getElementById('lbl-reward-label').innerText = t.rewardLabel;
-            document.getElementById('btn-create').innerText = t.btnCreate;
-            document.getElementById('lbl-wallet-title').innerText = t.walletTitle;
-            document.getElementById('lbl-wallet-balance').innerText = t.walletBalance;
-            document.getElementById('lbl-address-label').innerText = t.addressLabel;
-            document.getElementById('lbl-amount-label').innerText = t.amountLabel;
-            document.getElementById('btn-withdraw').innerText = t.btnWithdraw;
-            document.getElementById('lbl-history-title').innerText = t.historyTitle;
-            document.getElementById('lbl-no-history').innerText = t.noHistory;
-            
-            document.getElementById('nav-t1').innerText = t.nav1;
-            document.getElementById('nav-t2').innerText = t.nav2;
-            document.getElementById('nav-t3').innerText = t.nav3;
-            document.getElementById('nav-t4').innerText = t.nav4;
-            document.getElementById('nav-t5').innerText = t.nav5;
-            document.getElementById('nav-t6').innerText = t.nav6;
-        }
-
-        let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
-        let tapCount = parseInt(localStorage.getItem('user_taps')) || 0;
-        let refCount = parseInt(localStorage.getItem('user_ref_count')) || 0;
-        let refEarned = parseFloat(localStorage.getItem('user_ref_earned')) || 0.00;
-        
-        let tasks = JSON.parse(localStorage.getItem('platform_tasks')) || [
-            { platform: "Telegram", action: "اشتراك", link: "https://t.me/example", reward: 0.005 },
-            { platform: "YouTube", action: "مشاهدة فيديو", link: "https://youtube.com/@example", reward: 0.008 }
-        ];
-        let historyLogs = JSON.parse(localStorage.getItem('platform_history')) || [];
-
-        let userId = "user_" + Math.floor(100000 + Math.random() * 900000);
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
-            userId = "user_" + window.Telegram.WebApp.initDataUnsafe.user.id;
-        }
-        let botUsername = "YourBotUsername"; 
-        let refLink = `https://t.me/${botUsername}?start=${userId}`;
-
-        function getUserLevel() {
-            if (tapCount >= 100) return { name: currentLang === 'ar' ? 'خبير 🥇' : 'Expert 🥇', multiplier: 2.0 };
-            if (tapCount >= 40) return { name: currentLang === 'ar' ? 'محترف 🥈' : 'Pro 🥈', multiplier: 1.5 };
-            return { name: currentLang === 'ar' ? 'مبتدئ 🥉' : 'Beginner 🥉', multiplier: 1.0 };
-        }
-
-        function updateUI() {
-            document.getElementById('userBalance').innerText = balance.toFixed(3);
-            document.getElementById('walletBalance').innerText = balance.toFixed(3);
-            document.getElementById('tapCount').innerText = tapCount;
-            document.getElementById('refCount').innerText = refCount;
-            document.getElementById('refEarned').innerText = refEarned.toFixed(3) + " $";
-            document.getElementById('refLinkText').innerText = refLink;
-            
-            const level = getUserLevel();
-            document.getElementById('userLevelBadge').innerText = (currentLang === 'ar' ? 'المستوى: ' : 'Level: ') + level.name + ' (' + level.multiplier + 'x)';
-
-            localStorage.setItem('user_balance', balance);
-            localStorage.setItem('user_taps', tapCount);
-            localStorage.setItem('platform_tasks', JSON.stringify(tasks));
-            localStorage.setItem('platform_history', JSON.stringify(historyLogs));
-            
-            renderTasks();
-            renderHistory();
-        }
-
-        function copyRefLink() {
-            const t = translations[currentLang];
-            navigator.clipboard.writeText(refLink).then(() => {
-                alert(t.msgCopied);
-            }).catch(err => {
-                const tempInput = document.createElement("input");
-                tempInput.value = refLink;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand("copy");
-                document.body.removeChild(tempInput);
-                alert(t.msgCopied);
-            });
-        }
-
-        function addLog(text) {
-            const time = new Date().toLocaleString();
-            historyLogs.unshift({ text, time });
-            if (historyLogs.length > 25) historyLogs.pop();
-        }
-
-        function boostActivity() {
-            tapCount++;
-            updateUI();
-        }
-
-        function renderHistory() {
-            const t = translations[currentLang];
-            const list = document.getElementById('historyList');
-            if (historyLogs.length === 0) {
-                list.innerHTML = `<p style="color: #94a3b8; text-align: center;" id="lbl-no-history">${t.noHistory}</p>`;
-                return;
-            }
-            list.innerHTML = '';
-            historyLogs.forEach(log => {
-                list.innerHTML += `
-                    <div class="log-item">
-                        <div>${log.text}</div>
-                        <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">🕒 ${log.time}</div>
-                    </div>
-                `;
-            });
-        }
-
-        function renderTasks() {
-            const t = translations[currentLang];
-            const list = document.getElementById('tasksList');
-            const level = getUserLevel();
-
-            if (tasks.length === 0) {
-                list.innerHTML = `<p style="color: #94a3b8; text-align: center;">${t.msgNoTasks}</p>`;
-                return;
-            }
-            list.innerHTML = '';
-            tasks.forEach((task, index) => {
-                const boostedReward = (task.reward * level.multiplier).toFixed(3);
-                list.innerHTML += `
-                    <div class="task-item">
-                        <strong>${t.platformLabelText}</strong> ${task.platform} (${task.action})<br>
-                        <strong>${t.rewardLabelText}</strong> <span style="color: #eab308; font-weight: bold;">${boostedReward} $</span> <span style="font-size:11px; color:#a855f7;">(مستوى ${level.name})</span><br>
-                        <a href="${task.link}" target="_blank" style="color: #6366f1; text-decoration: underline; display:block; margin: 5px 0;">${t.linkText}</a>
-                        <button class="btn" style="padding: 6px; margin-top: 5px; font-size: 14px;" onclick="completeTask(${index})">${t.completeBtn}</button>
-                    </div>
-                `;
-            });
-        }
-
-        const adController = window.Adsgram ? window.Adsgram.init({ blockId: "48015" }) : null;
-
-        function showAd() {
-            const t = translations[currentLang];
-            if (adController) {
-                adController.show().then((result) => {
-                    balance += 0.010;
-                    addLog(currentLang === 'ar' ? "مشاهدة إعلان وكسب +0.010$" : "Watched Ad and earned +$0.010");
-                    updateUI();
-                    alert(t.msgAdSuccess);
-                }).catch((err) => {
-                    alert(currentLang === 'ar' ? "تم إغلاق الإعلان أو حدث خطأ." : "Ad closed or error occurred.");
-                });
-            } else {
-                balance += 0.010;
-                addLog(currentLang === 'ar' ? "مشاهدة إعلان (تجريبي) وكسب +0.010$" : "Watched Ad (Demo) and earned +$0.010");
-                updateUI();
-                alert(t.msgAdSuccess);
-            }
-        }
-
-        function completeTask(index) {
-            const t = translations[currentLang];
-            const level = getUserLevel();
-            const finalReward = parseFloat((tasks[index].reward * level.multiplier).toFixed(3));
-            const platform = tasks[index].platform;
-            const action = tasks[index].action;
-            
-            window.open(tasks[index].link, '_blank');
-
-            setTimeout(() => {
-                balance += finalReward;
-                addLog(currentLang === 'ar' ? `إنجاز مهمة (${platform} - ${action}) بمستوى ${level.name} وكسب +${finalReward}$` : `Completed task (${platform} - ${action}) at level ${level.name} and earned +$${finalReward}`);
-                tasks.splice(index, 1);
-                updateUI();
-                alert(t.msgTaskDone);
-            }, 1500);
-        }
-
-        function switchTab(tabId, element) {
+        function switchTab(tabName, element) {
             document.querySelectorAll('.container').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-tab'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-nav'));
             
-            document.getElementById('tab-' + tabId).classList.add('active');
-            element.classList.add('active-tab');
+            document.getElementById('tab-' + tabName).classList.add('active');
+            element.classList.add('active-nav');
+        }
+
+        function completeTask(amount) {
+            currentBalance += amount;
+            localStorage.setItem('user_balance', currentBalance.toFixed(2));
+            updateBalanceDisplay();
+            addHistoryRecord("إنجاز مهمة وكسب +$" + amount.toFixed(3));
+            alert("تم إنجاز المهمة بنجاح وإضافة الأرباح لرصيدك!");
+        }
+
+        function rechargeBalance() {
+            let amount = parseFloat(document.getElementById('depositAmount').value);
+            let method = document.getElementById('depositMethod').value;
+            if(!amount || amount <= 0) {
+                alert("الرجاء إدخال مبلغ صحيح للشحن");
+                return;
+            }
+            currentBalance += amount;
+            localStorage.setItem('user_balance', currentBalance.toFixed(2));
+            updateBalanceDisplay();
+            addHistoryRecord("شحن رصيد بقيمة $" + amount + " عبر " + method);
+            alert("تم تقديم طلب الشحن بنجاح عبر " + method + "! سيتم إضافة المبلغ لرصيدك بعد تأكيد التحويل.");
+        }
+
+        function requestWithdrawal() {
+            let amountStr = prompt("أدخل المبلغ المراد سحبه (رصيدك الحالي: $" + currentBalance.toFixed(2) + "):");
+            let amount = parseFloat(amountStr);
+            let method = document.getElementById('withdrawMethod').value;
+            let details = document.getElementById('accountDetails').value;
+
+            if(!amount || amount <= 0 || amount > currentBalance) {
+                alert("المبلغ غير صحيح أو أكبر من رصيدك الحالي!");
+                return;
+            }
+            if(!details) {
+                alert("الرجاء إدخال معلومات الحساب أو المحفظة للسحب.");
+                return;
+            }
+
+            currentBalance -= amount;
+            localStorage.setItem('user_balance', currentBalance.toFixed(2));
+            updateBalanceDisplay();
+            addHistoryRecord("طلب سحب $" + amount + " عبر " + method);
+            alert("تم إرسال طلب السحب بنجاح! سيصلك المبلغ إلى حسابك خلال 24 ساعة كحد أقصى.");
         }
 
         function createAd() {
-            const t = translations[currentLang];
-            const platform = document.getElementById('adPlatform').value;
-            const action = document.getElementById('adAction').value;
-            const link = document.getElementById('adLink').value;
-            const reward = parseFloat(document.getElementById('adReward').value);
-
-            if (!link || !reward || reward <= 0) {
-                alert(currentLang === 'ar' ? "الرجاء إدخال رابط صحيح ومكافأة مقبولة." : "Please enter a valid link and reward.");
+            let title = document.getElementById('adTitleInput').value;
+            let reward = document.getElementById('adRewardInput').value;
+            if(!title || !reward) {
+                alert("الرجاء إكمال بيانات الإعلان.");
                 return;
             }
-
-            tasks.push({ platform, action, link, reward });
-            addLog(currentLang === 'ar' ? `نشر حملة إعلانية جديدة (${platform} - ${action})` : `Published new ad campaign (${platform} - ${action})`);
-            updateUI();
-            alert(t.msgAdCreated);
-            document.getElementById('adLink').value = '';
-            document.getElementById('adReward').value = '';
-            switchTab('tasks', document.querySelectorAll('.nav-item')[0]);
+            addHistoryRecord("إنشاء إعلان جديد: " + title);
+            alert("تم نشر الإعلان بنجاح وسيظهر للمستخدمين الآن!");
+            document.getElementById('adTitleInput').value = '';
+            document.getElementById('adRewardInput').value = '';
         }
 
-        function requestWithdraw() {
-            const address = document.getElementById('binanceAddress').value;
-            const amount = parseFloat(document.getElementById('withdrawAmount').value);
-
-            if (!address) {
-                alert(currentLang === 'ar' ? "الرجاء إدخال عنوان محفظة باينانس." : "Please enter Binance wallet address.");
-                return;
-            }
-            if (isNaN(amount) || amount <= 0 || amount > balance) {
-                alert(currentLang === 'ar' ? "المبلغ غير صحيح أو يتجاوز رصيدك الحالي." : "Invalid amount or exceeds current balance.");
-                return;
-            }
-
-            balance -= amount;
-            addLog(currentLang === 'ar' ? `طلب سحب بقيمة ${amount}$ إلى Binance (${address})` : `Withdrawal request of $${amount} to Binance (${address})`);
-            updateUI();
-            alert(currentLang === 'ar' ? `تم إرسال طلب السحب بقيمة $${amount} بنجاح!` : `Withdrawal request of $${amount} to Binance successfully submitted!`);
-            document.getElementById('binanceAddress').value = '';
-            document.getElementById('withdrawAmount').value = '';
+        function updateBalanceDisplay() {
+            document.getElementById('userBalance').innerText = "$" + currentBalance.toFixed(2);
         }
 
-        document.getElementById('htmlRoot').setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
-        document.getElementById('htmlRoot').setAttribute('lang', currentLang);
-        document.getElementById('langSelect').value = currentLang;
-        updateTexts();
-        updateUI();
+        function addHistoryRecord(text) {
+            let historyList = document.getElementById('historyList');
+            if(document.getElementById('h-empty')) {
+                historyList.innerHTML = '';
+            }
+            let timeStr = new Date().toLocaleString();
+            let item = document.createElement('div');
+            item.className = 'card';
+            item.style.background = 'var(--bg-color)';
+            item.innerHTML = `<p>${text}</p><small style="color: #94a3b8;">${timeStr}</small>`;
+            historyList.prepend(item);
+        }
+
+        const translations = {
+            ar: {
+                "page-title": "منصة المهام والأرباح - SudanTapGame",
+                "main-heading": "منصة المهام والأرباح",
+                "t-available-tasks": "المهام المتاحة",
+                "t-tasks-desc": "أجز المهام واربح الأرباح فوراً.",
+                "w-title": "المحفظة والأرباح",
+                "w-balance-label": "رصيدك الحالي: ",
+                "w-notice": "ملاحظة: يتم معالجة طلبات السحب وتحويل الأرباح خلال 24 ساعة كحد أقصى.",
+                "w-withdraw-title": "طلب سحب الأرباح",
+                "w-select-method": "اختر طريقة السحب:",
+                "w-account-info": "معلومات الحساب أو المحفظة:",
+                "w-btn": "تأكيد طلب السحب",
+                "ad-title": "إضافة إعلان وشحن الرصيد",
+                "ad-desc": "للبدء في الإعلان، قم بشحن حسابك أولاً لتظهر إعلاناتك لجميع المستخدمين.",
+                "ad-recharge-title": "طرق شحن الرصيد (للمعلنين):",
+                "ad-select-pay": "اختر وسيلة الدفع للشحن:",
+                "ad-amount-label": "المبلغ المراد شحنه ($):",
+                "ad-btn": "شحن الرصيد الآن",
+                "ad-create-title": "إنشاء إعلان جديد",
+                "ad-title-label": "عنوان المهمة أو الإعلان:",
+                "ad-reward-label": "مكافأة العامل الواحد ($):",
+                "ad-create-btn": "نشر الإعلان",
+                "h-title": "سجل العمليات",
+                "nav-tasks": "المهام",
+                "nav-wallet": "المحفظة",
+                "nav-add": "إعلان",
+                "nav-history": "السجل"
+            },
+            en: {
+                "page-title": "Tasks & Earnings Platform",
+                "main-heading": "Tasks & Earnings Platform",
+                "t-available-tasks": "Available Tasks",
+                "t-tasks-desc": "Complete tasks and earn instantly.",
+                "w-title": "Wallet & Earnings",
+                "w-balance-label": "Current Balance: ",
+                "w-notice": "Note: Withdrawal requests are processed and funds are delivered within a maximum of 24 hours.",
+                "w-withdraw-title": "Request Withdrawal",
+                "w-select-method": "Select Withdrawal Method:",
+                "w-account-info": "Account or Wallet Details:",
+                "w-btn": "Confirm Withdrawal",
+                "ad-title": "Add Ad & Recharge",
+                "ad-desc": "To start advertising, recharge your balance first so your ads appear to all users.",
+                "ad-recharge-title": "Recharge Methods (for Advertisers):",
+                "ad-select-pay": "Select Payment Method:",
+                "ad-amount-label": "Amount to Recharge ($):",
+                "ad-btn": "Recharge Now",
+                "ad-create-title": "Create New Ad",
+                "ad-title-label": "Task or Ad Title:",
+                "ad-reward-label": "Reward per Worker ($):",
+                "ad-create-btn": "Publish Ad",
+                "h-title": "Activity & Operation Logs",
+                "nav-tasks": "Tasks",
+                "nav-wallet": "Wallet",
+                "nav-add": "Add Ad",
+                "nav-history": "History"
+            }
+        };
+
+        function changeLanguage() {
+            let lang = document.getElementById('langSwitcher').value;
+            let root = document.getElementById('htmlRoot');
+            root.setAttribute('lang', lang);
+            root.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+            let keys = Object.keys(translations[lang]);
+            keys.forEach(key => {
+                let el = document.getElementById(key);
+                if(el) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+        }
     </script>
 </body>
 </html>
-
