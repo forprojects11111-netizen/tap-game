@@ -9,18 +9,20 @@
     <style>
         body { font-family: Tahoma, sans-serif; background: #0f172a; color: #fff; margin: 0; padding: 0; padding-bottom: 70px; }
         .header { background: #1e293b; padding: 15px; text-align: center; font-size: 18px; font-weight: bold; border-bottom: 2px solid #334155; display: flex; justify-content: space-between; align-items: center; }
-        .lang-select { background: #334155; color: white; border: 1px solid #475569; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .lang-select { background: #334155; color: white; border: 1px solid #475569; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 14px; }
         .container { padding: 15px; display: none; }
         .active { display: block; }
         .card { background: #1e293b; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
         .btn { background: #6366f1; color: white; border: none; padding: 10px 15px; border-radius: 5px; width: 100%; font-size: 16px; cursor: pointer; margin-top: 10px; }
         .btn:active { background: #4f46e5; }
         input, select { width: 100%; padding: 10px; margin-top: 8px; margin-bottom: 15px; background: #334155; border: 1px solid #475569; color: white; border-radius: 5px; box-sizing: border-box; }
-        .nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #334155; }
-        .nav-item { color: #94a3b8; text-align: center; font-size: 12px; cursor: pointer; flex: 1; }
+        .nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #334155; z-index: 1000; }
+        .nav-item { color: #94a3b8; text-align: center; font-size: 11px; cursor: pointer; flex: 1; }
         .nav-item.active-tab { color: #6366f1; font-weight: bold; }
         .balance-box { text-align: center; font-size: 20px; color: #eab308; margin-bottom: 15px; font-weight: bold; }
-        .task-item { background: #334155; padding: 10px; border-radius: 6px; margin-bottom: 10px; }
+        .task-item, .log-item { background: #334155; padding: 10px; border-radius: 6px; margin-bottom: 10px; font-size: 14px; }
+        .log-item { border-right: 4px solid #6366f1; }
+        [dir="ltr"] .log-item { border-right: none; border-left: 4px solid #6366f1; }
     </style>
 </head>
 <body>
@@ -57,7 +59,7 @@
             <h3 id="t-create-title">📢 إضافة مهمة جديدة</h3>
             <label id="t-type-label">نوع المهمة:</label>
             <select id="adType">
-                <option value="اشتراك قناة تيليجرام" id="opt-sub">اشتراك في قناة تيليجرام</option>
+                <option value="اشتراك في قناة تيليجرام" id="opt-sub">اشتراك في قناة تيليجرام</option>
                 <option value="إعجاب بمنشور" id="opt-like">إعجاب بمنشور</option>
                 <option value="تعليق على منشور" id="opt-comment">تعليق على منشور</option>
             </select>
@@ -88,15 +90,25 @@
         </div>
     </div>
 
+    <!-- قسم السجل والعمليات (History & Logs) -->
+    <div id="tab-history" class="container">
+        <div class="card">
+            <h3 id="t-history-title">📜 سجل الأنشطة والعمليات</h3>
+            <div id="historyList">
+                <p style="color: #94a3b8;" id="t-no-history">لا توجد عمليات سابقة حتى الآن.</p>
+            </div>
+        </div>
+    </div>
+
     <!-- شريط التنقل السفلي -->
     <div class="nav">
         <div class="nav-item active-tab" onclick="switchTab('tasks', this)" id="nav-t1">📋 المهام</div>
         <div class="nav-item" onclick="switchTab('advertise', this)" id="nav-t2">📢 أضف إعلان</div>
         <div class="nav-item" onclick="switchTab('wallet', this)" id="nav-t3">💰 المحفظة</div>
+        <div class="nav-item" onclick="switchTab('history', this)" id="nav-t4">📜 السجل</div>
     </div>
 
     <script>
-        // ملفات اللغات
         const translations = {
             ar: {
                 title: "منصة المهام والأرباح",
@@ -119,15 +131,18 @@
                 addressLabel: "عنوان محفظة Binance (USDT):",
                 amountLabel: "المبلغ المراد سحبه:",
                 withdrawBtn: "طلب السحب إلى Binance",
+                historyTitle: "📜 سجل الأنشطة والعمليات",
+                noHistory: "لا توجد عمليات سابقة حتى الآن.",
                 nav1: "📋 المهام",
                 nav2: "📢 أضف إعلان",
                 nav3: "💰 المحفظة",
+                nav4: "📜 السجل",
                 completeBtn: "إتمام المهمة وكسب الرصيد",
                 msgAdSuccess: "تم مشاهدة الإعلان بنجاح! وتمت إضافة 0.010$ لرصيدك.",
                 msgTaskDone: "رائع! تم التحقق من إنجاز المهمة وإضافة المكافأة لرصيدك.",
-                msgAdCreated: "تم نشر حملتك الإعلانية بنجاح وأصبحت مرئية للعمال في قائمة المهام!",
-                msgWithdraw: "تم تقديم طلب سحب بقيمة",
-                msgNoTasks: "لا توجد مهام متاحة حالياً. عُود لاحقاً أو أضف إعلاناً!"
+                msgAdCreated: "تم نشر حملتك الإعلانية بنجاح وأصبحت مرئية للعمال!",
+                msgNoTasks: "لا توجد مهام متاحة حالياً. عُود لاحقاً أو أضف إعلاناً!",
+                linkText: "رابط المهمة"
             },
             en: {
                 title: "Tasks & Earnings Platform",
@@ -150,15 +165,18 @@
                 addressLabel: "Binance Wallet Address (USDT):",
                 amountLabel: "Withdrawal Amount:",
                 withdrawBtn: "Request Binance Withdrawal",
+                historyTitle: "📜 Activity & Operation Logs",
+                noHistory: "No previous operations yet.",
                 nav1: "📋 Tasks",
                 nav2: "📢 Add Ad",
                 nav3: "💰 Wallet",
+                nav4: "📜 History",
                 completeBtn: "Complete Task & Earn",
                 msgAdSuccess: "Ad watched successfully! $0.010 added to your balance.",
                 msgTaskDone: "Great! Task verified and reward added to your balance.",
                 msgAdCreated: "Ad campaign successfully published and visible to workers!",
-                msgWithdraw: "Withdrawal request submitted for",
-                msgNoTasks: "No tasks available right now. Check back later or add an ad!"
+                msgNoTasks: "No tasks available right now. Check back later or add an ad!",
+                linkText: "Task Link"
             }
         };
 
@@ -173,6 +191,7 @@
             htmlRoot.setAttribute('lang', lang);
             updateTexts();
             renderTasks();
+            renderHistory();
         }
 
         function updateTexts() {
@@ -197,23 +216,52 @@
             document.getElementById('t-address-label').innerText = t.addressLabel;
             document.getElementById('t-amount-label').innerText = t.amountLabel;
             document.getElementById('t-withdraw-btn').innerText = t.withdrawBtn;
+            document.getElementById('t-history-title').innerText = t.historyTitle;
+            document.getElementById('t-no-history').innerText = t.noHistory;
             document.getElementById('nav-t1').innerText = t.nav1;
             document.getElementById('nav-t2').innerText = t.nav2;
             document.getElementById('nav-t3').innerText = t.nav3;
+            document.getElementById('nav-t4').innerText = t.nav4;
         }
 
-        // إدارة البيانات والذاكرة المحلية
         let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
         let tasks = JSON.parse(localStorage.getItem('platform_tasks')) || [
-            { type: "اشتراك قناة تيليجرام", link: "https://t.me/example", reward: 0.005 }
+            { type: "اشتراك في قناة تيليجرام", link: "https://t.me/example", reward: 0.005 }
         ];
+        let historyLogs = JSON.parse(localStorage.getItem('platform_history')) || [];
 
         function updateUI() {
             document.getElementById('userBalance').innerText = balance.toFixed(3);
             document.getElementById('walletBalance').innerText = balance.toFixed(3);
             localStorage.setItem('user_balance', balance);
             localStorage.setItem('platform_tasks', JSON.stringify(tasks));
+            localStorage.setItem('platform_history', JSON.stringify(historyLogs));
             renderTasks();
+            renderHistory();
+        }
+
+        function addLog(text) {
+            const time = new Date().toLocaleString();
+            historyLogs.unshift({ text, time });
+            if (historyLogs.length > 20) historyLogs.pop(); // الاحتفاظ بآخر 20 سجل
+        }
+
+        function renderHistory() {
+            const t = translations[currentLang];
+            const list = document.getElementById('historyList');
+            if (historyLogs.length === 0) {
+                list.innerHTML = `<p style="color: #94a3b8;" id="t-no-history">${t.noHistory}</p>`;
+                return;
+            }
+            list.innerHTML = '';
+            historyLogs.forEach(log => {
+                list.innerHTML += `
+                    <div class="log-item">
+                        <div>${log.text}</div>
+                        <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">🕒 ${log.time}</div>
+                    </div>
+                `;
+            });
         }
 
         function renderTasks() {
@@ -229,14 +277,13 @@
                     <div class="task-item">
                         <strong>Type:</strong> ${task.type}<br>
                         <strong>Reward:</strong> <span style="color: #eab308;">${task.reward} $</span><br>
-                        <a href="${task.link}" target="_blank" style="color: #6366f1; text-decoration: underline; display:block; margin: 5px 0;">Task Link</a>
+                        <a href="${task.link}" target="_blank" style="color: #6366f1; text-decoration: underline; display:block; margin: 5px 0;">${t.linkText}</a>
                         <button class="btn" style="padding: 5px; margin-top: 5px;" onclick="completeTask(${index})">${t.completeBtn}</button>
                     </div>
                 `;
             });
         }
 
-        // إعداد إعلانات Adsgram بالمعرف 48015
         const adController = window.Adsgram ? window.Adsgram.init({ blockId: "48015" }) : null;
 
         function showAd() {
@@ -244,6 +291,7 @@
             if (adController) {
                 adController.show().then((result) => {
                     balance += 0.010;
+                    addLog(currentLang === 'ar' ? "مشاهدة إعلان وكسب +0.010$" : "Watched Ad and earned +$0.010");
                     updateUI();
                     alert(t.msgAdSuccess);
                 }).catch((err) => {
@@ -251,6 +299,7 @@
                 });
             } else {
                 balance += 0.010;
+                addLog(currentLang === 'ar' ? "مشاهدة إعلان (تجريبي) وكسب +0.010$" : "Watched Ad (Demo) and earned +$0.010");
                 updateUI();
                 alert(t.msgAdSuccess);
             }
@@ -258,7 +307,10 @@
 
         function completeTask(index) {
             const t = translations[currentLang];
-            balance += tasks[index].reward;
+            const reward = tasks[index].reward;
+            const type = tasks[index].type;
+            balance += reward;
+            addLog(currentLang === 'ar' ? `إنجاز مهمة (${type}) وكسب +${reward}$` : `Completed task (${type}) and earned +$${reward}`);
             tasks.splice(index, 1);
             updateUI();
             alert(t.msgTaskDone);
@@ -284,6 +336,7 @@
             }
 
             tasks.push({ type, link, reward });
+            addLog(currentLang === 'ar' ? `نشر حملة إعلانية جديدة (${type})` : `Published new ad campaign (${type})`);
             updateUI();
             alert(t.msgAdCreated);
             document.getElementById('adLink').value = '';
@@ -294,7 +347,6 @@
         function requestWithdraw() {
             const address = document.getElementById('binanceAddress').value;
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
-            const t = translations[currentLang];
 
             if (!address) {
                 alert("Please enter Binance wallet address.");
@@ -306,13 +358,13 @@
             }
 
             balance -= amount;
+            addLog(currentLang === 'ar' ? `طلب سحب بقيمة ${amount}$ إلى Binance (${address})` : `Withdrawal request of $${amount} to Binance (${address})`);
             updateUI();
-            alert(`${t.msgWithdraw} $${amount} to Binance (${address}) successfully!`);
+            alert(`Withdrawal request of $${amount} to Binance (${address}) submitted successfully!`);
             document.getElementById('binanceAddress').value = '';
             document.getElementById('withdrawAmount').value = '';
         }
 
-        // تهيئة النصوص والواجهة عند التحميل
         updateTexts();
         updateUI();
     </script>
