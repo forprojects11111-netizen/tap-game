@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة تبادل المهام والأرباح</title>
-    <!-- تضمين Telegram WebApp SDK -->
+    <title>منصة السودان للتبادل والربح</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -24,6 +23,7 @@
             color: var(--text-color);
             margin: 0;
             padding: 0 0 80px 0;
+            user-select: none;
         }
         .header {
             background: var(--card-bg);
@@ -57,12 +57,32 @@
             padding: 20px;
             margin-bottom: 15px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
         .balance-display {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: bold;
             color: var(--success);
             margin: 10px 0;
+        }
+        /* تصميم لعبة النقرات */
+        .tap-circle {
+            width: 160px;
+            height: 160px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border-radius: 50%;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+            transition: transform 0.1s ease;
+        }
+        .tap-circle:active {
+            transform: scale(0.92);
         }
         label {
             display: block;
@@ -70,6 +90,7 @@
             margin-bottom: 5px;
             font-size: 14px;
             color: var(--text-secondary);
+            text-align: right;
         }
         select, input {
             width: 100%;
@@ -81,10 +102,7 @@
             box-sizing: border-box;
             font-size: 14px;
             outline: none;
-            transition: border-color 0.2s;
-        }
-        select:focus, input:focus {
-            border-color: var(--primary);
+            text-align: right;
         }
         .btn {
             background: var(--primary);
@@ -111,31 +129,11 @@
             margin-bottom: 15px;
             text-align: center;
         }
-        .task-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255,255,255,0.03);
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border: 1px solid var(--border-color);
-        }
-        .task-info h4 { margin: 0 0 5px 0; font-size: 15px; }
-        .task-info p { margin: 0; font-size: 12px; color: var(--text-secondary); }
-        .btn-sm {
-            background: var(--success);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-        }
         .history-list {
             list-style: none;
             padding: 0;
             margin: 0;
+            text-align: right;
         }
         .history-item {
             background: rgba(255,255,255,0.02);
@@ -198,128 +196,130 @@
     <div id="toast" class="toast">تمت العملية بنجاح!</div>
 
     <div class="header">
-        <span>منصة تبادل المهام</span>
-        <span id="userBadge" class="user-badge">زائر كريم</span>
+        <span>منصة السودان للربح</span>
+        <span id="userBadge" class="user-badge">زائر</span>
     </div>
 
-    <!-- قسم المهام -->
-    <div id="tab-tasks" class="container active">
+    <!-- 1. قسم لعبة النقرات (Tap Game) -->
+    <div id="tab-tap" class="container active">
         <div class="card">
-            <h3>المهام اليومية المتاحة</h3>
-            <p style="color: var(--text-secondary); font-size: 13px;">أتمم المهام التالية لزيادة أرباحك في رصيدك فوراً.</p>
-            
-            <div class="task-item">
-                <div class="task-info">
-                    <h4>انضم لقناة التليجرام</h4>
-                    <p>المكافأة: +$0.05</p>
-                </div>
-                <button class="btn-sm" onclick="completeTask(0.05, this)">تنفيذ</button>
-            </div>
+            <h3>لعبة التعدين والنقرات</h3>
+            <p style="color: var(--text-secondary); font-size: 13px;">اضغط على الدائرة لاكتساب الأرباح وزيادة رصيدك فوراً!</p>
+            <div class="tap-circle" onclick="onTap()">اضغط هنا</div>
+            <p>إجمالي الأرباح: <span id="tapBalance" style="color: var(--success); font-weight: bold;">$0.384</span></p>
+        </div>
+    </div>
 
-            <div class="task-item">
-                <div class="task-info">
-                    <h4>مشاركة المنصة مع صديق</h4>
-                    <p>المكافأة: +$0.10</p>
+    <!-- 2. قسم المهام -->
+    <div id="tab-tasks" class="container">
+        <div class="card" style="text-align: right;">
+            <h3>المهام اليومية</h3>
+            <div class="task-item" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:10px; border-radius:8px; margin-top:10px;">
+                <div>
+                    <h4 style="margin:0;">انضم لقناة التليجرام</h4>
+                    <p style="margin:0; font-size:12px; color:var(--text-secondary);">المكافأة: +$0.05</p>
                 </div>
-                <button class="btn-sm" onclick="completeTask(0.10, this)">تنفيذ</button>
+                <button class="btn" style="width:auto; margin:0; padding:6px 12px;" onclick="completeTask(0.05, this)">تنفيذ</button>
             </div>
         </div>
     </div>
 
-    <!-- قسم المستوى -->
+    <!-- 3. قسم المستوى -->
     <div id="tab-level" class="container">
-        <div class="card" style="text-align: center;">
-            <h3>مستواك الحالي في المنصة</h3>
+        <div class="card">
+            <h3>مستواك الحالي</h3>
             <div style="font-size: 40px; margin: 15px 0;">⭐</div>
-            <h2 id="levelName">المستوي الأول (مبتدئ)</h2>
-            <p style="color: var(--text-secondary);">كلما زادت مهامك، كلما ترقيت لمستويات أعلى وأرباح أكبر.</p>
+            <h2 id="levelTitle">المستوى الأول (مبتدئ)</h2>
+            <p style="color: var(--text-secondary);">أرباح النقرة الحالية: $0.01 لكل ضغطة</p>
         </div>
     </div>
 
-    <!-- قسم الإحالات -->
+    <!-- 4. قسم الإحالات -->
     <div id="tab-referrals" class="container">
-        <div class="card">
-            <h3>نظام الإحالات والأصدقاء</h3>
-            <p style="color: var(--text-secondary); font-size: 13px;">شارك رابطك الخاص واكسب 10% من أرباح أصدقائك.</p>
-            <label>رابط الإحالة الخاص بك:</label>
+        <div class="card" style="text-align: right;">
+            <h3>نظام الإحالات</h3>
+            <p style="color: var(--text-secondary); font-size: 13px;">شارك رابطك واكسب من أصدقائك.</p>
+            <label>رابط الإحالة:</label>
             <input type="text" id="refLink" readonly>
-            <button class="btn" style="margin-top: 10px;" onclick="copyRefLink()">نسخ الرابط</button>
+            <button class="btn" onclick="copyRefLink()">نسخ الرابط</button>
         </div>
     </div>
 
-    <!-- قسم المحفظة وسحب الأرباح -->
+    <!-- 5. قسم المحفظة (سحب + شحن) -->
     <div id="tab-wallet" class="container">
-        <div class="card">
-            <h3>محفظة الأرباح</h3>
-            <p style="color: var(--text-secondary);">رصيدك القابل للسحب:</p>
-            <div class="balance-display" id="userBalance">$0.184</div>
+        <div class="card" style="text-align: right;">
+            <h3>المحفظة وإدارة الأموال</h3>
+            <p style="color: var(--text-secondary);">رصيدك الحالي:</p>
+            <div class="balance-display" id="walletBalance">$0.384</div>
             
-            <div class="notice">
-                ملاحظة: تتم معالجة طلبات السحب خلال 24 ساعة كحد أقصى.
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <button class="btn" style="margin-top:0; background:#10b981;" onclick="toggleWalletMode('withdraw')">سحب الأرباح</button>
+                <button class="btn" style="margin-top:0; background:#3b82f6;" onclick="toggleWalletMode('deposit')">شحن الرصيد</button>
             </div>
 
-            <label>طريقة السحب:</label>
-            <select id="method">
-                <option value="bankak">بنكك (بنك الخرطوم)</option>
-                <option value="fawry">فوري (Fawry)</option>
-                <option value="mycash">محفظة ماي كاش (MyCash)</option>
-                <option value="ton">محفظة تيليجرام TON</option>
-                <option value="binance">منصة باينانس (Binance USDT)</option>
-            </select>
+            <!-- نموذج السحب -->
+            <div id="withdrawSection">
+                <label>طريقة السحب:</label>
+                <select id="method">
+                    <option value="bankak">بنكك (بنك الخرطوم)</option>
+                    <option value="fawry">فوري (Fawry)</option>
+                    <option value="mycash">محفظة ماي كاش</option>
+                    <option value="binance">باينانس (USDT)</option>
+                </select>
 
-            <label>رقم الحساب أو عنوان المحفظة:</label>
-            <input type="text" id="details" placeholder="أدخل بيانات الحساب بدقة...">
+                <label>رقم الحساب أو العنوان:</label>
+                <input type="text" id="details" placeholder="أدخل البيانات بدقة...">
 
-            <label>المبلغ المراد سحبه ($):</label>
-            <input type="number" id="amount" placeholder="0.00" step="0.01">
+                <label>المبلغ ($):</label>
+                <input type="number" id="amount" placeholder="0.00" step="0.01">
 
-            <button class="btn" onclick="submitWithdraw()">تأكيد طلب السحب</button>
+                <button class="btn" onclick="submitWithdraw()">تأكيد طلب السحب</button>
+            </div>
+
+            <!-- نموذج الشحن -->
+            <div id="depositSection" style="display: none;">
+                <div class="notice">قم بتحويل المبلغ إلى حساب بنكك الآتي: 123456789 ثم أدخل رقم العملية للشحن الفوري.</div>
+                <label>رقم عملية التحويل (Reference ID):</label>
+                <input type="text" id="depRef" placeholder="أدخل رقم الإيصال أو العملية...">
+                <label>المبلغ المراد شحنه ($):</label>
+                <input type="number" id="depAmount" placeholder="0.00">
+                <button class="btn" style="background:#3b82f6;" onclick="submitDeposit()">تأكيد عملية الشحن</button>
+            </div>
         </div>
     </div>
 
-    <!-- قسم السجل -->
+    <!-- 6. قسم السجل -->
     <div id="tab-history" class="container">
-        <div class="card">
-            <h3>سجل المعاملات والسحوبات</h3>
+        <div class="card" style="text-align: right;">
+            <h3>سجل المعاملات</h3>
             <ul id="historyList" class="history-list">
-                <li style="color: var(--text-secondary); text-align: center; padding: 15px;">لا توجد سحوبات سابقة حتى الآن.</li>
+                <li style="color: var(--text-secondary); text-align: center; padding: 15px;">لا توجد معاملات سابقة.</li>
             </ul>
         </div>
     </div>
 
-    <!-- أزرار التنقل السفلية -->
+    <!-- شريط التنقل السفلي المترتب بشكل صحيح (اليمين للتهيئة) -->
     <div class="nav-bar">
-        <button class="nav-item active-nav" onclick="switchTab('tasks', this)">
-            <span>📋</span> المهام
-        </button>
-        <button class="nav-item" onclick="switchTab('level', this)">
-            <span>⭐</span> المستوى
-        </button>
-        <button class="nav-item" onclick="switchTab('referrals', this)">
-            <span>👥</span> الإحالات
-        </button>
-        <button class="nav-item" onclick="switchTab('wallet', this)">
-            <span>💳</span> المحفظة
-        </button>
-        <button class="nav-item" onclick="switchTab('history', this)">
-            <span>📜</span> السجل
-        </button>
+        <button class="nav-item active-nav" onclick="switchTab('tap', this)"><span>⚡</span> النقرات</button>
+        <button class="nav-item" onclick="switchTab('tasks', this)"><span>📋</span> المهام</button>
+        <button class="nav-item" onclick="switchTab('level', this)"><span>⭐</span> المستوى</button>
+        <button class="nav-item" onclick="switchTab('referrals', this)"><span>👥</span> الإحالات</button>
+        <button class="nav-item" onclick="switchTab('wallet', this)"><span>💳</span> المحفظة</button>
+        <button class="nav-item" onclick="switchTab('history', this)"><span>📜</span> السجل</button>
     </div>
 
     <script>
-        let appData = JSON.parse(localStorage.getItem('sudantap_data')) || {
-            balance: 0.184,
+        let appData = JSON.parse(localStorage.getItem('sudantap_pro')) || {
+            balance: 0.384,
             history: []
         };
 
         window.Telegram.WebApp.ready();
         const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;
         let userId = tgUser ? tgUser.id : '123456';
-        
         if (tgUser) {
-            document.getElementById('userBadge').innerText = tgUser.first_name || 'مستخدم';
+            document.getElementById('userBadge').innerText = tgUser.first_name;
         }
-
         document.getElementById('refLink').value = `https://t.me/SudanTapBot?start=ref_${userId}`;
 
         updateUI();
@@ -331,44 +331,51 @@
             element.classList.add('active-nav');
         }
 
-        function showToast(message) {
-            let toast = document.getElementById('toast');
-            toast.innerText = message;
-            toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
+        function showToast(msg) {
+            let t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
         }
 
         function updateUI() {
-            document.getElementById('userBalance').innerText = '$' + appData.balance.toFixed(3);
+            document.getElementById('tapBalance').innerText = '$' + appData.balance.toFixed(3);
+            document.getElementById('walletBalance').innerText = '$' + appData.balance.toFixed(3);
             
-            let historyUl = document.getElementById('historyList');
-            if (appData.history.length === 0) {
-                historyUl.innerHTML = '<li style="color: var(--text-secondary); text-align: center; padding: 15px;">لا توجد سحوبات سابقة حتى الآن.</li>';
+            let list = document.getElementById('historyList');
+            if(appData.history.length === 0) {
+                list.innerHTML = '<li style="color: var(--text-secondary); text-align: center; padding: 15px;">لا توجد معاملات سابقة.</li>';
             } else {
-                historyUl.innerHTML = '';
+                list.innerHTML = '';
                 appData.history.forEach(item => {
-                    historyUl.innerHTML += `<li class="history-item"><span>${item.method} (${item.details})</span> <strong style="color:var(--success);">-$${item.amount}</strong></li>`;
+                    list.innerHTML += `<li class="history-item"><span>${item.text}</span> <strong style="color:${item.type==='deposit'?'var(--primary)':'var(--success)'};">${item.amount}</strong></li>`;
                 });
             }
-            localStorage.setItem('sudantap_data', JSON.stringify(appData));
+            localStorage.setItem('sudantap_pro', JSON.stringify(appData));
         }
 
-        function completeTask(reward, btnElement) {
-            appData.balance += reward;
+        function onTap() {
+            appData.balance += 0.01;
             updateUI();
-            btnElement.innerText = "تم بنجاح";
-            btnElement.disabled = true;
-            btnElement.style.background = "#475569";
-            showToast("تمت إضافة المكافأة إلى رصيدك!");
         }
 
-        function copyRefLink() {
-            let copyText = document.getElementById('refLink');
-            copyText.select();
-            document.execCommand('copy');
-            showToast("تم نسخ رابط الإحالة بنجاح!");
+        function completeTask(reward, btn) {
+            appData.balance += reward;
+            appData.history.unshift({text: 'مكافأة إتمام مهمة', amount: '+$' + reward, type: 'deposit'});
+            updateUI();
+            btn.innerText = "تم";
+            btn.disabled = true;
+            showToast("تمت إضافة المكافأة!");
+        }
+
+        function toggleWalletMode(mode) {
+            if(mode === 'withdraw') {
+                document.getElementById('withdrawSection').style.display = 'block';
+                document.getElementById('depositSection').style.display = 'none';
+            } else {
+                document.getElementById('withdrawSection').style.display = 'none';
+                document.getElementById('depositSection').style.display = 'block';
+            }
         }
 
         function submitWithdraw() {
@@ -376,28 +383,45 @@
             let details = document.getElementById('details').value.trim();
             let amount = parseFloat(document.getElementById('amount').value);
 
-            if (!details) {
-                alert("الرجاء إدخال بيانات الحساب أو المحفظة بشكل صحيح.");
+            if(!details || isNaN(amount) || amount <= 0) {
+                alert("الرجاء إدخال البيانات والمبلغ بشكل صحيح.");
                 return;
             }
-            if (isNaN(amount) || amount <= 0) {
-                alert("الرجاء إدخال مبلغ صالح للسحب.");
-                return;
-            }
-            if (amount > appData.balance) {
-                alert("عذراً، رصيدك الحالي لا يكفي لهذا المبلغ.");
+            if(amount > appData.balance) {
+                alert("رصيدك لا يكفي.");
                 return;
             }
 
             appData.balance -= amount;
-            appData.history.unshift({ method: method, details: details, amount: amount.toFixed(2) });
+            appData.history.unshift({text: 'سحب عبر ' + method, amount: '-$' + amount.toFixed(2), type: 'withdraw'});
             updateUI();
+            showToast("تم إرسال طلب السحب بنجاح!");
+            switchTab('history', document.querySelectorAll('.nav-item')[5]);
+        }
 
-            document.getElementById('details').value = '';
-            document.getElementById('amount').value = '';
+        function submitDeposit() {
+            let ref = document.getElementById('depRef').value.trim();
+            let amount = parseFloat(document.getElementById('depAmount').value);
 
-            showToast("تم تقديم طلب السحب بنجاح وسيتم معالجته قريباً!");
-            switchTab('history', document.querySelectorAll('.nav-item')[4]);
+            if(!ref || isNaN(amount) || amount <= 0) {
+                alert("الرجاء إدخال رقم العملية والمبلغ بدقة.");
+                return;
+            }
+
+            appData.balance += amount;
+            appData.history.unshift({text: 'شحن رصيد (إيصال: ' + ref + ')', amount: '+$' + amount.toFixed(2), type: 'deposit'});
+            updateUI();
+            document.getElementById('depRef').value = '';
+            document.getElementById('depAmount').value = '';
+            showToast("تم شحن الرصيد بنجاح!");
+            switchTab('history', document.querySelectorAll('.nav-item')[5]);
+        }
+
+        function copyRefLink() {
+            let l = document.getElementById('refLink');
+            l.select();
+            document.execCommand('copy');
+            showToast("تم نسخ رابط الإحالة!");
         }
     </script>
 </body>
