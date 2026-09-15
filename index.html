@@ -4,63 +4,261 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة تبادل المهام والأرباح</title>
+    <!-- تضمين Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: Tahoma, sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding: 0 0 70px 0; }
-        .header { background: #1e293b; padding: 15px; text-align: center; border-bottom: 1px solid #334155; font-weight: bold; font-size: 18px; }
-        .container { padding: 15px; display: none; }
-        .active { display: block; }
-        .card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
-        select, input { width: 100%; padding: 10px; margin-top: 8px; margin-bottom: 15px; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 5px; box-sizing: border-box; }
-        .btn { background: #6366f1; color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        .notice { background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; color: #34d399; padding: 10px; border-radius: 5px; font-size: 13px; margin-bottom: 15px; text-align: center; }
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --text-color: #f8fafc;
+            --text-secondary: #94a3b8;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --success: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.1);
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0 0 80px 0;
+        }
+        .header {
+            background: var(--card-bg);
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-badge {
+            font-size: 12px;
+            background: rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+            padding: 4px 8px;
+            border-radius: 20px;
+        }
+        .container {
+            padding: 15px;
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .balance-display {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--success);
+            margin: 10px 0;
+        }
+        label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        select, input {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        select:focus, input:focus {
+            border-color: var(--primary);
+        }
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: var(--primary-hover);
+        }
+        .notice {
+            background: var(--success-bg);
+            border: 1px solid var(--success);
+            color: #34d399;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.03);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+        }
+        .task-info h4 { margin: 0 0 5px 0; font-size: 15px; }
+        .task-info p { margin: 0; font-size: 12px; color: var(--text-secondary); }
+        .btn-sm {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .history-item {
+            background: rgba(255,255,255,0.02);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+        }
         /* شريط التنقل السفلي */
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; border-top: 1px solid #334155; display: flex; justify-content: space-around; padding: 10px 0; z-index: 1000; }
-        .nav-item { color: #94a3b8; text-decoration: none; font-size: 12px; text-align: center; background: none; border: none; cursor: pointer; }
-        .nav-item.active-nav { color: #6366f1; font-weight: bold; }
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+        .nav-item {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 12px;
+            text-align: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .nav-item.active-nav {
+            color: var(--primary);
+            font-weight: bold;
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 2000;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">منصة تبادل المهام والأرباح</div>
+    <div id="toast" class="toast">تمت العملية بنجاح!</div>
+
+    <div class="header">
+        <span>منصة تبادل المهام</span>
+        <span id="userBadge" class="user-badge">زائر كريم</span>
+    </div>
 
     <!-- قسم المهام -->
     <div id="tab-tasks" class="container active">
         <div class="card">
-            <h3>المهام المتاحة</h3>
-            <p>نفذ المهام واحصل على أرباح فورية في رصيدك.</p>
-            <div class="notice">لا توجد مهام جديدة حالياً، تابعنا قريباً!</div>
+            <h3>المهام اليومية المتاحة</h3>
+            <p style="color: var(--text-secondary); font-size: 13px;">أتمم المهام التالية لزيادة أرباحك في رصيدك فوراً.</p>
+            
+            <div class="task-item">
+                <div class="task-info">
+                    <h4>انضم لقناة التليجرام</h4>
+                    <p>المكافأة: +$0.05</p>
+                </div>
+                <button class="btn-sm" onclick="completeTask(0.05, this)">تنفيذ</button>
+            </div>
+
+            <div class="task-item">
+                <div class="task-info">
+                    <h4>مشاركة المنصة مع صديق</h4>
+                    <p>المكافأة: +$0.10</p>
+                </div>
+                <button class="btn-sm" onclick="completeTask(0.10, this)">تنفيذ</button>
+            </div>
         </div>
     </div>
 
     <!-- قسم المستوى -->
     <div id="tab-level" class="container">
-        <div class="card">
-            <h3>مستواك الحالي</h3>
-            <p>المستوى: <strong>المبتدئ (1)</strong></p>
-            <p>أرباح النقرة: $0.01</p>
+        <div class="card" style="text-align: center;">
+            <h3>مستواك الحالي في المنصة</h3>
+            <div style="font-size: 40px; margin: 15px 0;">⭐</div>
+            <h2 id="levelName">المستوي الأول (مبتدئ)</h2>
+            <p style="color: var(--text-secondary);">كلما زادت مهامك، كلما ترقيت لمستويات أعلى وأرباح أكبر.</p>
         </div>
     </div>
 
     <!-- قسم الإحالات -->
     <div id="tab-referrals" class="container">
         <div class="card">
-            <h3>نظام الإحالات</h3>
-            <p>شارك رابطك مع أصدقائك واكسب نسبة على كل إحالة ناجحة.</p>
-            <input type="text" value="https://t.me/YourBot?start=ref123" readonly>
+            <h3>نظام الإحالات والأصدقاء</h3>
+            <p style="color: var(--text-secondary); font-size: 13px;">شارك رابطك الخاص واكسب 10% من أرباح أصدقائك.</p>
+            <label>رابط الإحالة الخاص بك:</label>
+            <input type="text" id="refLink" readonly>
+            <button class="btn" style="margin-top: 10px;" onclick="copyRefLink()">نسخ الرابط</button>
         </div>
     </div>
 
-    <!-- قسم المحفظة والسحب (محدث ومضاف له البنوك) -->
+    <!-- قسم المحفظة وسحب الأرباح -->
     <div id="tab-wallet" class="container">
         <div class="card">
-            <h3>المحفظة وسحب الأرباح</h3>
-            <p>رصيدك القابل للسحب: <span style="color: #10b981; font-weight: bold;">$0.184</span></p>
+            <h3>محفظة الأرباح</h3>
+            <p style="color: var(--text-secondary);">رصيدك القابل للسحب:</p>
+            <div class="balance-display" id="userBalance">$0.184</div>
             
             <div class="notice">
                 ملاحظة: تتم معالجة طلبات السحب خلال 24 ساعة كحد أقصى.
             </div>
 
-            <label>اختر طريـقة السحب:</label>
+            <label>طريقة السحب:</label>
             <select id="method">
                 <option value="bankak">بنكك (بنك الخرطوم)</option>
                 <option value="fawry">فوري (Fawry)</option>
@@ -69,49 +267,139 @@
                 <option value="binance">منصة باينانس (Binance USDT)</option>
             </select>
 
-            <label>عنوان المحفظة أو رقم الحساب:</label>
-            <input type="text" id="details" placeholder="ادخل رقم الحساب أو العنوان هنا...">
+            <label>رقم الحساب أو عنوان المحفظة:</label>
+            <input type="text" id="details" placeholder="أدخل بيانات الحساب بدقة...">
 
             <label>المبلغ المراد سحبه ($):</label>
-            <input type="number" id="amount" placeholder="0.00">
+            <input type="number" id="amount" placeholder="0.00" step="0.01">
 
-            <button class="btn" onclick="submitWithdraw()">تأكيد السحب</button>
+            <button class="btn" onclick="submitWithdraw()">تأكيد طلب السحب</button>
         </div>
     </div>
 
     <!-- قسم السجل -->
     <div id="tab-history" class="container">
         <div class="card">
-            <h3>سجل المعاملات</h3>
-            <p style="color: #94a3b8; text-align: center;">ليس لديك أي عمليات سحب سابقة.</p>
+            <h3>سجل المعاملات والسحوبات</h3>
+            <ul id="historyList" class="history-list">
+                <li style="color: var(--text-secondary); text-align: center; padding: 15px;">لا توجد سحوبات سابقة حتى الآن.</li>
+            </ul>
         </div>
     </div>
 
     <!-- أزرار التنقل السفلية -->
     <div class="nav-bar">
-        <button class="nav-item active-nav" onclick="switchTab('tasks', this)">المهام</button>
-        <button class="nav-item" onclick="switchTab('level', this)">المستوى</button>
-        <button class="nav-item" onclick="switchTab('referrals', this)">الإحالات</button>
-        <button class="nav-item" onclick="switchTab('wallet', this)">المحفظة</button>
-        <button class="nav-item" onclick="switchTab('history', this)">السجل</button>
+        <button class="nav-item active-nav" onclick="switchTab('tasks', this)">
+            <span>📋</span> المهام
+        </button>
+        <button class="nav-item" onclick="switchTab('level', this)">
+            <span>⭐</span> المستوى
+        </button>
+        <button class="nav-item" onclick="switchTab('referrals', this)">
+            <span>👥</span> الإحالات
+        </button>
+        <button class="nav-item" onclick="switchTab('wallet', this)">
+            <span>💳</span> المحفظة
+        </button>
+        <button class="nav-item" onclick="switchTab('history', this)">
+            <span>📜</span> السجل
+        </button>
     </div>
 
     <script>
+        let appData = JSON.parse(localStorage.getItem('sudantap_data')) || {
+            balance: 0.184,
+            history: []
+        };
+
+        window.Telegram.WebApp.ready();
+        const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;
+        let userId = tgUser ? tgUser.id : '123456';
+        
+        if (tgUser) {
+            document.getElementById('userBadge').innerText = tgUser.first_name || 'مستخدم';
+        }
+
+        document.getElementById('refLink').value = `https://t.me/SudanTapBot?start=ref_${userId}`;
+
+        updateUI();
+
         function switchTab(tabName, element) {
-            // إخفاء كل الأقسام
             document.querySelectorAll('.container').forEach(el => el.classList.remove('active'));
-            // إزالة التحديد عن كل الأزرار
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-nav'));
-            
-            // إظهار القسم المطلوب وتحديد الزر
             document.getElementById('tab-' + tabName).classList.add('active');
             element.classList.add('active-nav');
         }
 
+        function showToast(message) {
+            let toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        function updateUI() {
+            document.getElementById('userBalance').innerText = '$' + appData.balance.toFixed(3);
+            
+            let historyUl = document.getElementById('historyList');
+            if (appData.history.length === 0) {
+                historyUl.innerHTML = '<li style="color: var(--text-secondary); text-align: center; padding: 15px;">لا توجد سحوبات سابقة حتى الآن.</li>';
+            } else {
+                historyUl.innerHTML = '';
+                appData.history.forEach(item => {
+                    historyUl.innerHTML += `<li class="history-item"><span>${item.method} (${item.details})</span> <strong style="color:var(--success);">-$${item.amount}</strong></li>`;
+                });
+            }
+            localStorage.setItem('sudantap_data', JSON.stringify(appData));
+        }
+
+        function completeTask(reward, btnElement) {
+            appData.balance += reward;
+            updateUI();
+            btnElement.innerText = "تم بنجاح";
+            btnElement.disabled = true;
+            btnElement.style.background = "#475569";
+            showToast("تمت إضافة المكافأة إلى رصيدك!");
+        }
+
+        function copyRefLink() {
+            let copyText = document.getElementById('refLink');
+            copyText.select();
+            document.execCommand('copy');
+            showToast("تم نسخ رابط الإحالة بنجاح!");
+        }
+
         function submitWithdraw() {
             let method = document.getElementById('method').value;
-            alert("تم إرسال طلب السحب بنجاح عبر " + method + "!");
+            let details = document.getElementById('details').value.trim();
+            let amount = parseFloat(document.getElementById('amount').value);
+
+            if (!details) {
+                alert("الرجاء إدخال بيانات الحساب أو المحفظة بشكل صحيح.");
+                return;
+            }
+            if (isNaN(amount) || amount <= 0) {
+                alert("الرجاء إدخال مبلغ صالح للسحب.");
+                return;
+            }
+            if (amount > appData.balance) {
+                alert("عذراً، رصيدك الحالي لا يكفي لهذا المبلغ.");
+                return;
+            }
+
+            appData.balance -= amount;
+            appData.history.unshift({ method: method, details: details, amount: amount.toFixed(2) });
+            updateUI();
+
+            document.getElementById('details').value = '';
+            document.getElementById('amount').value = '';
+
+            showToast("تم تقديم طلب السحب بنجاح وسيتم معالجته قريباً!");
+            switchTab('history', document.querySelectorAll('.nav-item')[4]);
         }
     </script>
 </body>
 </html>
+
