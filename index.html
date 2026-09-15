@@ -3,49 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasks Platform</title>
+    <title>منصة تبادل المهام والأرباح</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
-        .card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 20px; margin-bottom: 15px; }
+        body { font-family: Tahoma, sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding: 0 0 70px 0; }
+        .header { background: #1e293b; padding: 15px; text-align: center; border-bottom: 1px solid #334155; font-weight: bold; font-size: 18px; }
+        .container { padding: 15px; display: none; }
+        .active { display: block; }
+        .card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
         select, input { width: 100%; padding: 10px; margin-top: 8px; margin-bottom: 15px; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 5px; box-sizing: border-box; }
         .btn { background: #6366f1; color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; }
         .notice { background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; color: #34d399; padding: 10px; border-radius: 5px; font-size: 13px; margin-bottom: 15px; text-align: center; }
+        /* شريط التنقل السفلي */
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; border-top: 1px solid #334155; display: flex; justify-content: space-around; padding: 10px 0; z-index: 1000; }
+        .nav-item { color: #94a3b8; text-decoration: none; font-size: 12px; text-align: center; background: none; border: none; cursor: pointer; }
+        .nav-item.active-nav { color: #6366f1; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h3>Wallet & Withdrawals</h3>
-        <p>Current Balance: <span style="color: #10b981; font-weight: bold;">$0.174</span></p>
-        
-        <div class="notice">
-            Note: Withdrawals are processed within 24 hours max.
+    <div class="header">منصة تبادل المهام والأرباح</div>
+
+    <!-- قسم المهام -->
+    <div id="tab-tasks" class="container active">
+        <div class="card">
+            <h3>المهام المتاحة</h3>
+            <p>نفذ المهام واحصل على أرباح فورية في رصيدك.</p>
+            <div class="notice">لا توجد مهام جديدة حالياً، تابعنا قريباً!</div>
         </div>
+    </div>
 
-        <label>Select Withdrawal Method:</label>
-        <select id="method">
-            <option value="bank">Bankak (Sudan Bank)</option>
-            <option value="fawry">Fawry Bank</option>
-            <option value="mycash">MyCash Wallet</option>
-            <option value="ton">Telegram TON Wallet</option>
-            <option value="binance">Binance USDT</option>
-        </select>
+    <!-- قسم المستوى -->
+    <div id="tab-level" class="container">
+        <div class="card">
+            <h3>مستواك الحالي</h3>
+            <p>المستوى: <strong>المبتدئ (1)</strong></p>
+            <p>أرباح النقرة: $0.01</p>
+        </div>
+    </div>
 
-        <label>Account / Wallet Details:</label>
-        <input type="text" id="details" placeholder="Enter account number or address...">
+    <!-- قسم الإحالات -->
+    <div id="tab-referrals" class="container">
+        <div class="card">
+            <h3>نظام الإحالات</h3>
+            <p>شارك رابطك مع أصدقائك واكسب نسبة على كل إحالة ناجحة.</p>
+            <input type="text" value="https://t.me/YourBot?start=ref123" readonly>
+        </div>
+    </div>
 
-        <label>Withdraw Amount ($):</label>
-        <input type="number" id="amount" placeholder="0.00">
+    <!-- قسم المحفظة والسحب (محدث ومضاف له البنوك) -->
+    <div id="tab-wallet" class="container">
+        <div class="card">
+            <h3>المحفظة وسحب الأرباح</h3>
+            <p>رصيدك القابل للسحب: <span style="color: #10b981; font-weight: bold;">$0.184</span></p>
+            
+            <div class="notice">
+                ملاحظة: تتم معالجة طلبات السحب خلال 24 ساعة كحد أقصى.
+            </div>
 
-        <button class="btn" onclick="submitWithdraw()">Confirm Withdrawal</button>
+            <label>اختر طريـقة السحب:</label>
+            <select id="method">
+                <option value="bankak">بنكك (بنك الخرطوم)</option>
+                <option value="fawry">فوري (Fawry)</option>
+                <option value="mycash">محفظة ماي كاش (MyCash)</option>
+                <option value="ton">محفظة تيليجرام TON</option>
+                <option value="binance">منصة باينانس (Binance USDT)</option>
+            </select>
+
+            <label>عنوان المحفظة أو رقم الحساب:</label>
+            <input type="text" id="details" placeholder="ادخل رقم الحساب أو العنوان هنا...">
+
+            <label>المبلغ المراد سحبه ($):</label>
+            <input type="number" id="amount" placeholder="0.00">
+
+            <button class="btn" onclick="submitWithdraw()">تأكيد السحب</button>
+        </div>
+    </div>
+
+    <!-- قسم السجل -->
+    <div id="tab-history" class="container">
+        <div class="card">
+            <h3>سجل المعاملات</h3>
+            <p style="color: #94a3b8; text-align: center;">ليس لديك أي عمليات سحب سابقة.</p>
+        </div>
+    </div>
+
+    <!-- أزرار التنقل السفلية -->
+    <div class="nav-bar">
+        <button class="nav-item active-nav" onclick="switchTab('tasks', this)">المهام</button>
+        <button class="nav-item" onclick="switchTab('level', this)">المستوى</button>
+        <button class="nav-item" onclick="switchTab('referrals', this)">الإحالات</button>
+        <button class="nav-item" onclick="switchTab('wallet', this)">المحفظة</button>
+        <button class="nav-item" onclick="switchTab('history', this)">السجل</button>
     </div>
 
     <script>
+        function switchTab(tabName, element) {
+            // إخفاء كل الأقسام
+            document.querySelectorAll('.container').forEach(el => el.classList.remove('active'));
+            // إزالة التحديد عن كل الأزرار
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-nav'));
+            
+            // إظهار القسم المطلوب وتحديد الزر
+            document.getElementById('tab-' + tabName).classList.add('active');
+            element.classList.add('active-nav');
+        }
+
         function submitWithdraw() {
             let method = document.getElementById('method').value;
-            alert("Withdrawal request sent successfully via " + method + "!");
+            alert("تم إرسال طلب السحب بنجاح عبر " + method + "!");
         }
     </script>
 </body>
 </html>
-
