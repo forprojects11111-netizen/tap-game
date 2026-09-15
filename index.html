@@ -203,4 +203,4 @@
 </html>
 
 <script src="https://sad.adsgram.ai/js/adsgram.min.js"></script>
-<script>const adController = window.Adsgram.init({ blockId: "48015" }); function showRewardedAd() { adController.show().catch((e) => console.log(e)); }</script>
+<script>const adController = window.Adsgram.init({ blockId: "48015" }); function adController.show().then((res) => { console.log("Success"); }).catch((err) => { console.log("Error", err); }); { adController.show().catch((e) => console.log(e)); }</script>
