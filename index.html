@@ -13,320 +13,155 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --success-color: #10b981;
-            --warning-color: #f59e0b;
             --border-color: #334155;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            padding-bottom: 70px;
-            min-height: 100vh;
-        }
-
-        header {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        header h1 {
-            font-size: 1.25rem;
-            color: var(--accent-color);
-            margin-bottom: 5px;
-        }
-
-        header p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .container {
-            padding: 15px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* شاشة تسجيل الدخول */
-        #authScreen {
-            display: block;
-        }
-
-        /* التطبيق الرئيسي (يُخفى افتراضياً حتى يتم تسجيل الدخول) */
-        #mainApp {
-            display: none;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-        }
-
-        .card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            color: var(--text-main);
-        }
-
-        .card p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            border-radius: 8px;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-            text-align: right;
-        }
-
-        .btn {
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 12px 15px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            font-weight: bold;
-            width: 100%;
-            transition: background 0.2s;
-        }
-
-        .btn:hover {
-            background: var(--accent-hover);
-        }
-
-        .balance-card {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .balance-card .amount {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-
-        .tabs {
-            display: flex;
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 4px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border-color);
-        }
-
-        .tab-btn {
-            flex: 1;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            padding: 10px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .tab-btn.active {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .coin-btn {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #f59e0b, #d97706);
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
-            margin: 20px auto;
-            display: block;
-        }
-
-        .coin-btn:active {
-            transform: scale(0.95);
-        }
-
-        .nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--card-bg);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            z-index: 100;
-        }
-
-        .nav-item {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            text-align: center;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .nav-item.active {
-            color: var(--accent-color);
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding-bottom: 70px; min-height: 100vh; }
+        header { background: #1e293b; padding: 20px; text-align: center; border-bottom: 1px solid var(--border-color); }
+        header h1 { font-size: 1.25rem; color: var(--accent-color); margin-bottom: 5px; }
+        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        input { width: 100%; padding: 12px; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; margin-bottom: 12px; text-align: right; }
+        .btn { background: var(--accent-color); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; }
+        .btn:hover { background: var(--accent-hover); }
+        .success-btn { background: var(--success-color); margin-top: 10px; }
+        #otpSection, #mainApp { display: none; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>منصة الخدمات والمهام المتكاملة</h1>
-        <p>إدارة التطوير، المهام، والأرباح</p>
+        <h1>منصة الخدمات والمهام</h1>
+        <p>نظام موثق وآمن بالكامل</p>
     </header>
 
     <div class="container">
         
-        <!-- 1. شاشة تسجيل الدخول -->
+        <!-- شاشة تسجيل الدخول -->
         <div id="authScreen" class="card">
-            <h3>تسجيل الدخول / إنشاء حساب</h3>
-            <p>أدخل بريدك الإلكتروني وكلمة السر للبدء</p>
-            <input type="email" id="userEmail" placeholder="البريد الإلكتروني">
-            <input type="password" id="userPassword" placeholder="كلمة السر">
-            <button class="btn" onclick="loginUser()">دخول / تسجيل</button>
+            <h3>تسجيل حساب جديد / دخول</h3>
+            <p>أدخل بريدك وكلمة السر لاستلام رمز التحقق</p>
+            <input type="email" id="emailInput" placeholder="البريد الإلكتروني">
+            <input type="password" id="passwordInput" placeholder="كلمة السر">
+            <button class="btn" onclick="requestOTP()">إرسال رمز التحقق (OTP)</button>
         </div>
 
-        <!-- 2. التطبيق الرئيسي (يظهر بعد تسجيل الدخول) -->
+        <!-- شاشة إدخال رمز التحقق -->
+        <div id="otpSection" class="card">
+            <h3>تفعيل الحساب</h3>
+            <p>أدخل الرمز الذي ظهر في شاشة Termux</p>
+            <input type="text" id="otpInput" placeholder="رمز التحقق OTP">
+            <button class="btn" onclick="verifyAndRegister()">تأكيد وتسجيل الدخول</button>
+        </div>
+
+        <!-- التطبيق الرئيسي ولوحة التحكم -->
         <div id="mainApp">
-            
-            <div class="balance-card">
-                <h3 style="font-size: 0.9rem; opacity: 0.9;">رصيدك الحالي</h3>
-                <div class="amount" id="balanceDisplay">0.00 $</div>
+            <div class="card" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); text-align: center;">
+                <h3>رصيدك الحالي</h3>
+                <div style="font-size: 2rem; font-weight: bold; margin-top: 5px;" id="balanceDisplay">0.00 $</div>
             </div>
 
-            <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('services', event)">الخدمات</button>
-                <button class="tab-btn" onclick="switchTab('tasks', event)">المهام والنقرات</button>
-                <button class="tab-btn" onclick="switchTab('dashboard', event)">لوحة التحكم</button>
+            <div class="card">
+                <h3>خدمات البرمجة والمهام</h3>
+                <p>اطلب خدمات تطوير بوتات تيليجرام وتطبيقات الويب.</p>
+                <button class="btn" style="margin-top: 10px;" onclick="alert('تم إرسال طلب الخدمة بنجاح!')">طلب خدمة برمجية (50$)</button>
             </div>
 
-            <!-- قسم الخدمات -->
-            <div id="services" class="tab-content" style="display: block;">
-                <div class="card">
-                    <h3>برمجة بوت تيليجرام مخصص</h3>
-                    <p>تصميم وتطوير بوت متكامل لإدارة عملك أو مشروعك.</p>
-                    <button class="btn" onclick="alert('تم طلب الخدمة بنجاح!')">اطلب الخدمة (30$)</button>
-                </div>
-                <div class="card">
-                    <h3>تطوير واجهة Telegram Mini App</h3>
-                    <p>تحويل فكرتك إلى تطبيق مصغر يعمل داخل التيليجرام بكفاءة.</p>
-                    <button class="btn" onclick="alert('تم طلب الخدمة بنجاح!')">اطلب الخدمة (50$)</button>
-                </div>
+            <div class="card">
+                <h3>لوحة إدارة الرصيد (شحن يدوي)</h3>
+                <p>إدارة الشحن والمحفظة</p>
+                <input type="number" id="chargeAmountInput" placeholder="أدخل مبلغ الشحن بالدولار" style="margin-top: 10px;">
+                <button class="btn success-btn" onclick="chargeBalance()">شحن الرصيد الآن</button>
             </div>
-
-            <!-- قسم المهام والنقرات -->
-            <div id="tasks" class="tab-content">
-                <div class="card" style="text-align: center;">
-                    <h3>تعدين النقاط</h3>
-                    <button class="coin-btn" onclick="addPoints()">💰</button>
-                    <p style="margin-top: 15px; font-weight: bold; color: var(--warning-color);">النقاط: <span id="pointsDisplay">0</span></p>
-                </div>
-            </div>
-
-            <!-- قسم لوحة التحكم (للمديرة) -->
-            <div id="dashboard" class="tab-content">
-                <div class="card">
-                    <h3>لوحة التحكم والعمليات</h3>
-                    <p>إدارة الأرصدة والعملاء يدوياً:</p>
-                    <input type="text" id="clientEmailInput" placeholder="بريد العميل">
-                    <input type="number" id="chargeInput" placeholder="المبلغ ($)">
-                    <button class="btn" onclick="chargeBalance()">شحن رصيد العميل</button>
-                </div>
-            </div>
-
         </div>
 
     </div>
 
     <script>
-        let currentUser = null;
-        let userBalance = 0;
-        let userPoints = 0;
+        let userEmail = "";
+        let userPassword = "";
+        const SERVER_URL = "http://127.0.0.1:5000";
 
-        function loginUser() {
-            let email = document.getElementById('userEmail').value.trim();
-            let pass = document.getElementById('userPassword').value.trim();
+        async function requestOTP() {
+            userEmail = document.getElementById('emailInput').value.trim();
+            userPassword = document.getElementById('passwordInput').value.trim();
 
-            if(!email || !pass) {
-                alert('الرجاء إدخال البريد الإلكتروني وكلمة السر بشكل صحيح.');
+            if(!userEmail || !userPassword) {
+                alert('الرجاء إدخال البريد وكلمة السر.');
                 return;
             }
 
-            currentUser = email;
-            document.getElementById('authScreen').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            alert('مرحباً بكِ، تم تسجيل الدخول بنجاح!');
-        }
-
-        function switchTab(tabId, evt) {
-            // إخفاء كل المحتويات وإزالة التفعيل عن الأزرار
-            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-
-            // إظهار القسم المحدد وتفعيل الزر الخاص به
-            document.getElementById(tabId).style.display = 'block';
-            if(evt && evt.currentTarget) {
-                evt.currentTarget.classList.add('active');
+            try {
+                let response = await fetch(`${SERVER_URL}/api/send-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail })
+                });
+                let data = await response.json();
+                
+                if(response.ok) {
+                    alert('تم إرسال الطلب! راجعي شاشة Termux لرؤية الـ OTP.');
+                    document.getElementById('authScreen').style.display = 'none';
+                    document.getElementById('otpSection').style.display = 'block';
+                } else {
+                    alert(data.message || 'حدث خطأ');
+                }
+            } catch(e) {
+                alert('تعذر الاتصال بالسيرفر.');
             }
         }
 
-        function addPoints() {
-            userPoints += 10;
-            document.getElementById('pointsDisplay').innerText = userPoints;
-        }
-
-        function chargeBalance() {
-            let amount = parseFloat(document.getElementById('chargeInput').value);
-            if(isNaN(amount)) {
-                alert('الرجاء إدخال مبلغ صحيح لشحن الرصيد.');
+        async function verifyAndRegister() {
+            let otp = document.getElementById('otpInput').value.trim();
+            if(!otp) {
+                alert('الرجاء إدخال رمز التحقق.');
                 return;
             }
-            userBalance += amount;
-            document.getElementById('balanceDisplay').innerText = userBalance.toFixed(2) + ' $';
-            alert('تم شحن الرصيد بنجاح في اللوحة!');
-            document.getElementById('chargeInput').value = '';
-            document.getElementById('clientEmailInput').value = '';
+
+            try {
+                let response = await fetch(`${SERVER_URL}/api/verify-and-register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail, password: userPassword, otp: otp })
+                });
+                let data = await response.json();
+
+                if(response.ok) {
+                    alert('تم تفعيل الحساب وتسجيل الدخول بنجاح!');
+                    document.getElementById('otpSection').style.display = 'none';
+                    document.getElementById('mainApp').style.display = 'block';
+                } else {
+                    alert(data.message || 'رمز التحقق غير صحيح');
+                }
+            } catch(e) {
+                alert('خطأ في الاتصال بالباكند.');
+            }
+        }
+
+        async function chargeBalance() {
+            let amount = document.getElementById('chargeAmountInput').value.trim();
+            if(!amount || amount <= 0) {
+                alert('الرجاء إدخال مبلغ صحيح.');
+                return;
+            }
+
+            try {
+                let response = await fetch(`${SERVER_URL}/api/charge`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail, amount: amount })
+                });
+                let data = await response.json();
+
+                if(response.ok) {
+                    document.getElementById('balanceDisplay').innerText = data.new_balance.toFixed(2) + " $";
+                    alert('تم شحن الرصيد بنجاح!');
+                } else {
+                    alert(data.message || 'فشل عملية الشحن');
+                }
+            } catch(e) {
+                alert('خطأ في الاتصال بالسيرفر.');
+            }
         }
     </script>
 </body>
